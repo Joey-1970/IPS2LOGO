@@ -70,7 +70,7 @@
 			($this->ReadPropertyInteger("LOGO_ID") > 0) AND 
 			($this->ReadPropertyInteger("Status_ID") > 0) AND 
 			($this->ReadPropertyInteger("Switch_ID") > 0) {
-			
+			SetValueBoolean($this->GetIDForIdent("State"), GetValueBoolean($this->ReadPropertyInteger("State_ID")));
 			$this->SetStatus(102);
 		}
 		else {
@@ -78,6 +78,35 @@
 		}
 	}
 	
+	public function RequestAction($Ident, $Value) 
+	{
+  		switch($Ident) {
+	        case "State":
+	            If ($this->ReadPropertyBoolean("Open") == true) {
+		    	//$this->Set_Status($Value);
+		    }
+	            break;
+	        default:
+	            throw new Exception("Invalid Ident");
+	    	}
+	}
+	    
+	public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    	{
+		switch ($Message) {
+			case 10803:
+				//$this->SendDebug("ReceiveData", "Ausloeser Wochenplan", 0);
+				break;
+			case 10603:
+				// Änderung der LOGO Status Variablen
+				If ($SenderID == $this->ReadPropertyInteger("State_ID")) {
+					$this->SendDebug("ReceiveData", "Ausloeser Aenderung Status", 0);
+					SetValueBoolean($this->GetIDForIdent("State"), GetValueBoolean($this->ReadPropertyInteger("State_ID")));
+				}
+				
+				break;
+		}
+    	}    
 	
 	// Beginn der Funktionen
 	
