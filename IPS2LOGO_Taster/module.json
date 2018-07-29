@@ -7,8 +7,8 @@
   [
     "IPSLOGO_Taster"
   ],
-  "parentRequirements": [],
+  "parentRequirements": ["{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}"],
   "childRequirements": [],
-  "implemented": [],
+  "implemented": ["{EC09E155-355C-4DC2-95C7-5C336B1C9D48}"],
   "prefix": "I2LTaster"
 }
