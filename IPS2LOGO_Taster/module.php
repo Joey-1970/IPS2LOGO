@@ -14,6 +14,7 @@
         {
             	// Diese Zeile nicht löschen.
             	parent::Create();
+		$this->ConnectParent("{1B0A36F7-343F-42F3-8181-0748819FB324}");
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyInteger("LOGO_ID", 0);
 		$this->RegisterPropertyInteger("State_ID", 0);
