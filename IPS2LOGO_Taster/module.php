@@ -67,10 +67,10 @@
 		}
 		
             
-		If ($this->ReadPropertyBoolean("Open") == true) AND 
+		If (($this->ReadPropertyBoolean("Open") == true) AND 
 			($this->ReadPropertyInteger("LOGO_ID") > 0) AND 
 			($this->ReadPropertyInteger("Status_ID") > 0) AND 
-			($this->ReadPropertyInteger("Switch_ID") > 0) {
+			($this->ReadPropertyInteger("Switch_ID") > 0)) {
 			SetValueBoolean($this->GetIDForIdent("State"), GetValueBoolean($this->ReadPropertyInteger("State_ID")));
 			$this->SetStatus(102);
 		}
