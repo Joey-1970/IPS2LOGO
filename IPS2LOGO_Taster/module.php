@@ -62,14 +62,14 @@
 		}
 		
 		// Registrierung für die Änderung des Status
-		If ($this->ReadPropertyInteger("Status_ID") > 0) {
+		If ($this->ReadPropertyInteger("State_ID") > 0) {
 			$this->RegisterMessage($this->ReadPropertyInteger("Status_ID"), 10603);
 		}
 		
             
 		If (($this->ReadPropertyBoolean("Open") == true) AND 
 			($this->ReadPropertyInteger("LOGO_ID") > 0) AND 
-			($this->ReadPropertyInteger("Status_ID") > 0) AND 
+			($this->ReadPropertyInteger("State_ID") > 0) AND 
 			($this->ReadPropertyInteger("Switch_ID") > 0)) {
 			SetValueBoolean($this->GetIDForIdent("State"), GetValueBoolean($this->ReadPropertyInteger("State_ID")));
 			$this->SetStatus(102);
