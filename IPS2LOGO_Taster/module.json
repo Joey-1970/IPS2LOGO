@@ -1,11 +1,11 @@
 {
   "id": "{840BBE1F-F51B-4EDA-9EE2-A66B8884FE46}",
-  "name": "IPSLOGO_Taster",
+  "name": "IPS2LOGO_Taster",
   "type": 3,
   "vendor": "JP-IPS-Modules",
   "aliases":
   [
-    "IPSLOGO_Taster"
+    "IPS2LOGO_Taster"
   ],
   "parentRequirements": ["{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}"],
   "childRequirements": [],
