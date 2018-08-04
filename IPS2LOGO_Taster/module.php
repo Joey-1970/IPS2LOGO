@@ -116,13 +116,13 @@
 		$SwitchID = $this->ReadPropertyInteger("Switch_ID"); // Instanz des Netzwerkeingangs
 		$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
 		
-		$result = @S7_WriteBit($SwitchID,true);
+		$result = @S7_WriteBit($SwitchID, true);
 		if ($result==false)
 		{
-			$this->LogoReset($ObjektID);
-			S7_WriteBit($SwitchID ,true);
+			$this->LogoReset();
+			S7_WriteBit($SwitchID , true);
 		}
-		IPS_Sleep($Dauer);
+		IPS_Sleep($Switchtime);
 		S7_WriteBit($SwitchID ,false);
    	Return;
   	}
@@ -130,14 +130,27 @@
 	// Führt einen Reset der LOGO-Anbindung durch
 	private function LogoReset
 	{
-		S7_SetOpen($ObjektID, false);
-		IPS_ApplyChanges($ObjektID);
+		$ParentID = $this->GetParentID();
+		
+		S7_SetOpen($ParentID, false);
+		IPS_ApplyChanges($ParentID);
 		IPS_Sleep(500);
-		S7_SetOpen($ObjektID, True);
-		IPS_ApplyChanges($ObjektID);
+		S7_SetOpen($ParentID, True);
+		IPS_ApplyChanges($ParentID);
    	Return;
    	}
 	
+	private function GetParentID()
+	{
+		$ParentID = (IPS_GetInstance($this->InstanceID)['ConnectionID']);  
+	return $ParentID;
+	}
+  	
+  	private function GetParentStatus()
+	{
+		$Status = (IPS_GetInstance($this->GetParentID())['InstanceStatus']);  
+	return $Status;
+	}
 	    
 	
 }
