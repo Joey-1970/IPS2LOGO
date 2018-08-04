@@ -16,7 +16,6 @@
             	parent::Create();
 		$this->ConnectParent("{1B0A36F7-343F-42F3-8181-0748819FB324}");
             	$this->RegisterPropertyBoolean("Open", false);
-		$this->RegisterPropertyInteger("LOGO_ID", 0);
 		$this->RegisterPropertyInteger("State_ID", 0);
 		$this->RegisterPropertyInteger("Switch_ID", 0);
 		$this->RegisterPropertyInteger("Switchtime", 1000);
@@ -36,8 +35,6 @@
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________"); 
-		$arrayElements[] = array("type" => "Label", "label" => "LOGO");
-		$arrayElements[] = array("type" => "SelectVariable", "name" => "LOGO_ID", "caption" => "Variablen ID");
 		$arrayElements[] = array("type" => "Label", "label" => "Status");
 		$arrayElements[] = array("type" => "SelectVariable", "name" => "Status_ID", "caption" => "Variablen ID");
 		$arrayElements[] = array("type" => "Label", "label" => "Schalter");
@@ -66,9 +63,8 @@
 			$this->RegisterMessage($this->ReadPropertyInteger("Status_ID"), 10603);
 		}
 		
-            
-		If (($this->ReadPropertyBoolean("Open") == true) AND 
-			($this->ReadPropertyInteger("LOGO_ID") > 0) AND 
+            	
+		If (($this->ReadPropertyBoolean("Open") == true) AND  
 			($this->ReadPropertyInteger("State_ID") > 0) AND 
 			($this->ReadPropertyInteger("Switch_ID") > 0)) {
 			SetValueBoolean($this->GetIDForIdent("State"), GetValueBoolean($this->ReadPropertyInteger("State_ID")));
@@ -77,6 +73,7 @@
 		else {
 			$this->SetStatus(104);
 		}
+		
 	}
 	
 	public function RequestAction($Ident, $Value) 
@@ -113,18 +110,19 @@
 	// Simuliert einen Tastfunktion auf der Logo
 	public function Keypress($ObjektID)
 	{
-		$SwitchID = $this->ReadPropertyInteger("Switch_ID"); // Instanz des Netzwerkeingangs
-		$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
-		
-		$result = @S7_WriteBit($SwitchID, true);
-		if ($result==false)
-		{
-			$this->LogoReset();
-			S7_WriteBit($SwitchID , true);
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
+			$SwitchID = $this->ReadPropertyInteger("Switch_ID"); // Instanz des Netzwerkeingangs
+			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
+
+			$result = @S7_WriteBit($SwitchID, true);
+			if ($result==false)
+			{
+				$this->LogoReset();
+				S7_WriteBit($SwitchID , true);
+			}
+			IPS_Sleep($Switchtime);
+			S7_WriteBit($SwitchID ,false);
 		}
-		IPS_Sleep($Switchtime);
-		S7_WriteBit($SwitchID ,false);
-   	Return;
   	}
 	    
 	// Führt einen Reset der LOGO-Anbindung durch
@@ -152,6 +150,16 @@
 	return $Status;
 	}
 	    
-	
+	private function HasActiveParent()
+    	{
+		$Instance = @IPS_GetInstance($this->InstanceID);
+		if ($Instance['ConnectionID'] > 0)
+		{
+			$Parent = IPS_GetInstance($Instance['ConnectionID']);
+			if ($Parent['InstanceStatus'] == 102)
+			return true;
+		}
+        return false;
+    	}  
 }
 ?>
