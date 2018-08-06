@@ -36,7 +36,7 @@
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Status");
-		$arrayElements[] = array("type" => "SelectVariable", "name" => "Status_ID", "caption" => "Variablen ID");
+		$arrayElements[] = array("type" => "SelectVariable", "name" => "State_ID", "caption" => "Variablen ID");
 		$arrayElements[] = array("type" => "Label", "label" => "Schalter");
 		$arrayElements[] = array("type" => "SelectVariable", "name" => "Switch_ID", "caption" => "Variablen ID");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
