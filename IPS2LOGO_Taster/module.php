@@ -108,7 +108,7 @@
 	
 	// Beginn der Funktionen
 	// Simuliert einen Tastfunktion auf der Logo
-	public function Keypress($ObjektID)
+	public function Keypress()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
 			$SwitchID = $this->ReadPropertyInteger("Switch_ID"); // Instanz des Netzwerkeingangs
@@ -126,7 +126,7 @@
   	}
 	    
 	// Führt einen Reset der LOGO-Anbindung durch
-	private function LogoReset
+	private function LogoReset()
 	{
 		$ParentID = $this->GetParentID();
 		
