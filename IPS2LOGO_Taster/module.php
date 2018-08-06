@@ -18,7 +18,7 @@
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyInteger("State_ID", 0);
 		$this->RegisterPropertyInteger("Switch_ID", 0);
-		$this->RegisterPropertyInteger("Switchtime", 1000);
+		$this->RegisterPropertyInteger("Switchtime", 20);
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
@@ -41,7 +41,7 @@
 		$arrayElements[] = array("type" => "SelectVariable", "name" => "Switch_ID", "caption" => "Variablen ID");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Impulses");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "MinRuntime", "caption" => "ms");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
 
 		
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
