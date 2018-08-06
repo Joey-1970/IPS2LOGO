@@ -53,11 +53,6 @@
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
 		
-		// Registrierung für die Änderung am LOGO-Status
-		If ($this->ReadPropertyInteger("LOGO_ID") > 0) {
-			//$this->RegisterMessage($this->ReadPropertyInteger("LOGO_ID"), 10603);
-		}
-		
 		// Registrierung für die Änderung des Status
 		If ($this->ReadPropertyInteger("State_ID") > 0) {
 			$this->RegisterMessage($this->ReadPropertyInteger("Status_ID"), 10603);
