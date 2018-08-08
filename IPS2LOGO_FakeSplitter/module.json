@@ -1,0 +1,14 @@
+{
+  "id": "{139E70B4-AAE4-4107-8E5A-F27D6071496E}",
+  "name": "IPS2LOGO_FakeSplitter",
+  "type": 2,
+  "vendor": "JP-IPS-Modules",
+  "aliases":
+  [
+    "IPS2LOGO_FakeSplitter"
+  ],
+  "parentRequirements": [],
+  "childRequirements": ["{EC09E155-355C-4DC2-95C7-5C336B1C9D48}"],
+  "implemented": ["{018EF6B5-AB94-40C6-AA53-46943E824ACF}"], 
+  "prefix": "I2LFS"
+}
