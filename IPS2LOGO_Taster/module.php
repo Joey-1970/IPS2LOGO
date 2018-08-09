@@ -103,6 +103,25 @@
 	
 	// Beginn der Funktionen
 	// Simuliert einen Tastfunktion auf der Logo
+	// Netzwerkbefehl ein
+	    // Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":5,"Area":132,"AreaAddress":0,"BitAddress":0,"WordLength":1,"DataCount":1,"DataPayload":"\u0001"}
+	    // aus
+	    // Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":5,"Area":132,"AreaAddress":0,"BitAddress":0,"WordLength":1,"DataCount":1,"DataPayload":"\u0000"}
+	public function S7_WriteBit(Bool $State)
+	{
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+			$this->SendDebug("S7_WriteBit", "Ausfuehrung", 0);
+			If ($State = true) {
+				$DataPayload = "\u0001";
+			}
+			else {
+				$DataPayload = "\u0000";
+			}
+			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => 132, "AreaAddress" => 0, "BitAddress" => 0, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
+			$this->SendDebug("S7_WriteBit", "Ergebnis: ".$Result, 0);
+		}
+	}
+	    
 	public function Keypress()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
