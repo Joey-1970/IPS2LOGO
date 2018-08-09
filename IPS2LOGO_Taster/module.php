@@ -6,7 +6,7 @@
 	{
 		//Never delete this line!
 		parent::Destroy();
-		
+		$this->SetTimerInterval("Timer_1", 0);
 	}
 	    
 	// Überschreibt die interne IPS_Create($id) Funktion
@@ -19,6 +19,8 @@
 		$this->RegisterPropertyInteger("State_ID", 0);
 		$this->RegisterPropertyInteger("Switch_ID", 0);
 		$this->RegisterPropertyInteger("Switchtime", 20);
+		$this->RegisterPropertyInteger("Timer_1", 60);
+		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
@@ -107,6 +109,8 @@
 	    // Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":5,"Area":132,"AreaAddress":0,"BitAddress":0,"WordLength":1,"DataCount":1,"DataPayload":"\u0001"}
 	    // aus
 	    // Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":5,"Area":132,"AreaAddress":0,"BitAddress":0,"WordLength":1,"DataCount":1,"DataPayload":"\u0000"}
+	    // Ausgang abfragen
+	    // Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":130,"AreaAddress":0,"BitAddress":0,"WordLength":1,"DataCount":1,"DataPayload":""}
 	public function S7_WriteBit(Bool $State)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
