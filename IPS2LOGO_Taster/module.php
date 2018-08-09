@@ -132,7 +132,7 @@
 			$result = $this->S7_WriteBit(true);
 			if ($result==false)
 			{
-				$this->LogoReset();
+				//$this->LogoReset();
 				//S7_WriteBit($SwitchID , true);
 				
 			}
@@ -143,6 +143,7 @@
   	}
 	    
 	// Führt einen Reset der LOGO-Anbindung durch
+	/*
 	private function LogoReset()
 	{
 		$ParentID = $this->GetParentID();
@@ -154,7 +155,8 @@
 		IPS_ApplyChanges($ParentID);
    	Return;
    	}
-	
+	*/
+	    
 	private function GetParentID()
 	{
 		$ParentID = (IPS_GetInstance($this->InstanceID)['ConnectionID']);  
