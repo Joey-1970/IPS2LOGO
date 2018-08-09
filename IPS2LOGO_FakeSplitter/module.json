@@ -8,7 +8,7 @@
     "IPS2LOGO_FakeSplitter"
   ],
   "parentRequirements": [],
-  "childRequirements": ["{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}"],
-  "implemented": ["{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}"], 
+  "childRequirements": ["{EC09E155-355C-4DC2-95C7-5C336B1C9D48}"],
+  "implemented": ["{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}"], 
   "prefix": "I2LFS"
 }
