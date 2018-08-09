@@ -128,14 +128,17 @@
 			$SwitchID = $this->ReadPropertyInteger("Switch_ID"); // Instanz des Netzwerkeingangs
 			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
 
-			$result = @S7_WriteBit($SwitchID, true);
+			//$result = @S7_WriteBit($SwitchID, true);
+			$result = $this->S7_WriteBit(true);
 			if ($result==false)
 			{
 				$this->LogoReset();
-				S7_WriteBit($SwitchID , true);
+				//S7_WriteBit($SwitchID , true);
+				
 			}
 			IPS_Sleep($Switchtime);
-			S7_WriteBit($SwitchID ,false);
+			//S7_WriteBit($SwitchID ,false);
+			$result = $this->S7_WriteBit(false);
 		}
   	}
 	    
