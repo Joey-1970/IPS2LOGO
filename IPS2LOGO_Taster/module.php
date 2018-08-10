@@ -113,9 +113,10 @@
 			// Ausgang 1: Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":130,"AreaAddress":0,"BitAddress":0,"WordLength":1,"DataCount":1,"DataPayload":""}
 
 			$Area = 130;
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => 0, "BitAddress" => 0, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
+			$Result = ord($this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => 0, "BitAddress" => 0, "WordLength" => 1, "DataCount" => 1,"DataPayload" => ""))));
+			
 			$this->SendDebug("GetState", "Ergebnis: ".$Result, 0);
-			//SetValueBoolean($this->GetIDForIdent("State"), $Result);
+			SetValueBoolean($this->GetIDForIdent("State"), $Result);
 		}
 	}
 	    
