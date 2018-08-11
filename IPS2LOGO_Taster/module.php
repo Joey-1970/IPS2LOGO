@@ -105,6 +105,8 @@
 	public function SetState(Bool $State)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+			//Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":5,"Area":132,"AreaAddress":0,"BitAddress":0,"WordLength":1,"DataCount":1,"DataPayload":"\u0001"}
+			//Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":5,"Area":132,"AreaAddress":0,"BitAddress":0,"WordLength":1,"DataCount":1,"DataPayload":"\u0000"}
 			$this->SendDebug("SetState", "Ausfuehrung", 0);
 			$Area = 132; // Konstante
 			$Address = $this->ReadPropertyInteger("Address");
@@ -115,7 +117,7 @@
 			else {
 				$DataPayload = "\u0000";
 			}
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => 132, "AreaAddress" => $Address, "BitAddress" => $Bit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
+			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => $Area, "AreaAddress" => $Address, "BitAddress" => $Bit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
 			$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
 		}
 	}
