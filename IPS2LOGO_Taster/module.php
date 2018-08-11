@@ -34,6 +34,7 @@
 		$arrayStatus[] = array("code" => 102, "icon" => "active", "caption" => "Instanz ist aktiv");
 		$arrayStatus[] = array("code" => 104, "icon" => "inactive", "caption" => "Instanz ist inaktiv");
 		$arrayStatus[] = array("code" => 200, "icon" => "error", "caption" => "Instanz ist fehlerhaft"); 
+		$arrayStatus[] = array("code" => 202, "icon" => "error", "caption" => "Kommunikationfehler!");
 		
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
@@ -120,15 +121,28 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("GetState", "Ausfuehrung", 0);
-			// Ausgang 1: Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":130,"AreaAddress":0,"BitAddress":0,"WordLength":1,"DataCount":1,"DataPayload":""}
-
 			$Area = 130; // Konstante
-			$AreaAddress = 0;
-			$BitAddress = 0;
+			$Output = $this->ReadPropertyInteger("Output");
+			If ($Output <= 8) {
+				$AreaAddress = 0;
+				$BitAddress = $Output - 1;
+			}
+			else {
+				$AreaAddress = 1;
+				$BitAddress = $Output - 9;
+			}
+			
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
-			$State = ord($Result);
-			$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
-			SetValueBoolean($this->GetIDForIdent("State"), $State);
+			If ($Result === false) {
+				$this->SetStatus(202);
+				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
+			}
+			else {
+				$this->SetStatus(102);
+				$State = ord($Result);
+				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
+				SetValueBoolean($this->GetIDForIdent("State"), $State);
+			}
 		}
 	}
 	    
