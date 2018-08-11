@@ -77,7 +77,7 @@
 	{
   		switch($Ident) {
 	        case "State":
-		    	$this->SetState($Value);
+		    	$this->KeyPress();
 	            break;
 	        default:
 	            throw new Exception("Invalid Ident");
@@ -106,13 +106,16 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("SetState", "Ausfuehrung", 0);
+			$Area = 132; // Konstante
+			$Address = $this->ReadPropertyInteger("Address");
+			$Bit = $this->ReadPropertyInteger("Bit");
 			If ($State = true) {
 				$DataPayload = "\u0001";
 			}
 			else {
 				$DataPayload = "\u0000";
 			}
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => 132, "AreaAddress" => 0, "BitAddress" => 0, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
+			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => 132, "AreaAddress" => $Address, "BitAddress" => $Bit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
 			$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
 		}
 	}
@@ -149,37 +152,12 @@
 	public function Keypress()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			$SwitchID = $this->ReadPropertyInteger("Switch_ID"); // Instanz des Netzwerkeingangs
 			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
-
-			//$result = @S7_WriteBit($SwitchID, true);
-			$result = $this->S7_WriteBit(true);
-			if ($result==false)
-			{
-				//$this->LogoReset();
-				//S7_WriteBit($SwitchID , true);
-				
-			}
+			$this->SetState(true);
 			IPS_Sleep($Switchtime);
-			//S7_WriteBit($SwitchID ,false);
-			$result = $this->S7_WriteBit(false);
+			$this->SetState(false);
 		}
   	}
-	    
-	// Führt einen Reset der LOGO-Anbindung durch
-	/*
-	private function LogoReset()
-	{
-		$ParentID = $this->GetParentID();
-		
-		S7_SetOpen($ParentID, false);
-		IPS_ApplyChanges($ParentID);
-		IPS_Sleep(500);
-		S7_SetOpen($ParentID, True);
-		IPS_ApplyChanges($ParentID);
-   	Return;
-   	}
-	*/
 	    
 	private function GetParentID()
 	{
