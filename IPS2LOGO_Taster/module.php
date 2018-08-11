@@ -141,7 +141,9 @@
 				$this->SetStatus(102);
 				$State = ord($Result);
 				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
-				SetValueBoolean($this->GetIDForIdent("State"), $State);
+				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
+					SetValueBoolean($this->GetIDForIdent("State"), $State);
+				}
 			}
 		}
 	}
