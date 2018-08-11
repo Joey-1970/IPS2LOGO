@@ -16,7 +16,9 @@
             	parent::Create();
 		$this->ConnectParent("{1B0A36F7-343F-42F3-8181-0748819FB324}");
             	$this->RegisterPropertyBoolean("Open", false);
-		
+		$this->RegisterPropertyInteger("Output", 1);
+		$this->RegisterPropertyInteger("Address", 0);
+		$this->RegisterPropertyInteger("Bit", 0);
 		$this->RegisterPropertyInteger("Switchtime", 20);
 		$this->RegisterPropertyInteger("Timer_1", 250);
 		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
@@ -36,10 +38,16 @@
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________"); 
-		
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Abfragezyklus");
+		$arrayOptions = array();
+		for ($i = 1; $i <= 16; $i++) {
+		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+		}
+		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
+		$arrayElements[] = array("type" => "Label", "label" => "Intervall");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address",  "caption" => "Adresse"); 
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit",  "caption" => "Bit"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
 
