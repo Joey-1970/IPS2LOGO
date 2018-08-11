@@ -45,7 +45,7 @@
 		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 		}
 		for ($i = 1; $i <= 27; $i++) {
-		    	$arrayOptions[] = array("label" => "M".$i, "value" => $i);
+		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
@@ -121,17 +121,32 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("GetState", "Ausfuehrung", 0);
-			$Area = 130; // Konstante
 			$Output = $this->ReadPropertyInteger("Output");
+			If ($Output < 100) {
+				$Area = 130; // Ausgang
+			}
+			else [
+				$Area = 131; // Merker
+				$Output = $Output - 100;
+			}
+			
 			If ($Output <= 8) {
 				$AreaAddress = 0;
 				$BitAddress = $Output - 1;
 			}
-			else {
+			elseif (($Output > 8) AND ($Output <= 16)) {
 				$AreaAddress = 1;
 				$BitAddress = $Output - 9;
 			}
-			
+			elseif (($Output > 16) AND ($Output <= 24)) {
+				$AreaAddress = 2;
+				$BitAddress = $Output - 17;
+			}
+			elseif ($Output > 24) {
+				$AreaAddress = 3;
+				$BitAddress = $Output - 25;
+			}
+				
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
 			If ($Result === false) {
 				$this->SetStatus(202);
