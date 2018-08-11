@@ -125,7 +125,7 @@
 			If ($Output < 100) {
 				$Area = 130; // Ausgang
 			}
-			else [
+			else {
 				$Area = 131; // Merker
 				$Output = $Output - 100;
 			}
