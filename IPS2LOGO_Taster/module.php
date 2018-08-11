@@ -111,7 +111,7 @@
 			$Area = 132; // Konstante
 			$Address = $this->ReadPropertyInteger("Address");
 			$Bit = $this->ReadPropertyInteger("Bit");
-			If ($State = true) {
+			If ($State == true) {
 				//$DataPayload = "\u0001";
 				$DataPayload = utf8_encode(chr(1));
 			}
