@@ -117,7 +117,7 @@
 			}
 			else {
 				//$DataPayload = "\u0000";
-				$DataPayload = utf8_encode(chr(1));
+				$DataPayload = utf8_encode(chr(0));
 			}
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => $Area, "AreaAddress" => $Address, "BitAddress" => $Bit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
 			$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
