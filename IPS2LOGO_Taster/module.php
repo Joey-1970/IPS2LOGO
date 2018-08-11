@@ -43,7 +43,6 @@
 		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "Label", "label" => "Intervall");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address",  "caption" => "Adresse"); 
