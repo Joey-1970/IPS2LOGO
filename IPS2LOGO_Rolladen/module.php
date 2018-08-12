@@ -22,7 +22,6 @@
 		$this->RegisterPropertyInteger("Bit_2", 0);
 		$this->RegisterPropertyInteger("Address_3", 0);
 		$this->RegisterPropertyInteger("Bit_3", 0);
-		$this->RegisterPropertyInteger("Switchtime", 20);
 		$this->RegisterPropertyInteger("Timer_1", 30);
 		$this->RegisterTimer("Timer_1", 0, 'I2LRolladen_StateReset($_IPS["TARGET"]);');
 		
@@ -121,17 +120,17 @@
 	public function Keypress(Int $Button)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
 			SetValueInteger($this->GetIDForIdent("State"), $Button);
-			$this->SetState(true, $Button);
-			IPS_Sleep($Switchtime);
-			$this->SetState(false, $Button);
 			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
+			$this->SetState(true, $Button);
+			$this->SetBuffer("Button", $Button);
 		}
   	}
 	    
 	public function StateReset()
 	{
+		$Button = $this->GetBuffer("Button");
+		$this->SetState(false, $Button);
 		$this->SetTimerInterval("Timer_1", 0);
 		SetValueInteger($this->GetIDForIdent("State"), 2);
 	}
