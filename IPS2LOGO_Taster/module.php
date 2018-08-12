@@ -82,7 +82,9 @@
 	{
   		switch($Ident) {
 	        case "State":
-		    	$this->KeyPress();
+			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
+				$this->KeyPress();
+			}
 	            break;
 	        default:
 	            throw new Exception("Invalid Ident");
