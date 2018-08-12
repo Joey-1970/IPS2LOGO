@@ -79,7 +79,7 @@
 	{
   		switch($Ident) {
 	        case "State":
-			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
+			If ($Value <> GetValueInteger($this->GetIDForIdent("State"))) {
 				$this->KeyPress($Value);
 			}
 	            break;
