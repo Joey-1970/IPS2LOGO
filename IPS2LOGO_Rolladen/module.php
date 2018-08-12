@@ -27,7 +27,7 @@
 		$this->RegisterTimer("Timer_1", 0, 'I2LRolladen_StateReset($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
-		$this->RegisterVariableBoolean("State", "State", "~ShutterMoveStop", 10);
+		$this->RegisterVariableInteger("State", "State", "~ShutterMoveStop", 10);
 		$this->EnableAction("State");
         }
        	
