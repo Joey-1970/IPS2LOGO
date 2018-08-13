@@ -20,8 +20,6 @@
 		$this->RegisterPropertyInteger("Bit_1", 0);
 		$this->RegisterPropertyInteger("Address_2", 0);
 		$this->RegisterPropertyInteger("Bit_2", 0);
-		$this->RegisterPropertyInteger("Address_3", 0);
-		$this->RegisterPropertyInteger("Bit_3", 0);
 		$this->RegisterPropertyInteger("Timer_1", 30);
 		$this->RegisterTimer("Timer_1", 0, 'I2LRolladen_StateReset($_IPS["TARGET"]);');
 		
@@ -44,12 +42,9 @@
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Öffnen"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_1",  "caption" => "Adresse"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_1",  "caption" => "Bit"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Stoppen"); 
+		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_3",  "caption" => "Adresse"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_3",  "caption" => "Bit"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
@@ -102,10 +97,8 @@
 			$Area = 132; // Konstante
 			$Address[0] = $this->ReadPropertyInteger("Address_1"); // Öffnen
 			$Bit[0] = $this->ReadPropertyInteger("Bit_1");
-			$Address[2] = $this->ReadPropertyInteger("Address_2"); // Stop
-			$Bit[2] = $this->ReadPropertyInteger("Bit_2");
-			$Address[4] = $this->ReadPropertyInteger("Address_3"); // Schliessen
-			$Bit[4] = $this->ReadPropertyInteger("Bit_3");
+			$Address[4] = $this->ReadPropertyInteger("Address_2"); // Schliessen
+			$Bit[4] = $this->ReadPropertyInteger("Bit_2");
 			If ($State == true) {
 				$DataPayload = utf8_encode(chr(1));
 			}
@@ -139,7 +132,6 @@
 		$Button = $this->GetBuffer("Button");
 		$this->SetState(false, $Button);
 		$this->SetTimerInterval("Timer_1", 0);
-		SetValueInteger($this->GetIDForIdent("State"), 2);
 	}
 	    
 	private function GetParentID()
