@@ -60,6 +60,12 @@
 		
 		SetValueInteger($this->GetIDForIdent("State"), 2);
 		
+		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 0, "Offen", "Information", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 1, "Undefiniert", "Information", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 2, "Geschlossen", "Information", -1);
+		
+		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SetStatus(102);
 		}
