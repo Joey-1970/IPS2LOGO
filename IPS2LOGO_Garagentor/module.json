@@ -1,0 +1,14 @@
+{
+  "id": "{18A2EA59-3F03-41A6-8F6F-18AF7E3F4DD0}",
+  "name": "IPS2LOGO_Garagentor",
+  "type": 3,
+  "vendor": "JP-IPS-Modules",
+  "aliases":
+  [
+    "IPS2LOGO_Garagentor"
+  ],
+  "parentRequirements": ["{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}"],
+  "childRequirements": [],
+  "implemented": ["{EC09E155-355C-4DC2-95C7-5C336B1C9D48}"],
+  "prefix": "I2LGaragentor"
+}
