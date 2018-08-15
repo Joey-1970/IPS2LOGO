@@ -18,10 +18,14 @@
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyInteger("Address_1", 0);
 		$this->RegisterPropertyInteger("Bit_1", 0);
+		$this->RegisterPropertyInteger("Output_1", 1);
 		$this->RegisterPropertyInteger("Address_2", 0);
 		$this->RegisterPropertyInteger("Bit_2", 0);
+		$this->RegisterPropertyInteger("Output_2", 1);
 		$this->RegisterPropertyInteger("Timer_1", 30);
 		$this->RegisterTimer("Timer_1", 0, 'I2LGaragentor_StateReset($_IPS["TARGET"]);');
+		$this->RegisterPropertyInteger("Timer_2", 250);
+		$this->RegisterTimer("Timer_2", 0, 'I2LGaragentor_GetGateState($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableInteger("State", "State", "~ShutterMoveStop", 10);
@@ -44,9 +48,32 @@
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_1",  "caption" => "Bit"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse"); 
+		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist auf"); 
+		$arrayOptions = array();
+		for ($i = 1; $i <= 16; $i++) {
+		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+		}
+		for ($i = 1; $i <= 27; $i++) {
+		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+		}
+		$arrayElements[] = array("type" => "Select", "name" => "Output_1", "caption" => "Ausgang", "options" => $arrayOptions );
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit"); 
+		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist auf"); 
+		$arrayOptions = array();
+		for ($i = 1; $i <= 16; $i++) {
+		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+		}
+		for ($i = 1; $i <= 27; $i++) {
+		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+		}
+		$arrayElements[] = array("type" => "Select", "name" => "Output_2", "caption" => "Ausgang", "options" => $arrayOptions );
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_2", "caption" => "ms");
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
+		
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
@@ -61,16 +88,21 @@
 		SetValueInteger($this->GetIDForIdent("State"), 2);
 		
 		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
-		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 0, "Offen", "Information", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 0, "Geöffnet", "Information", -1);
 		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 1, "Undefiniert", "Information", -1);
 		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 2, "Geschlossen", "Information", -1);
 		
+		$this->RegisterVariableInteger("GateState", "GateState", "IPS2LOGO.GateState", 20);
+		$this->EnableAction("State");
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SetStatus(102);
+			$this->GetGateState();
+			$this->SetTimerInterval("Timer_2", $this->ReadPropertyInteger("Timer_2") );
 		}
 		else {
 			$this->SetStatus(104);
+			$this->SetTimerInterval("Timer_2", 0 );
 		}
 		
 	}
@@ -138,6 +170,62 @@
 		$Button = $this->GetBuffer("Button");
 		$this->SetState(false, $Button);
 		$this->SetTimerInterval("Timer_1", 0);
+	}
+	
+	public function GetGateState()
+	{
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+			$this->SendDebug("GetGateState", "Ausfuehrung", 0);
+			$Output = $this->ReadPropertyInteger("Output_1");
+			$this->GetState($Output);
+			$Output = $this->ReadPropertyInteger("Output_2");
+			$this->GetState($Output);
+		}
+	}
+			
+	    
+	private function GetState(int $Output)
+	{
+		$this->SendDebug("GetState", "Ausfuehrung", 0);
+
+		If ($Output < 100) {
+			$Area = 130; // Ausgang
+		}
+		else {
+			$Area = 131; // Merker
+			$Output = $Output - 100;
+		}
+
+		If ($Output <= 8) {
+			$AreaAddress = 0;
+			$BitAddress = $Output - 1;
+		}
+		elseif (($Output > 8) AND ($Output <= 16)) {
+			$AreaAddress = 1;
+			$BitAddress = $Output - 9;
+		}
+		elseif (($Output > 16) AND ($Output <= 24)) {
+			$AreaAddress = 2;
+			$BitAddress = $Output - 17;
+		}
+		elseif ($Output > 24) {
+			$AreaAddress = 3;
+			$BitAddress = $Output - 25;
+		}
+
+		$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
+		If ($Result === false) {
+			$this->SetStatus(202);
+			$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
+		}
+		else {
+			$this->SetStatus(102);
+			$State = ord($Result);
+			$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
+			If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
+				SetValueBoolean($this->GetIDForIdent("State"), $State);
+			}
+		}
 	}
 	    
 	private function GetParentID()
