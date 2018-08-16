@@ -7,6 +7,7 @@
 		//Never delete this line!
 		parent::Destroy();
 		$this->SetTimerInterval("Timer_1", 0);
+		$this->SetTimerInterval("Timer_2", 0);
 	}
 	    
 	// Überschreibt die interne IPS_Create($id) Funktion
@@ -22,11 +23,11 @@
 		$this->RegisterPropertyInteger("Address_2", 0);
 		$this->RegisterPropertyInteger("Bit_2", 0);
 		$this->RegisterPropertyInteger("Output_2", 1);
-		$this->RegisterPropertyInteger("Timer_1", 30);
-		$this->RegisterTimer("Timer_1", 0, 'I2LGaragentor_StateReset($_IPS["TARGET"]);');
-		$this->RegisterPropertyInteger("Timer_2", 250);
+		$this->RegisterPropertyInteger("Timer_1", 0); // Laufzeit des Tastsignals
+		$this->RegisterTimer("Timer_1", 0, 'I2LGaragentor_StateReset($_IPS["TARGET"]);'); 
+		$this->RegisterPropertyInteger("Timer_2", 250); // Abfrageintervall des Status
 		$this->RegisterTimer("Timer_2", 0, 'I2LGaragentor_GetGateState($_IPS["TARGET"]);');
-		$this->RegisterPropertyInteger("Switchtime", 20);
+		$this->RegisterPropertyInteger("Switchtime", 1000);
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableInteger("State", "State", "~ShutterMoveStop", 10);
@@ -76,8 +77,6 @@
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
 		
-		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Garagentor"); 
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
 	
@@ -159,7 +158,8 @@
 				$this->SetTimerInterval("Timer_1", 0);
 			}
 			else {
-				$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
+				$SwitchTime = $this->ReadPropertyInteger("Switchtime"); // Laufzeit des Signals
+				$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 				$this->SetState(true, $Button);
 				$this->SetBuffer("Button", $Button);
 			}
