@@ -18,7 +18,7 @@
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyInteger("Address", 0);
 		$this->RegisterPropertyInteger("Bit", 0);
-		$this->RegisterPropertyInteger("Timer_1", 30);
+		$this->RegisterPropertyInteger("Timer_1", 5);
 		$this->RegisterTimer("Timer_1", 0, 'I2LTueroeffner_StateReset($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
@@ -52,8 +52,6 @@
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
 		
-		SetValueInteger($this->GetIDForIdent("State"), 2);
-		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SetStatus(102);
 		}
@@ -68,7 +66,7 @@
 	{
   		switch($Ident) {
 	        case "State":
-			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
+			If (($Value <> GetValueBoolean($this->GetIDForIdent("State"))) AND ($Value == true)) {
 				$this->KeyPress($Value);
 			}
 	            break;
@@ -104,10 +102,10 @@
 		}
 	}
 	        
-	public function Keypress(Int $State)
+	public function Keypress()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			SetValueBoolean($this->GetIDForIdent("State"), $State);
+			SetValueBoolean($this->GetIDForIdent("State"), true);
 			
 			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
 			$this->SetState(true);
@@ -118,6 +116,7 @@
 	{
 		$this->SetState(false);
 		$this->SetTimerInterval("Timer_1", 0);
+		SetValueBoolean($this->GetIDForIdent("State"), false);
 	}
 	    
 	private function GetParentID()
