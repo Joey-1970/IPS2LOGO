@@ -60,7 +60,7 @@
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_1", "caption" => "Ausgang", "options" => $arrayOptions );
 		
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist auf"); 
+		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist zu"); 
 		$arrayOptions = array();
 		for ($i = 1; $i <= 16; $i++) {
 		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
@@ -75,7 +75,7 @@
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
 		
-		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
+		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Garagentor"); 
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
