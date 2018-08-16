@@ -29,9 +29,18 @@
 		$this->RegisterTimer("Timer_2", 0, 'I2LGaragentor_GetGateState($_IPS["TARGET"]);');
 		$this->RegisterPropertyInteger("Switchtime", 1000);
 		
+		// Profile erstellen
+		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 0, "Geöffnet", "Garage", 0xFF0000);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 25, "Undefiniert", "Garage", 0x0000FF);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 100, "Geschlossen", "Garage", 0x00FF00);
+		
 		//Status-Variablen anlegen
 		$this->RegisterVariableInteger("State", "State", "~ShutterMoveStop", 10);
 		$this->EnableAction("State");
+		
+		$this->RegisterVariableInteger("GateState", "GateState", "IPS2LOGO.GateState", 20);
+
         }
        	
 	public function GetConfigurationForm() { 
@@ -87,13 +96,6 @@
                 parent::ApplyChanges();
 		
 		SetValueInteger($this->GetIDForIdent("State"), 2);
-		
-		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
-		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 0, "Geöffnet", "Garage", 0xFF0000);
-		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 25, "Undefiniert", "Garage", 0x0000FF);
-		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 100, "Geschlossen", "Garage", 0x00FF00);
-		
-		$this->RegisterVariableInteger("GateState", "GateState", "IPS2LOGO.GateState", 20);
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SetStatus(102);
