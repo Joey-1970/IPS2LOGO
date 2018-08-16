@@ -16,15 +16,13 @@
             	parent::Create();
 		$this->ConnectParent("{1B0A36F7-343F-42F3-8181-0748819FB324}");
             	$this->RegisterPropertyBoolean("Open", false);
-		$this->RegisterPropertyInteger("Address_1", 0);
-		$this->RegisterPropertyInteger("Bit_1", 0);
-		$this->RegisterPropertyInteger("Address_2", 0);
-		$this->RegisterPropertyInteger("Bit_2", 0);
+		$this->RegisterPropertyInteger("Address", 0);
+		$this->RegisterPropertyInteger("Bit", 0);
 		$this->RegisterPropertyInteger("Timer_1", 30);
-		$this->RegisterTimer("Timer_1", 0, 'I2LRolladen_StateReset($_IPS["TARGET"]);');
+		$this->RegisterTimer("Timer_1", 0, 'I2LTueroeffner_StateReset($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
-		$this->RegisterVariableInteger("State", "State", "~ShutterMoveStop", 10);
+		$this->RegisterVariableBoolean("State", "State", "~Lock", 10);
 		$this->EnableAction("State");
         }
        	
@@ -39,16 +37,12 @@
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 			
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Öffnen"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_1",  "caption" => "Adresse"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_1",  "caption" => "Bit"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
-		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
+		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs"); 
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address",  "caption" => "Adresse"); 
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit",  "caption" => "Bit"); 
+		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
+	
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
 	
@@ -65,6 +59,7 @@
 		}
 		else {
 			$this->SetStatus(104);
+			$this->SetTimerInterval("Timer_1", 0);
 		}
 		
 	}
@@ -73,7 +68,7 @@
 	{
   		switch($Ident) {
 	        case "State":
-			If ($Value <> GetValueInteger($this->GetIDForIdent("State"))) {
+			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
 				$this->KeyPress($Value);
 			}
 	            break;
@@ -90,47 +85,38 @@
  	}
 	
 	// Beginn der Funktionen
-	public function SetState(Bool $State, Int $Button)
+	public function SetState(Bool $State)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("SetState", "Ausfuehrung", 0);
 			$Area = 132; // Konstante
-			$Address[0] = $this->ReadPropertyInteger("Address_1"); // Öffnen
-			$Bit[0] = $this->ReadPropertyInteger("Bit_1");
-			$Address[4] = $this->ReadPropertyInteger("Address_2"); // Schliessen
-			$Bit[4] = $this->ReadPropertyInteger("Bit_2");
+			$Address = $this->ReadPropertyInteger("Address"); 
+			$Bit = $this->ReadPropertyInteger("Bit");
+			
 			If ($State == true) {
 				$DataPayload = utf8_encode(chr(1));
 			}
 			else {
 				$DataPayload = utf8_encode(chr(0));
 			}
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => $Area, "AreaAddress" => $Address[$Button], "BitAddress" => $Bit[$Button], "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
+			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => $Area, "AreaAddress" => $Address, "BitAddress" => $Bit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
 			$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
 		}
 	}
 	        
-	public function Keypress(Int $Button)
+	public function Keypress(Int $State)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			SetValueInteger($this->GetIDForIdent("State"), $Button);
-			If ($Button == 2) {
-				$this->SetState(false, 0);
-				$this->SetState(false, 4);
-				$this->SetTimerInterval("Timer_1", 0);
-			}
-			else {
-				$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
-				$this->SetState(true, $Button);
-				$this->SetBuffer("Button", $Button);
-			}
+			SetValueBoolean($this->GetIDForIdent("State"), $State);
+			
+			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
+			$this->SetState(true);
 		}
   	}
 	    
 	public function StateReset()
 	{
-		$Button = $this->GetBuffer("Button");
-		$this->SetState(false, $Button);
+		$this->SetState(false);
 		$this->SetTimerInterval("Timer_1", 0);
 	}
 	    
