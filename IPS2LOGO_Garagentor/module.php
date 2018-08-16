@@ -177,9 +177,21 @@
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("GetGateState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output_1");
-			$this->GetState($Output);
+			$StateTop = $this->GetState($Output);
 			$Output = $this->ReadPropertyInteger("Output_2");
-			$this->GetState($Output);
+			$StateDown = $this->GetState($Output);
+			If (($StateTop == true) AND ($StateDown == false)) {
+				$State = 0;
+			}
+			elseIf (($StateTop == false) AND ($StateDown == true)) {
+				$State = 100;
+			}
+			else {
+				$State = 25;
+			}
+			If ($State <> GetValueInteger($this->GetIDForIdent("GateState"))) {
+				SetValueInteger($this->GetIDForIdent("GateState"), $State);
+			}
 		}
 	}
 			
@@ -187,6 +199,7 @@
 	private function GetState(int $Output)
 	{
 		$this->SendDebug("GetState", "Ausfuehrung", 0);
+		$Result = -1;
 
 		If ($Output < 100) {
 			$Area = 130; // Ausgang
@@ -222,10 +235,9 @@
 			$this->SetStatus(102);
 			$State = ord($Result);
 			$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
-			If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
-				SetValueBoolean($this->GetIDForIdent("State"), $State);
-			}
+			$Result = $State;
 		}
+	return $Result;
 	}
 	    
 	private function GetParentID()
