@@ -1,0 +1,14 @@
+{
+  "id": "{C5BA0D52-C839-49E0-890E-9FDCF09E150A}",
+  "name": "IPS2LOGO_Tueroeffner",
+  "type": 3,
+  "vendor": "JP-IPS-Modules",
+  "aliases":
+  [
+    "IPS2LOGO_Tueroeffner"
+  ],
+  "parentRequirements": ["{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}"],
+  "childRequirements": [],
+  "implemented": ["{EC09E155-355C-4DC2-95C7-5C336B1C9D48}"],
+  "prefix": "I2LTueroeffner"
+}
