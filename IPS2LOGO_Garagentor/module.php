@@ -89,12 +89,11 @@
 		SetValueInteger($this->GetIDForIdent("State"), 2);
 		
 		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
-		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 0, "Geöffnet", "Information", -1);
-		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 1, "Undefiniert", "Information", -1);
-		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 2, "Geschlossen", "Information", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 0, "Geöffnet", "Garage", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 25, "Undefiniert", "Garage", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 100, "Geschlossen", "Garage", -1);
 		
 		$this->RegisterVariableInteger("GateState", "GateState", "IPS2LOGO.GateState", 20);
-		$this->EnableAction("State");
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SetStatus(102);
