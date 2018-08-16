@@ -47,7 +47,9 @@
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_1",  "caption" => "Adresse"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_1",  "caption" => "Bit"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse"); 
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit"); 
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist auf"); 
 		$arrayOptions = array();
 		for ($i = 1; $i <= 16; $i++) {
@@ -57,8 +59,7 @@
 		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_1", "caption" => "Ausgang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit"); 
+		
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist auf"); 
 		$arrayOptions = array();
 		for ($i = 1; $i <= 16; $i++) {
