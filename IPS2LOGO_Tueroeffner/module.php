@@ -67,7 +67,7 @@
   		switch($Ident) {
 	        case "State":
 			If (($Value <> GetValueBoolean($this->GetIDForIdent("State"))) AND ($Value == true)) {
-				$this->KeyPress($Value);
+				$this->KeyPress();
 			}
 	            break;
 	        default:
