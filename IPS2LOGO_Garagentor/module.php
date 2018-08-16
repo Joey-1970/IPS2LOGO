@@ -26,6 +26,7 @@
 		$this->RegisterTimer("Timer_1", 0, 'I2LGaragentor_StateReset($_IPS["TARGET"]);');
 		$this->RegisterPropertyInteger("Timer_2", 250);
 		$this->RegisterTimer("Timer_2", 0, 'I2LGaragentor_GetGateState($_IPS["TARGET"]);');
+		$this->RegisterPropertyInteger("Switchtime", 20);
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableInteger("State", "State", "~ShutterMoveStop", 10);
