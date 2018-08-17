@@ -125,8 +125,10 @@
 			If ($Output < 100) {
 				$Area = 130; // Ausgang
 				$AreaAddress = 0;
-				$AddressBit = ($Address * 10) + $Bit;
-				$BitAddress = intval(octdec($AddressBit));
+				
+				//$AddressBit = ($Address * 10) + $Bit;
+				//$BitAddress = intval(octdec($AddressBit));
+				$BitAddress = $Output - 1;
 			}
 			else {
 				$Area = 131; // Merker
