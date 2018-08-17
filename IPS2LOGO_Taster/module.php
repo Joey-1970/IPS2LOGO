@@ -124,6 +124,9 @@
 			$Output = $this->ReadPropertyInteger("Output");
 			If ($Output < 100) {
 				$Area = 130; // Ausgang
+				$AreaAddress = 0;
+				$AddressBit = ($Address * 10) + $Bit;
+				$BitAddress = octdec($AddressBit);
 			}
 			else {
 				$Area = 131; // Merker
