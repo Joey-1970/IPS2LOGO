@@ -205,31 +205,32 @@
 		$Result = -1;
 
 		If ($Output < 100) {
-				$Area = 130; // Ausgang
+			$Area = 130; // Ausgang
+			$AreaAddress = 0;
+			//$AddressBit = ($Address * 10) + $Bit;
+			//$BitAddress = intval(octdec($AddressBit));
+			$BitAddress = $Output - 1;
+		}
+		else {
+			$Area = 131; // Merker
+			$Output = $Output - 100;
+			If ($Output <= 8) {
 				$AreaAddress = 0;
-				$AddressBit = ($Address * 10) + $Bit;
-				$BitAddress = intval(octdec($AddressBit));
+				$BitAddress = $Output - 1;
 			}
-			else {
-				$Area = 131; // Merker
-				$Output = $Output - 100;
-				If ($Output <= 8) {
-					$AreaAddress = 0;
-					$BitAddress = $Output - 1;
-				}
-				elseif (($Output > 8) AND ($Output <= 16)) {
-					$AreaAddress = 1;
-					$BitAddress = $Output - 9;
-				}
-				elseif (($Output > 16) AND ($Output <= 24)) {
-					$AreaAddress = 2;
-					$BitAddress = $Output - 17;
-				}
-				elseif ($Output > 24) {
-					$AreaAddress = 3;
-					$BitAddress = $Output - 25;
-				}
+			elseif (($Output > 8) AND ($Output <= 16)) {
+				$AreaAddress = 1;
+				$BitAddress = $Output - 9;
 			}
+			elseif (($Output > 16) AND ($Output <= 24)) {
+				$AreaAddress = 2;
+				$BitAddress = $Output - 17;
+			}
+			elseif ($Output > 24) {
+				$AreaAddress = 3;
+				$BitAddress = $Output - 25;
+			}
+		}
 
 		$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
 		If ($Result === false) {
