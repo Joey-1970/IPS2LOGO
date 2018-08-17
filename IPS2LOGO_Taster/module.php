@@ -126,7 +126,7 @@
 				$Area = 130; // Ausgang
 				$AreaAddress = 0;
 				$AddressBit = ($Address * 10) + $Bit;
-				$BitAddress = octdec($AddressBit);
+				$BitAddress = intval(octdec($AddressBit));
 			}
 			else {
 				$Area = 131; // Merker
