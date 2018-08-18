@@ -23,11 +23,10 @@
 		$this->RegisterPropertyInteger("Address_2", 0);
 		$this->RegisterPropertyInteger("Bit_2", 0);
 		$this->RegisterPropertyInteger("Output_2", 1);
-		$this->RegisterPropertyInteger("Timer_1", 0); // Laufzeit des Tastsignals
+		$this->RegisterPropertyInteger("Timer_1", 1000); // Laufzeit des Tastsignals
 		$this->RegisterTimer("Timer_1", 0, 'I2LGaragentor_StateReset($_IPS["TARGET"]);'); 
 		$this->RegisterPropertyInteger("Timer_2", 250); // Abfrageintervall des Status
 		$this->RegisterTimer("Timer_2", 0, 'I2LGaragentor_GetGateState($_IPS["TARGET"]);');
-		$this->RegisterPropertyInteger("Switchtime", 1000);
 		
 		// Profile erstellen
 		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
@@ -84,7 +83,7 @@
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
 		
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
