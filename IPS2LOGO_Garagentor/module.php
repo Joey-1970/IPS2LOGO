@@ -161,7 +161,6 @@
 				$this->SetTimerInterval("Timer_1", 0);
 			}
 			else {
-				$SwitchTime = $this->ReadPropertyInteger("Switchtime"); // Laufzeit des Signals
 				$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 				$this->SetState(true, $Button);
 				$this->SetBuffer("Button", $Button);
