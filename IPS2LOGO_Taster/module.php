@@ -22,6 +22,8 @@
 		$this->RegisterPropertyInteger("Switchtime", 20);
 		$this->RegisterPropertyInteger("Timer_1", 250);
 		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
+		$this->RegisterPropertyBoolean("AP", false);
+		$this->RegisterPropertyInteger("Output_AP", 1);
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
@@ -55,6 +57,18 @@
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit",  "caption" => "Bit"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "label" => "Status parallel laufender automatischer Programme"); 
+		$arrayElements[] = array("name" => "AP", "type" => "CheckBox",  "caption" => "Aktiv"); 
+		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
+		$arrayOptions = array();
+		for ($i = 1; $i <= 16; $i++) {
+		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+		}
+		for ($i = 1; $i <= 27; $i++) {
+		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+		}
+		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
 
 		
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
