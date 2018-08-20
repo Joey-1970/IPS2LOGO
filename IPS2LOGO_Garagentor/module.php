@@ -158,14 +158,7 @@
 			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 			If ($Button == 2) {
 				$OldButton = $this->GetBuffer("Button");
-				If ($OldButton <> 2) {
-					If ($OldButton == 0) {
-						$OppositeButton = 4;
-					}
-					elseif ($OldButton == 4) {
-						$OppositeButton = 0;
-					}
-					$this->SetState(true, $OppositeButton);
+					$this->SetState(true, $OldButton);
 				}
 			}
 			else {
