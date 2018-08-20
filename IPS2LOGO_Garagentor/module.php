@@ -155,16 +155,23 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
 			SetValueInteger($this->GetIDForIdent("State"), $Button);
+			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 			If ($Button == 2) {
-				$this->SetState(false, 0);
-				$this->SetState(false, 4);
-				$this->SetTimerInterval("Timer_1", 0);
+				$OldButton = $this->GetBuffer("Button");
+				If ($OldButton <> 2) {
+					If ($OldButton == 0) {
+						$OppositeButton = 4;
+					}
+					elseif ($OldButton == 4) {
+						$OppositeButton = 0;
+					}
+					$this->SetState(true, $OppositeButton);
+				}
 			}
 			else {
-				$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 				$this->SetState(true, $Button);
-				$this->SetBuffer("Button", $Button);
 			}
+			$this->SetBuffer("Button", $Button);
 		}
   	}
 	    
