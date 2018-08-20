@@ -141,9 +141,6 @@
 			If ($Output < 100) {
 				$Area = 130; // Ausgang
 				$AreaAddress = 0;
-				
-				//$AddressBit = ($Address * 10) + $Bit;
-				//$BitAddress = intval(octdec($AddressBit));
 				$BitAddress = $Output - 1;
 			}
 			else {
@@ -180,6 +177,62 @@
 				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
 					SetValueBoolean($this->GetIDForIdent("State"), $State);
+				}
+				$ReadAP = $this->ReadPropertyBoolean("AP");
+				If ($ReadAP == true) {
+					 $this->GetAPState();
+				}
+			}
+		}
+	}
+	    
+	public function GetAPState()
+	{
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+			$this->SendDebug("GetAPState", "Ausfuehrung", 0);
+			$Output = $this->ReadPropertyInteger("Output_AP");
+			If ($Output < 100) {
+				$Area = 130; // Ausgang
+				$AreaAddress = 0;
+				$BitAddress = $Output - 1;
+			}
+			else {
+				$Area = 131; // Merker
+				$Output = $Output - 100;
+				If ($Output <= 8) {
+					$AreaAddress = 0;
+					$BitAddress = $Output - 1;
+				}
+				elseif (($Output > 8) AND ($Output <= 16)) {
+					$AreaAddress = 1;
+					$BitAddress = $Output - 9;
+				}
+				elseif (($Output > 16) AND ($Output <= 24)) {
+					$AreaAddress = 2;
+					$BitAddress = $Output - 17;
+				}
+				elseif ($Output > 24) {
+					$AreaAddress = 3;
+					$BitAddress = $Output - 25;
+				}
+			}
+			
+			
+				
+			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
+			If ($Result === false) {
+				$this->SetStatus(202);
+				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
+			}
+			else {
+				$this->SetStatus(102);
+				$State = ord($Result);
+				$this->SendDebug("GetAPState", "Ergebnis: ".$State, 0);
+				If ($State == false) {
+					$this->EnableAction("State");
+				}
+				else {
+					$this->DisableAction("State");
 				}
 			}
 		}
