@@ -141,7 +141,7 @@
 			If ($Output < 100) {
 				$Area = 130; // Ausgang
 				$AreaAddress = 0;
-				
+				$BitAddress = $Output - 1;
 			}
 			else {
 				$Area = 131; // Merker
