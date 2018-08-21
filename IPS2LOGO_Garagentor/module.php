@@ -112,9 +112,7 @@
 	{
   		switch($Ident) {
 	        case "State":
-			If ($Value <> GetValueInteger($this->GetIDForIdent("State"))) {
-				$this->KeyPress($Value);
-			}
+			$this->KeyPress($Value);
 	            break;
 	        default:
 	            throw new Exception("Invalid Ident");
