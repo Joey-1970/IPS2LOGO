@@ -157,7 +157,8 @@
 			SetValueInteger($this->GetIDForIdent("State"), $Button);
 			If ($Button == 2) {
 				$OldButton = $this->GetBuffer("Button");
-				If ($OldButton <> 2) {
+				$GateState = GetValueInteger($this->GetIDForIdent("GateState"));
+				If (($GateState = 25) AND ($OldButton <> 2)) {
 					$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 					$this->SetState(true, $OldButton);
 				}
@@ -186,13 +187,13 @@
 			$Output = $this->ReadPropertyInteger("Output_2");
 			$StateDown = $this->GetState($Output);
 			If (($StateTop == true) AND ($StateDown == false)) {
-				$State = 0;
+				$State = 0; // geöffnet
 			}
 			elseIf (($StateTop == false) AND ($StateDown == true)) {
-				$State = 100;
+				$State = 100; // geschlossen
 			}
 			else {
-				$State = 25;
+				$State = 25; // undefinierter Zustand
 			}
 			If ($State <> GetValueInteger($this->GetIDForIdent("GateState"))) {
 				SetValueInteger($this->GetIDForIdent("GateState"), $State);
