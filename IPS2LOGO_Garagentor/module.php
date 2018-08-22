@@ -131,6 +131,7 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("SetState", "Ausfuehrung", 0);
+			$this->SetBuffer("Button", $Button);
 			$Area = 132; // Konstante
 			$Address[0] = $this->ReadPropertyInteger("Address_1"); // Öffnen
 			$Bit[0] = $this->ReadPropertyInteger("Bit_1");
@@ -144,6 +145,7 @@
 			else {
 				$DataPayload = utf8_encode(chr(0));
 			}
+			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => $Area, "AreaAddress" => 0, "BitAddress" => $AddressBit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
 			$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
 		}
@@ -153,19 +155,18 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
 			SetValueInteger($this->GetIDForIdent("State"), $Button);
+			
 			If ($Button == 2) {
 				$OldButton = $this->GetBuffer("Button");
 				$GateState = GetValueInteger($this->GetIDForIdent("GateState"));
-				If (($GateState = 25) AND ($OldButton <> 2)) {
-					$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
+				If (($GateState == 25) AND ($OldButton <> 2)) {
 					$this->SetState(true, $OldButton);
+					$this->SetBuffer("Button", $Button);
 				}
 			}
 			else {
-				$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 				$this->SetState(true, $Button);
 			}
-			$this->SetBuffer("Button", $Button);
 		}
   	}
 	    
