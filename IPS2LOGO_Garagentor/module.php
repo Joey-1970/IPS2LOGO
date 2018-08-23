@@ -81,9 +81,11 @@
 		$arrayElements[] = array("type" => "Select", "name" => "Output_2", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_2", "caption" => "ms");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise iat abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
+		
 		
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
