@@ -24,7 +24,6 @@
 		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
 		$this->RegisterPropertyBoolean("AP", false); // Parallele automatische Progamme
 		$this->RegisterPropertyInteger("Output_AP", 1);
-		$this->RegisterPropertyInteger("Device_ID", 0);
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
@@ -70,11 +69,7 @@
 		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Optional: Angabe einer Boolean Variablen die bei Statusänderung gesetzt wird");
-		$arrayElements[] = array("type" => "SelectVariable", "name" => "Device_ID", "caption" => "Variablen ID");
 
-		
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
 	
@@ -166,11 +161,6 @@
 				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
 					SetValueBoolean($this->GetIDForIdent("State"), $State);
 					$this->SendDebug("GetState", "Device_ID: ".$Device_ID, 0);
-					/*
-					If ($Device_ID > 0) {
-						SetValueBoolean($Device_ID, $State);
-					}
-					*/
 				}
 				$ReadAP = $this->ReadPropertyBoolean("AP");
 				If ($ReadAP == true) {
