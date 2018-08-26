@@ -222,7 +222,7 @@
 			$TimeDiff = time() -  $this->GetBuffer("LastCalculate");
 			$Amplification = $this->ReadPropertyInteger("Amplification");
 			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
-			$PitchThreshold = $this->ReadPropertyFloat("PitchThreshold");
+			$PitchThreshold = $this->ReadPropertyInteger("PitchThreshold");
 			
 			If ($TimeDiff > 0) {
 				$Pitch = ($TempDiff * $Amplification) / $TimeDiff;
