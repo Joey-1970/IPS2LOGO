@@ -21,13 +21,10 @@
 		$this->RegisterPropertyInteger("Bit", 0);
 		$this->RegisterPropertyInteger("Switchtime", 20);
 		$this->RegisterPropertyInteger("Timer_1", 250);
-		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
-		$this->RegisterPropertyBoolean("AP", false); // Parallele automatische Progamme
-		$this->RegisterPropertyInteger("Output_AP", 1);
+		$this->RegisterTimer("Timer_1", 0, 'I2LZirkulation_GetState($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
-		$this->EnableAction("State");
         }
        	
 	public function GetConfigurationForm() { 
@@ -57,19 +54,9 @@
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Status parallel laufender automatischer Programme"); 
-		$arrayElements[] = array("name" => "AP", "type" => "CheckBox",  "caption" => "Aktiv"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
-		$arrayOptions = array();
-		for ($i = 1; $i <= 16; $i++) {
-		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
-		}
-		for ($i = 1; $i <= 27; $i++) {
-		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
-		}
-		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
- 		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
+		 
+		
+		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
 	
 	// Überschreibt die intere IPS_ApplyChanges($id) Funktion
@@ -93,11 +80,7 @@
 	public function RequestAction($Ident, $Value) 
 	{
   		switch($Ident) {
-	        case "State":
-			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
-				$this->KeyPress();
-			}
-	            break;
+	       
 	        default:
 	            throw new Exception("Invalid Ident");
 	    	}
@@ -169,51 +152,9 @@
 		}
 	}
 	    
-	public function GetAPState()
-	{
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
-			$this->SendDebug("GetAPState", "Ausfuehrung", 0);
-			$Output = $this->ReadPropertyInteger("Output_AP");
-			$AreaAddress = 0;
-			
-			If ($Output < 100) {
-				$Area = 130; // Ausgang
-				$BitAddress = $Output - 1;
-			}
-			else {
-				$Area = 131; // Merker
-				$BitAddress = $Output - 101;
-			}
-				
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
-			If ($Result === false) {
-				$this->SetStatus(202);
-				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
-			}
-			else {
-				$this->SetStatus(102);
-				$State = ord($Result);
-				$this->SendDebug("GetAPState", "Ergebnis: ".$State, 0);
-				If ($State == false) {
-					$this->EnableAction("State");
-				}
-				else {
-					$this->DisableAction("State");
-				}
-			}
-		}
-	}
+	
 	    
-	public function Keypress()
-	{
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
-			$this->SetState(true);
-			IPS_Sleep($Switchtime);
-			$this->SetState(false);
-		}
-  	}
-	    
+
 	private function GetParentID()
 	{
 		$ParentID = (IPS_GetInstance($this->InstanceID)['ConnectionID']);  
