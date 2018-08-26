@@ -186,7 +186,6 @@
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("GetState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output");
-			$Device_ID = $this->ReadPropertyInteger("Device_ID");
 			$AreaAddress = 0;
 			
 			If ($Output < 100) {
@@ -209,11 +208,6 @@
 				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
 					SetValueBoolean($this->GetIDForIdent("State"), $State);
-					$this->SendDebug("GetState", "Device_ID: ".$Device_ID, 0);
-				}
-				$ReadAP = $this->ReadPropertyBoolean("AP");
-				If ($ReadAP == true) {
-					 $this->GetAPState();
 				}
 			}
 		}
