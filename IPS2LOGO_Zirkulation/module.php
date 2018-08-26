@@ -218,7 +218,7 @@
 		// Prüfen, ob die Zirkulationspumpe aufgrund einer Warmwasseranforderung eingeschaltet werden soll
 		If (($this->ReadPropertyInteger("FlowTemperature_ID") > 0) AND ($this->ReadPropertyInteger("ReturnTemperature_ID"))) {
 			$FlowTemperature = GetValueFloat($this->ReadPropertyInteger("FlowTemperature_ID"));
-			$TempDiff = $FlowTemperature - $this->GetBuffer("LastFlowTemperature");
+			$TempDiff = $FlowTemperature - floatval($this->GetBuffer("LastFlowTemperature"));
 			$TimeDiff = time() -  $this->GetBuffer("LastCalculate");
 			$Amplification = $this->ReadPropertyInteger("Amplification");
 			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
@@ -252,7 +252,7 @@
 			$FlowTemperature = GetValueFloat($this->ReadPropertyInteger("FlowTemperature_ID"));
 			$ReturnTemperature = GetValueFloat($this->ReadPropertyInteger("ReturnTemperature_ID"));
 			$TempDiff = $FlowTemperature - $ReturnTemperature;
-			$TimeDiff = time() -  $this->GetBuffer("LastSwitchOn");
+			$TimeDiff = time() - floatval($this->GetBuffer("LastSwitchOn"));
 			$MinRuntime = $this->ReadPropertyInteger("MinRuntime");
 			$ParallelShift = $this->ReadPropertyInteger("ParallelShift");
 			$PumpState = GetValueBoolean($this->GetIDForIdent("Status"));
