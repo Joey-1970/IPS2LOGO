@@ -264,6 +264,8 @@
 			}
 			else {
 				$this->SendDebug("SwitchOff", "Die Zirkulationspumpe wird nicht ausgeschaltet.", 0);
+				$this->SendDebug("SwitchOff", "TimeDiff: ".$TimeDiff." MinRuntime: ".$MinRuntime , 0);
+				$this->SendDebug("SwitchOff", "ReturnTemperature: ".$ReturnTemperature." FlowTemperature: ".$FlowTemperature , 0);
 			}
 		}
 	}
