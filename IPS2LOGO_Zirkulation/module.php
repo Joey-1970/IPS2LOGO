@@ -219,7 +219,7 @@
 		If (($this->ReadPropertyInteger("FlowTemperature_ID") > 0) AND ($this->ReadPropertyInteger("ReturnTemperature_ID"))) {
 			$FlowTemperature = GetValueFloat($this->ReadPropertyInteger("FlowTemperature_ID"));
 			$TempDiff = $FlowTemperature - floatval($this->GetBuffer("LastFlowTemperature"));
-			$TimeDiff = time() -  $this->GetBuffer("LastCalculate");
+			$TimeDiff = time() -  floatval($this->GetBuffer("LastCalculate"));
 			$Amplification = $this->ReadPropertyInteger("Amplification");
 			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
 			$PitchThreshold = $this->ReadPropertyInteger("PitchThreshold");
@@ -255,7 +255,7 @@
 			$TimeDiff = time() - floatval($this->GetBuffer("LastSwitchOn"));
 			$MinRuntime = $this->ReadPropertyInteger("MinRuntime");
 			$ParallelShift = $this->ReadPropertyInteger("ParallelShift");
-			$PumpState = GetValueBoolean($this->GetIDForIdent("Status"));
+			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
 			
 			If (($TimeDiff > $MinRuntime) AND (($ReturnTemperature - $ParallelShift) > $FlowTemperature) And ($PumpState == true)) {
 				// Pumpe ausschalten
