@@ -219,7 +219,7 @@
 		If (($this->ReadPropertyInteger("FlowTemperature_ID") > 0) AND ($this->ReadPropertyInteger("ReturnTemperature_ID"))) {
 			$FlowTemperature = GetValueFloat($this->ReadPropertyInteger("FlowTemperature_ID"));
 			$TempDiff = $FlowTemperature - floatval($this->GetBuffer("LastFlowTemperature"));
-			$TimeDiff = time() -  floatval($this->GetBuffer("LastCalculate"));
+			$TimeDiff = time() -  intval($this->GetBuffer("LastCalculate"));
 			$Amplification = $this->ReadPropertyInteger("Amplification");
 			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
 			$PitchThreshold = $this->ReadPropertyInteger("PitchThreshold");
@@ -252,7 +252,7 @@
 			$FlowTemperature = GetValueFloat($this->ReadPropertyInteger("FlowTemperature_ID"));
 			$ReturnTemperature = GetValueFloat($this->ReadPropertyInteger("ReturnTemperature_ID"));
 			$TempDiff = $FlowTemperature - $ReturnTemperature;
-			$TimeDiff = time() - floatval($this->GetBuffer("LastSwitchOn"));
+			$TimeDiff = time() - intval($this->GetBuffer("LastSwitchOn"));
 			$MinRuntime = $this->ReadPropertyInteger("MinRuntime");
 			$ParallelShift = $this->ReadPropertyInteger("ParallelShift");
 			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
@@ -260,7 +260,10 @@
 			If (($TimeDiff > $MinRuntime) AND (($ReturnTemperature - $ParallelShift) > $FlowTemperature) And ($PumpState == true)) {
 				// Pumpe ausschalten
 				$this->SetState(false);
-				$this->SendDebug("Calculate", "Die Zirkulationspumpe wird ausgeschaltet da der Schwellwert der Rücklauftemperatur erreicht wurde", 0);
+				$this->SendDebug("SwitchOff", "Die Zirkulationspumpe wird ausgeschaltet da der Schwellwert der Rücklauftemperatur erreicht wurde", 0);
+			}
+			else {
+				$this->SendDebug("SwitchOff", "Die Zirkulationspumpe wird nicht ausgeschaltet.", 0);
 			}
 		}
 	}
