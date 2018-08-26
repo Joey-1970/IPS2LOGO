@@ -257,10 +257,17 @@
 			$ParallelShift = $this->ReadPropertyInteger("ParallelShift");
 			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
 			
-			If (($TimeDiff > $MinRuntime) AND (($ReturnTemperature + $ParallelShift) > $FlowTemperature) And ($PumpState == true)) {
-				// Pumpe ausschalten
-				$this->SetState(false);
-				$this->SendDebug("SwitchOff", "Die Zirkulationspumpe wird ausgeschaltet da der Schwellwert der Rücklauftemperatur erreicht wurde", 0);
+			If ($TimeDiff > $MinRuntime) {
+				$this->SendDebug("SwitchOff", "TimeDiff: ".($TimeDiff - $MinRuntime), 0);
+				If (($ReturnTemperature + $ParallelShift) > $FlowTemperature) {
+					$this->SendDebug("SwitchOff", "TempDiff: ".(($ReturnTemperature + $ParallelShift) - $FlowTemperature), 0);
+					If ($PumpState == true) {
+						$this->SendDebug("SwitchOff", "PumpState:".$PumpState, 0);
+						// Pumpe ausschalten
+						$this->SetState(false);
+						$this->SendDebug("SwitchOff", "Die Zirkulationspumpe wird ausgeschaltet da der Schwellwert der Rücklauftemperatur erreicht wurde", 0);
+					}
+				}
 			}
 			else {
 				$this->SendDebug("SwitchOff", "Die Zirkulationspumpe wird nicht ausgeschaltet.", 0);
