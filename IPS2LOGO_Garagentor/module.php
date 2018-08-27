@@ -149,7 +149,8 @@
 			}
 			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => $Area, "AreaAddress" => 0, "BitAddress" => $AddressBit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
-			$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
+			//$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
+			$this->GetGateState();
 		}
 	}
 	        
