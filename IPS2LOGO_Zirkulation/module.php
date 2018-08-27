@@ -202,7 +202,7 @@
 	public function GetState()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
-			$this->SendDebug("GetState", "Ausfuehrung", 0);
+			//$this->SendDebug("GetState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output");
 			$AreaAddress = 0;
 			
