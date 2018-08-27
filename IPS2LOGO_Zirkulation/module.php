@@ -165,12 +165,12 @@
 			case 10603:
 				// Änderung der Vorlauf-Temperatur
 				If ($SenderID == $this->ReadPropertyInteger("FlowTemperature_ID")) {
-					$this->SendDebug("ReceiveData", "Ausloeser Aenderung Vorlauf-Temperatur", 0);
+					//$this->SendDebug("ReceiveData", "Ausloeser Aenderung Vorlauf-Temperatur", 0);
 					$this->Calculate();
 				}
 				//Änderung der Rücklauf-Temperatur
 				elseif ($SenderID == $this->ReadPropertyInteger("ReturnTemperature_ID")) {
-					$this->SendDebug("ReceiveData", "Ausloeser Aenderung Ruecklauf-Temperatur", 0);
+					//$this->SendDebug("ReceiveData", "Ausloeser Aenderung Ruecklauf-Temperatur", 0);
 					$this->SwitchOff();
 				}
 				break;
@@ -279,11 +279,11 @@
 			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
 			
 			If (($TimeDiff > $MinRuntime) AND ($Automatic == true)) {
-				$this->SendDebug("SwitchOff", "TimeDiff: ".($TimeDiff - $MinRuntime), 0);
+				//$this->SendDebug("SwitchOff", "TimeDiff: ".($TimeDiff - $MinRuntime), 0);
 				If (($ReturnTemperature + $ParallelShift) > $FlowTemperature) {
-					$this->SendDebug("SwitchOff", "TempDiff: ".(($ReturnTemperature + $ParallelShift) - $FlowTemperature), 0);
+					//$this->SendDebug("SwitchOff", "TempDiff: ".(($ReturnTemperature + $ParallelShift) - $FlowTemperature), 0);
 					If ($PumpState == true) {
-						$this->SendDebug("SwitchOff", "PumpState:".$PumpState, 0);
+						//$this->SendDebug("SwitchOff", "PumpState:".$PumpState, 0);
 						// Pumpe ausschalten
 						$this->SetState(false);
 						$this->SendDebug("SwitchOff", "Die Zirkulationspumpe wird ausgeschaltet da der Schwellwert der Rücklauftemperatur erreicht wurde", 0);
@@ -291,9 +291,9 @@
 				}
 			}
 			else {
-				$this->SendDebug("SwitchOff", "Die Zirkulationspumpe wird nicht ausgeschaltet.", 0);
-				$this->SendDebug("SwitchOff", "TimeDiff: ".$TimeDiff." MinRuntime: ".$MinRuntime , 0);
-				$this->SendDebug("SwitchOff", "ReturnTemperature: ".$ReturnTemperature." FlowTemperature: ".$FlowTemperature , 0);
+				//$this->SendDebug("SwitchOff", "Die Zirkulationspumpe wird nicht ausgeschaltet.", 0);
+				//$this->SendDebug("SwitchOff", "TimeDiff: ".$TimeDiff." MinRuntime: ".$MinRuntime , 0);
+				//$this->SendDebug("SwitchOff", "ReturnTemperature: ".$ReturnTemperature." FlowTemperature: ".$FlowTemperature , 0);
 			}
 		}
 	}
