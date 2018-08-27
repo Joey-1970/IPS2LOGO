@@ -271,7 +271,7 @@
 			$ParallelShift = $this->ReadPropertyInteger("ParallelShift");
 			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
 			
-			If ($TimeDiff > $MinRuntime) {
+			If (($TimeDiff > $MinRuntime) AND ($Automatic == true)) {
 				$this->SendDebug("SwitchOff", "TimeDiff: ".($TimeDiff - $MinRuntime), 0);
 				If (($ReturnTemperature + $ParallelShift) > $FlowTemperature) {
 					$this->SendDebug("SwitchOff", "TempDiff: ".(($ReturnTemperature + $ParallelShift) - $FlowTemperature), 0);
