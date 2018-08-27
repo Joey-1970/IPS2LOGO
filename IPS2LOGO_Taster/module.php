@@ -128,14 +128,14 @@
 				$DataPayload = utf8_encode(chr(0));
 			}
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => $Area, "AreaAddress" => 0, "BitAddress" => $AddressBit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
-			$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
+			//$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
 		}
 	}
 	    
 	public function GetState()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
-			$this->SendDebug("GetState", "Ausfuehrung", 0);
+			//$this->SendDebug("GetState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output");
 			$AreaAddress = 0;
 			
@@ -156,7 +156,7 @@
 			else {
 				$this->SetStatus(102);
 				$State = ord($Result);
-				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
+				//$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
 					SetValueBoolean($this->GetIDForIdent("State"), $State);
 				}
@@ -171,7 +171,7 @@
 	public function GetAPState()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
-			$this->SendDebug("GetAPState", "Ausfuehrung", 0);
+			//$this->SendDebug("GetAPState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output_AP");
 			$AreaAddress = 0;
 			
@@ -192,7 +192,7 @@
 			else {
 				$this->SetStatus(102);
 				$State = ord($Result);
-				$this->SendDebug("GetAPState", "Ergebnis: ".$State, 0);
+				//$this->SendDebug("GetAPState", "Ergebnis: ".$State, 0);
 				If ($State == false) {
 					$this->EnableAction("State");
 				}
