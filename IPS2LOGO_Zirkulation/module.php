@@ -137,6 +137,12 @@
 	            	break;
 			case "Automatic":
 				SetValueBoolean($this->GetIDForIdent($Ident), $Value);
+				If ($Value == true) {
+					$this->DisableAction("State");
+				}
+				else {
+					$this->EnableAction("State");
+				}
 	            	break;
 	        default:
 	            throw new Exception("Invalid Ident");
