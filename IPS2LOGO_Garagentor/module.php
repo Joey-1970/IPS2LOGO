@@ -182,7 +182,7 @@
 	public function GetGateState()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
-			$this->SendDebug("GetGateState", "Ausfuehrung", 0);
+			//$this->SendDebug("GetGateState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output_1");
 			$StateTop = $this->GetState($Output);
 			$Output = $this->ReadPropertyInteger("Output_2");
@@ -205,7 +205,7 @@
 	    
 	private function GetState(int $Output)
 	{
-		$this->SendDebug("GetState", "Ausfuehrung", 0);
+		//$this->SendDebug("GetState", "Ausfuehrung", 0);
 		$Result = -1;
 
 		If ($Output < 100) {
@@ -227,7 +227,7 @@
 		else {
 			$this->SetStatus(102);
 			$State = ord($Result);
-			$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
+			//$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 			$Result = $State;
 		}
 	return $Result;
