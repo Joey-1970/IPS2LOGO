@@ -271,6 +271,7 @@
 		If (($this->ReadPropertyInteger("FlowTemperature_ID") > 0) AND ($this->ReadPropertyInteger("ReturnTemperature_ID"))) {
 			$FlowTemperature = GetValueFloat($this->ReadPropertyInteger("FlowTemperature_ID"));
 			$ReturnTemperature = GetValueFloat($this->ReadPropertyInteger("ReturnTemperature_ID"));
+			$Automatic = GetValueBoolean($this->GetIDForIdent("Automatic"));
 			$TempDiff = $FlowTemperature - $ReturnTemperature;
 			$TimeDiff = time() - intval($this->GetBuffer("LastSwitchOn"));
 			$MinRuntime = $this->ReadPropertyInteger("MinRuntime");
