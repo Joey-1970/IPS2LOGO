@@ -31,7 +31,11 @@
 		$this->RegisterPropertyInteger("ParallelShift", 15);
 		
 		//Status-Variablen anlegen
-		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);		
+		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
+		$this->EnableAction("State");
+		
+		$this->RegisterVariableBoolean("Automatic", "Automatik", "~Switch", 20);
+		$this->EnableAction("Automatic");
 	
         }
        	
@@ -126,7 +130,14 @@
 	public function RequestAction($Ident, $Value) 
 	{
   		switch($Ident) {
-	       
+			case "State":
+			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
+				$this->SetState($Value);
+			}
+	            	break;
+			case "Automatic":
+				SetValueBoolean($this->GetIDForIdent($Ident), $Value);
+	            	break;
 	        default:
 	            throw new Exception("Invalid Ident");
 	    	}
@@ -177,6 +188,7 @@
 				$DataPayload = utf8_encode(chr(0));
 			}
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => $Area, "AreaAddress" => 0, "BitAddress" => $AddressBit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
+			$this->GetState();
 			//$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
 		}
 	}
@@ -222,9 +234,11 @@
 			$TimeDiff = time() -  intval($this->GetBuffer("LastCalculate"));
 			$Amplification = $this->ReadPropertyInteger("Amplification");
 			$PumpState = GetValueBoolean($this->GetIDForIdent("State"));
+			$Automatic = GetValueBoolean($this->GetIDForIdent("Automatic"));
 			$PitchThreshold = $this->ReadPropertyInteger("PitchThreshold");
 			
-			If ($TimeDiff > 0) {
+			
+			If (($TimeDiff > 0) AND ($Automatic == true)) {
 				$Pitch = ($TempDiff * $Amplification) / $TimeDiff;
 				$this->SendDebug("Calculate", "Steigung: ".round($Pitch, 2)." Temperaturdifferenz: ".$TempDiff." °C Zeitdifferenz: ".round($TimeDiff, 2), 0);
 				If (($Pitch > $PitchThreshold) And ($TimeDiff > 1) And ($PumpState == false)) {
