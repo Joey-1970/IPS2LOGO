@@ -32,7 +32,6 @@
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
-		$this->EnableAction("State");
 		
 		$this->RegisterVariableBoolean("Automatic", "Automatik", "~Switch", 20);
 		$this->EnableAction("Automatic");
@@ -89,6 +88,15 @@
         {
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
+		
+		$Automatic = GetValueBoolean($this->GetIDForIdent("Automatic"));
+		If ($Automatic == true) {
+			$this->DisableAction("State");
+		}
+		else {
+			$this->EnableAction("State");
+		}
+		
 		
 		// Anlegen des Wochenplans
 		$this->RegisterEvent("Wochenplan", "IPS2Cn_Event_".$this->InstanceID, 2, $this->InstanceID, 20);
