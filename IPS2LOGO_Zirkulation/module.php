@@ -131,9 +131,9 @@
 	{
   		switch($Ident) {
 			case "State":
-			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
-				$this->SetState($Value);
-			}
+				If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
+					$this->SetState($Value);
+				}
 	            	break;
 			case "Automatic":
 				SetValueBoolean($this->GetIDForIdent($Ident), $Value);
