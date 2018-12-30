@@ -22,10 +22,20 @@
 		$this->RegisterPropertyInteger("Bit_2", 0);
 		$this->RegisterPropertyInteger("Timer_1", 30);
 		$this->RegisterTimer("Timer_1", 0, 'I2LRolladen_StateReset($_IPS["TARGET"]);');
+		$this->RegisterPropertyInteger("ActualTemperatureID", 0);
+		$this->RegisterPropertyFloat("Temperature", 3.0);
+		
+		// Profile erstellen
+		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 0, "Geöffnet", "Garage", 0xFF0000);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 25, "Undefiniert", "Garage", 0x0000FF);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 100, "Geschlossen", "Garage", 0x00FF00);
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableInteger("State", "State", "~ShutterMoveStop", 10);
 		$this->EnableAction("State");
+		
+		$this->RegisterVariableInteger("GateState", "GateState", "IPS2LOGO.GateState", 20);
         }
        	
 	public function GetConfigurationForm() { 
@@ -49,7 +59,13 @@
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
- 		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "label" => "Variable die den aktuellen Temperaturwert enthält:");
+		$arrayElements[] = array("type" => "SelectVariable", "name" => "ActualTemperatureID", "caption" => "Ist-Temperatur"); 
+ 		$arrayElements[] = array("type" => "Label", "label" => "Mindesttemperatur für den Betrieb:");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Temperature", "caption" => "Temperatur", "digits" => 1);
+		
+		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
 	
 	// Überschreibt die intere IPS_ApplyChanges($id) Funktion
@@ -113,16 +129,25 @@
 	public function Keypress(Int $Button)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			SetValueInteger($this->GetIDForIdent("State"), $Button);
-			$this->SetState(false, 0);
-			$this->SetState(false, 4);
-			If ($Button == 2) {
-				$this->SetTimerInterval("Timer_1", 0);
+			$ActualTemperature = GetValueFloat($this->ReadPropertyInteger("ActualTemperatureID"));
+			$Temperature = $this->ReadPropertyFloat("Temperature");
+				
+			If ($ActualTemperature >= $Temperature) {
+				SetValueInteger($this->GetIDForIdent("State"), $Button);
+				$this->SetState(false, 0);
+				$this->SetState(false, 4);
+				If ($Button == 2) {
+					$this->SetTimerInterval("Timer_1", 0);
+				}
+				else {
+					$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
+					SetValueInteger($this->GetIDForIdent("GateState"), 25);
+					$this->SetState(true, $Button);
+					$this->SetBuffer("Button", $Button);
+				}
 			}
 			else {
-				$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
-				$this->SetState(true, $Button);
-				$this->SetBuffer("Button", $Button);
+				$this->SendDebug("Keypress", "Mindesttemperatur nicht vorhanden!", 0);
 			}
 		}
   	}
@@ -133,6 +158,12 @@
 		$this->SetState(false, $Button);
 		SetValueInteger($this->GetIDForIdent("State"), 2);
 		$this->SetTimerInterval("Timer_1", 0);
+		If ($Button == 0) {
+			SetValueInteger($this->GetIDForIdent("GateState"), 0);
+		}
+		elseif ($Button == 4) {
+			SetValueInteger($this->GetIDForIdent("GateState"), 100);
+		}
 	}
 	    
 	private function GetParentID()
@@ -157,6 +188,23 @@
 			return true;
 		}
         return false;
-    	}  
+    	} 
+	    
+	private function RegisterProfileInteger($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize)
+	{
+	        if (!IPS_VariableProfileExists($Name))
+	        {
+	            IPS_CreateVariableProfile($Name, 1);
+	        }
+	        else
+	        {
+	            $profile = IPS_GetVariableProfile($Name);
+	            if ($profile['ProfileType'] != 1)
+	                throw new Exception("Variable profile type does not match for profile " . $Name);
+	        }
+	        IPS_SetVariableProfileIcon($Name, $Icon);
+	        IPS_SetVariableProfileText($Name, $Prefix, $Suffix);
+	        IPS_SetVariableProfileValues($Name, $MinValue, $MaxValue, $StepSize);        
+	}
 }
 ?>
