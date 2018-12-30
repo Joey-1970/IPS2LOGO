@@ -114,9 +114,9 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
 			SetValueInteger($this->GetIDForIdent("State"), $Button);
+			$this->SetState(false, 0);
+			$this->SetState(false, 4);
 			If ($Button == 2) {
-				$this->SetState(false, 0);
-				$this->SetState(false, 4);
 				$this->SetTimerInterval("Timer_1", 0);
 			}
 			else {
@@ -131,6 +131,7 @@
 	{
 		$Button = $this->GetBuffer("Button");
 		$this->SetState(false, $Button);
+		SetValueInteger($this->GetIDForIdent("State"), 2);
 		$this->SetTimerInterval("Timer_1", 0);
 	}
 	    
