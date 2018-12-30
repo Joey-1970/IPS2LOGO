@@ -199,6 +199,9 @@
 			}
 			If ($State <> GetValueInteger($this->GetIDForIdent("GateState"))) {
 				SetValueInteger($this->GetIDForIdent("GateState"), $State);
+				If ($State <> 25) {
+					SetValueInteger($this->GetIDForIdent("State"), 2);
+				}
 			}
 		}
 	}
