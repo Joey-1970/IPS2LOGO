@@ -74,6 +74,11 @@
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
 		
+		// Registrierung für die Änderung der Ist-Temperatur
+		If ($this->ReadPropertyInteger("ActualTemperatureID") > 0) {
+			$this->RegisterMessage($this->ReadPropertyInteger("ActualTemperatureID"), 10603);
+		}
+		
 		SetValueInteger($this->GetIDForIdent("State"), 2);
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
@@ -84,6 +89,26 @@
 		}
 		
 	}
+	
+	public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    	{
+		switch ($Message) {
+			case 10603:
+				// Änderung der Ist-Temperatur, die Temperatur aus dem angegebenen Sensor in das Modul kopieren
+				If ($SenderID == $this->ReadPropertyInteger("ActualTemperatureID")) {
+					$ActualTemperature = GetValueFloat($this->ReadPropertyInteger("ActualTemperatureID"));
+					$Temperature = $this->ReadPropertyFloat("Temperature");
+					If ($ActualTemperature >= $Temperature) {
+						$this->EnableAction("State");
+					}
+					else {
+						$this->DisableAction("State");
+					}
+				}
+				break;
+
+		}
+    	}
 	
 	public function RequestAction($Ident, $Value) 
 	{
@@ -129,25 +154,17 @@
 	public function Keypress(Int $Button)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			$ActualTemperature = GetValueFloat($this->ReadPropertyInteger("ActualTemperatureID"));
-			$Temperature = $this->ReadPropertyFloat("Temperature");
-				
-			If ($ActualTemperature >= $Temperature) {
-				SetValueInteger($this->GetIDForIdent("State"), $Button);
-				$this->SetState(false, 0);
-				$this->SetState(false, 4);
-				If ($Button == 2) {
-					$this->SetTimerInterval("Timer_1", 0);
-				}
-				else {
-					$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
-					SetValueInteger($this->GetIDForIdent("GateState"), 25);
-					$this->SetState(true, $Button);
-					$this->SetBuffer("Button", $Button);
-				}
+			SetValueInteger($this->GetIDForIdent("State"), $Button);
+			$this->SetState(false, 0);
+			$this->SetState(false, 4);
+			If ($Button == 2) {
+				$this->SetTimerInterval("Timer_1", 0);
 			}
 			else {
-				$this->SendDebug("Keypress", "Mindesttemperatur nicht vorhanden!", 0);
+				$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
+				SetValueInteger($this->GetIDForIdent("GateState"), 25);
+				$this->SetState(true, $Button);
+				$this->SetBuffer("Button", $Button);
 			}
 		}
   	}
