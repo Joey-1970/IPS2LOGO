@@ -22,7 +22,6 @@
 		$this->RegisterPropertyInteger("Bit_2", 0);
 		$this->RegisterPropertyInteger("Timer_1", 30);
 		$this->RegisterTimer("Timer_1", 0, 'I2LRolladen_StateReset($_IPS["TARGET"]);');
-		$this->RegisterPropertyInteger("Switchtime", 1);
 		$this->RegisterPropertyInteger("ActualTemperatureID", 0);
 		$this->RegisterPropertyFloat("Temperature", 3.0);
 		
@@ -56,8 +55,6 @@
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit");
-		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "s");
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
