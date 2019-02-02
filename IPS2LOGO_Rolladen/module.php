@@ -22,6 +22,7 @@
 		$this->RegisterPropertyInteger("Bit_2", 0);
 		$this->RegisterPropertyInteger("Timer_1", 30);
 		$this->RegisterTimer("Timer_1", 0, 'I2LRolladen_StateReset($_IPS["TARGET"]);');
+		$this->RegisterPropertyInteger("Switchtime", 1);
 		$this->RegisterPropertyInteger("ActualTemperatureID", 0);
 		$this->RegisterPropertyFloat("Temperature", 3.0);
 		
