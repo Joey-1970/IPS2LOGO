@@ -112,7 +112,7 @@
  	}
 	
 	// Beginn der Funktionen
-	public function SetState(Bool $State)
+	private function SetState(Bool $State)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("SetState", "Ausfuehrung", 0);
@@ -135,6 +135,7 @@
 	    
 	public function GetState()
 	{
+		$State = false;
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			//$this->SendDebug("GetState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output");
@@ -167,9 +168,10 @@
 				}
 			}
 		}
+	return $State;
 	}
 	    
-	public function GetAPState()
+	private function GetAPState()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			//$this->SendDebug("GetAPState", "Ausfuehrung", 0);
@@ -204,13 +206,15 @@
 		}
 	}
 	    
-	public function Keypress()
+	public function Keypress(bool $State)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
 			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
-			$this->SetState(true);
-			IPS_Sleep($Switchtime);
-			$this->SetState(false);
+			If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
+				$this->SetState(true);
+				IPS_Sleep($Switchtime);
+				$this->SetState(false);
+			}
 		}
   	}
 	    
