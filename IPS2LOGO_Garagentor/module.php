@@ -23,6 +23,7 @@
 		$this->RegisterPropertyInteger("Address_2", 0);
 		$this->RegisterPropertyInteger("Bit_2", 0);
 		$this->RegisterPropertyInteger("Output_2", 1);
+		$this->RegisterPropertyInteger("ActuatorID", 0);
 		$this->RegisterPropertyInteger("Timer_1", 1000); // Laufzeit des Tastsignals
 		$this->RegisterTimer("Timer_1", 0, 'I2LGaragentor_StateReset($_IPS["TARGET"]);'); 
 		$this->RegisterPropertyInteger("Timer_2", 250); // Abfrageintervall des Status
@@ -83,6 +84,9 @@
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "label" => "Beleuchtungs-Aktor-Variable (Boolean)");
+            	$arrayElements[] = array("type" => "SelectVariable", "name" => "ActuatorID", "caption" => "Aktor");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise iat abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
 		
