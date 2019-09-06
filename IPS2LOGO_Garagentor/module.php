@@ -172,6 +172,14 @@
 				}
 			}
 			else {
+				// 0 = Öffnen
+				// 4 = Schliessen
+				If (($Button == 0) AND ($this->ReadPropertyInteger("ActuatorID") > 0)) {
+					// Licht einschalten wenn Tor geöffnet wird
+					RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
+				}
+				
+				
 				$this->SetState(true, $Button);
 			}
 		}
@@ -196,6 +204,11 @@
 				$State = 0; // geöffnet
 			}
 			elseIf (($StateTop == false) AND ($StateDown == true)) {
+				If ($this->ReadPropertyInteger("ActuatorID") > 0) {
+					// Licht ausschalten wenn Tor als geschlossen gemeldet wird
+					RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
+				}
+				
 				$State = 100; // geschlossen
 			}
 			else {
