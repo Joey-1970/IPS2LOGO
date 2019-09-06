@@ -104,6 +104,11 @@
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SetStatus(102);
+			If ($this->ReadPropertyInteger("ActuatorID") > 0) {
+				// Aktuellen Zustand des Licht einlesen
+				$LightState = GetValueBoolean($this->ReadPropertyInteger("ActuatorID"));
+				$this->SetBuffer("LightState", $LightState);
+			}
 			$this->GetGateState();
 			$this->SetTimerInterval("Timer_2", $this->ReadPropertyInteger("Timer_2") );
 		}
@@ -175,11 +180,14 @@
 				// 0 = Öffnen
 				// 4 = Schliessen
 				If (($Button == 0) AND ($this->ReadPropertyInteger("ActuatorID") > 0)) {
-					// Licht einschalten wenn Tor geöffnet wird
-					RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
+					// Aktuellen Zustand des Licht einlesen
+					$LightState = GetValueBoolean($this->ReadPropertyInteger("ActuatorID"));
+					$this->SetBuffer("LightState", $LightState);
+					If ($LightState == false) {
+						// Licht einschalten wenn Tor geöffnet wird
+						RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
+					}
 				}
-				
-				
 				$this->SetState(true, $Button);
 			}
 		}
@@ -205,8 +213,10 @@
 			}
 			elseIf (($StateTop == false) AND ($StateDown == true)) {
 				If ($this->ReadPropertyInteger("ActuatorID") > 0) {
-					// Licht ausschalten wenn Tor als geschlossen gemeldet wird
-					RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
+					If ($this->GetBuffer("LightState") == false) {
+						// Licht ausschalten wenn Tor als geschlossen gemeldet wird
+						RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
+					}
 				}
 				
 				$State = 100; // geschlossen
