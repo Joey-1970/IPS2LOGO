@@ -213,9 +213,10 @@
 			}
 			elseIf (($StateTop == false) AND ($StateDown == true)) {
 				If ($this->ReadPropertyInteger("ActuatorID") > 0) {
-					If ($this->GetBuffer("LightState") == false) {
+					$LightState = boolval($this->GetBuffer("LightState"));
+					If ($LightState == false) {
 						// Licht ausschalten wenn Tor als geschlossen gemeldet wird
-						RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
+						RequestAction($this->ReadPropertyInteger("ActuatorID"), false);
 					}
 				}
 				
