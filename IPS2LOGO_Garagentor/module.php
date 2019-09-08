@@ -183,6 +183,7 @@
 					// Aktuellen Zustand des Licht einlesen
 					$LightState = GetValueBoolean($this->ReadPropertyInteger("ActuatorID"));
 					$this->SetBuffer("LightState", $LightState);
+					$this->SendDebug("Keypress", "Buffer gesetzt mit: ".$LightState, 0);
 					If (boolval($LightState) == false) {
 						// Licht einschalten wenn Tor geöffnet wird
 						RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
@@ -214,6 +215,7 @@
 			elseIf (($StateTop == false) AND ($StateDown == true)) {
 				If ($this->ReadPropertyInteger("ActuatorID") > 0) {
 					$LightState = boolval($this->GetBuffer("LightState"));
+					$this->SendDebug("GetGateState", "Buffer ausgelesen mit: ".$LightState, 0);
 					If (boolval($LightState) == false) {
 						// Licht ausschalten wenn Tor als geschlossen gemeldet wird
 						RequestAction($this->ReadPropertyInteger("ActuatorID"), false);
