@@ -29,7 +29,7 @@
 		$this->RegisterTimer("Timer_1", 0, 'I2LGaragentor_StateReset($_IPS["TARGET"]);'); 
 		$this->RegisterPropertyInteger("Timer_2", 250); // Abfrageintervall des Status
 		$this->RegisterTimer("Timer_2", 0, 'I2LGaragentor_GetGateState($_IPS["TARGET"]);');
-		$this->RegisterPropertyInteger("Timer_3", 5000); // Ausschaltverzögerung für die Beleuchtung
+		$this->RegisterPropertyInteger("Timer_3", 5); // Ausschaltverzögerung für die Beleuchtung
 		$this->RegisterTimer("Timer_3", 0, 'I2LGaragentor_LightState($_IPS["TARGET"]);');
 		
 		// Profile erstellen
