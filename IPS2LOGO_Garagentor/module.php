@@ -106,7 +106,7 @@
 			$this->SetStatus(102);
 			If ($this->ReadPropertyInteger("ActuatorID") > 0) {
 				// Aktuellen Zustand des Licht einlesen
-				$LightState = GetValueBoolean($this->ReadPropertyInteger("ActuatorID"));
+				$LightState = intval(GetValueBoolean($this->ReadPropertyInteger("ActuatorID")));
 				$this->SetBuffer("LightState", $LightState);
 			}
 			$this->GetGateState();
@@ -181,7 +181,7 @@
 				// 4 = Schliessen
 				If (($Button == 0) AND ($this->ReadPropertyInteger("ActuatorID") > 0)) {
 					// Aktuellen Zustand des Licht einlesen
-					$LightState = GetValueBoolean($this->ReadPropertyInteger("ActuatorID"));
+					$LightState = intval(GetValueBoolean($this->ReadPropertyInteger("ActuatorID")));
 					$this->SetBuffer("LightState", $LightState);
 					$this->SendDebug("Keypress", "Buffer gesetzt mit: ".$LightState, 0);
 					If (boolval($LightState) == false) {
