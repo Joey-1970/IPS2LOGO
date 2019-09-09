@@ -8,6 +8,7 @@
 		parent::Destroy();
 		$this->SetTimerInterval("Timer_1", 0);
 		$this->SetTimerInterval("Timer_2", 0);
+		$this->SetTimerInterval("Timer_3", 0);
 	}
 	    
 	// Überschreibt die interne IPS_Create($id) Funktion
@@ -28,6 +29,8 @@
 		$this->RegisterTimer("Timer_1", 0, 'I2LGaragentor_StateReset($_IPS["TARGET"]);'); 
 		$this->RegisterPropertyInteger("Timer_2", 250); // Abfrageintervall des Status
 		$this->RegisterTimer("Timer_2", 0, 'I2LGaragentor_GetGateState($_IPS["TARGET"]);');
+		$this->RegisterPropertyInteger("Timer_3", 5000); // Ausschaltverzögerung für die Beleuchtung
+		$this->RegisterTimer("Timer_3", 0, 'I2LGaragentor_LightState($_IPS["TARGET"]);');
 		
 		// Profile erstellen
 		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
@@ -87,6 +90,8 @@
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Beleuchtungs-Aktor-Variable (Boolean)");
             	$arrayElements[] = array("type" => "SelectVariable", "name" => "ActuatorID", "caption" => "Aktor");
+		$arrayElements[] = array("type" => "Label", "label" => "Ausschaltverzögerung für die Beleuchtung");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_3", "caption" => "s");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise iat abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
 		
@@ -193,8 +198,8 @@
 					$LightState = boolval($this->GetBuffer("LightState"));
 					$this->SendDebug("Keypress", "Buffer ausgelesen mit: ".$LightState, 0);
 					If (boolval($LightState) == false) {
-						// Licht ausschalten wenn Tor geschlossen wird
-						RequestAction($this->ReadPropertyInteger("ActuatorID"), false);
+						// Timer starten
+						$this->SetTimerInterval("Timer_3", ($this->ReadPropertyInteger("Timer_3") * 1000));
 					}
 				}
 				$this->SetState(true, $Button);
@@ -265,6 +270,15 @@
 		}
 	return $Result;
 	}
+	
+	public function LightState()
+	{
+		If ($this->ReadPropertyInteger("ActuatorID") > 0) {
+			// Licht ausschalten wenn Tor geschlossen wird
+			RequestAction($this->ReadPropertyInteger("ActuatorID"), false);
+		}
+		$this->SetTimerInterval("Timer_3", 0);
+	}    
 	    
 	private function GetParentID()
 	{
