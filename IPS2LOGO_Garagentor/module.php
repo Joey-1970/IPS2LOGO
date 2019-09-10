@@ -32,6 +32,10 @@
 		$this->RegisterPropertyInteger("Timer_3", 5); // Ausschaltverzögerung für die Beleuchtung
 		$this->RegisterTimer("Timer_3", 0, 'I2LGaragentor_LightState($_IPS["TARGET"]);');
 		$this->RegisterPropertyInteger("WebfrontID", 0);
+		$this->RegisterPropertyString("Title", "Meldungstitel");
+		$this->RegisterPropertyString("TextOpen", "Text geöffnet");
+		$this->RegisterPropertyString("TextClose", "Text geschlossen");
+		$this->RegisterPropertyInteger("SoundID", 0);
 		
 		// Profile erstellen
 		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
@@ -103,7 +107,9 @@
         		$arrayOptions[] = array("label" => $Webfront, "value" => $ID);
     		}
 		$arrayElements[] = array("type" => "Select", "name" => "WebfrontID", "caption" => "Webfront", "options" => $arrayOptions );
-
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Title", "caption" => "Meldungstitel");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TextOpen", "caption" => "Text geöffnet");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TextClose", "caption" => "Text geschlossen");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise iat abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
 		
