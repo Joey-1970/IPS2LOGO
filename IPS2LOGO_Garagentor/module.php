@@ -31,6 +31,7 @@
 		$this->RegisterTimer("Timer_2", 0, 'I2LGaragentor_GetGateState($_IPS["TARGET"]);');
 		$this->RegisterPropertyInteger("Timer_3", 5); // Ausschaltverzögerung für die Beleuchtung
 		$this->RegisterTimer("Timer_3", 0, 'I2LGaragentor_LightState($_IPS["TARGET"]);');
+		$this->RegisterPropertyInteger("WebfrontID", 0);
 		
 		// Profile erstellen
 		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
@@ -290,6 +291,18 @@
 	{
 		$Status = (IPS_GetInstance($this->GetParentID())['InstanceStatus']);  
 	return $Status;
+	}
+	
+	private function GetWebfrontID()
+	{
+    		$guid = "{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}"; // Webfront Konfigurator
+    		//Auflisten
+    		$WebfrontArray = (IPS_GetInstanceListByModuleID($guid));
+    		$Result = array();
+    		foreach ($WebfrontArray as $Webfront) {
+        		$Result[$Webfront] = IPS_GetName($Webfront);
+    		}
+	return $Result;   
 	}
 	    
 	protected function HasActiveParent()
