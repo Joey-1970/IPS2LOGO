@@ -110,6 +110,12 @@
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Title", "caption" => "Meldungstitel");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TextOpen", "caption" => "Text geöffnet");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TextClose", "caption" => "Text geschlossen");
+		$arrayOptions = array();
+		$SoundArray = array("Alarm", "Bell", "Boom", "Buzzer", "Connected", "Dark", "Digital", "Drums", "Duck", "Full", "Happy", "Horn", "Inception", "Kazoo", "Roll", "Siren", "Space", "Trickling", "Turn");
+		foreach ($SoundArray as $ID => $Sound) {
+        		$arrayOptions[] = array("label" => $Sound, "value" => $ID);
+    		}
+		$arrayElements[] = array("type" => "Select", "name" => "SoundID", "caption" => "Sound", "options" => $arrayOptions );		
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise iat abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
 		
