@@ -96,7 +96,7 @@
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Benachrichtigungsfunktion");
 		$WebfrontID = Array();
-		$WebfrontID = $this->GetWebfrondID();
+		$WebfrontID = $this->GetWebfrontID();
 		$arrayOptions = array();
 		$arrayOptions[] = array("label" => "unbestimmt", "value" => 0);
 		foreach ($WebfrontID as $ID => $Webfront) {
