@@ -94,6 +94,17 @@
 		$arrayElements[] = array("type" => "Label", "label" => "Ausschaltverzögerung für die Beleuchtung");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_3", "caption" => "s");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "label" => "Benachrichtigungsfunktion");
+		$WebfrontID = Array();
+		$WebfrontID = $this->GetWebfrondID();
+		$arrayOptions = array();
+		$arrayOptions[] = array("label" => "unbestimmt", "value" => 0);
+		foreach ($WebfrontID as $ID => $Webfront) {
+        		$arrayOptions[] = array("label" => $Webfront, "value" => $ID);
+    		}
+		$arrayElements[] = array("type" => "Select", "name" => "WebfrontID", "caption" => "Webfront", "options" => $arrayOptions );
+
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise iat abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
 		
 		
@@ -275,6 +286,7 @@
 	public function LightState()
 	{
 		If ($this->ReadPropertyInteger("ActuatorID") > 0) {
+			$this->SendDebug("LightState", "Auschaltverzoegerung", 0);
 			// Licht ausschalten wenn Tor geschlossen wird
 			RequestAction($this->ReadPropertyInteger("ActuatorID"), false);
 		}
