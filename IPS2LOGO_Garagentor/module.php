@@ -217,6 +217,7 @@
 						// Licht einschalten wenn Tor geöffnet wird
 						RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
 					}
+					$this->Notification($this->ReadPropertyString("TextOpen"));
 				}
 				If (($Button == 4) AND ($this->ReadPropertyInteger("ActuatorID") > 0)) {
 					$LightState = boolval($this->GetBuffer("LightState"));
@@ -225,6 +226,7 @@
 						// Timer starten
 						$this->SetTimerInterval("Timer_3", ($this->ReadPropertyInteger("Timer_3") * 1000));
 					}
+					$this->Notification($this->ReadPropertyString("TextClose"));
 				}
 				$this->SetState(true, $Button);
 			}
@@ -303,6 +305,19 @@
 			RequestAction($this->ReadPropertyInteger("ActuatorID"), false);
 		}
 		$this->SetTimerInterval("Timer_3", 0);
+	} 
+	    
+	private function Notification ($Text)
+	{
+		If ($this->ReadPropertyInteger("WebfrontID") > 0) {
+			$WebFrontID = $this->ReadPropertyInteger("WebfrontID");
+			$Title = $this->ReadPropertyString("Title");
+			$SoundID = $this->ReadPropertyInteger("SoundID");
+			$SoundArray = array("Alarm", "Bell", "Boom", "Buzzer", "Connected", "Dark", "Digital", "Drums", "Duck", "Full", "Happy", "Horn", "Inception", "Kazoo", "Roll", "Siren", "Space", "Trickling", "Turn");
+			$Sound = strtolower($SoundArray[$SoundID]);
+			$TargetID = 0;
+			WFC_PushNotification($WebfrontID, $Title, substr($Text, 0, 256), $Sound, $TargetID);
+		}
 	}    
 	    
 	private function GetParentID()
