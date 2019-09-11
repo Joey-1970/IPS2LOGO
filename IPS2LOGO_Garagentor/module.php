@@ -310,7 +310,7 @@
 	private function Notification ($Text)
 	{
 		If ($this->ReadPropertyInteger("WebfrontID") > 0) {
-			$WebFrontID = $this->ReadPropertyInteger("WebfrontID");
+			$WebfrontID = $this->ReadPropertyInteger("WebfrontID");
 			$Title = $this->ReadPropertyString("Title");
 			$SoundID = $this->ReadPropertyInteger("SoundID");
 			$SoundArray = array("Alarm", "Bell", "Boom", "Buzzer", "Connected", "Dark", "Digital", "Drums", "Duck", "Full", "Happy", "Horn", "Inception", "Kazoo", "Roll", "Siren", "Space", "Trickling", "Turn");
