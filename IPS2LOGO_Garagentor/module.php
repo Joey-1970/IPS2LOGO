@@ -217,7 +217,6 @@
 						// Licht einschalten wenn Tor geöffnet wird
 						RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
 					}
-					$this->Notification($this->ReadPropertyString("TextOpen"));
 				}
 				If (($Button == 4) AND ($this->ReadPropertyInteger("ActuatorID") > 0)) {
 					$LightState = boolval($this->GetBuffer("LightState"));
@@ -226,7 +225,6 @@
 						// Timer starten
 						$this->SetTimerInterval("Timer_3", ($this->ReadPropertyInteger("Timer_3") * 1000));
 					}
-					$this->Notification($this->ReadPropertyString("TextClose"));
 				}
 				$this->SetState(true, $Button);
 			}
@@ -259,6 +257,12 @@
 			}
 			If ($State <> GetValueInteger($this->GetIDForIdent("GateState"))) {
 				SetValueInteger($this->GetIDForIdent("GateState"), $State);
+				If ($State == 0) { // geöffnet
+					$this->Notification($this->ReadPropertyString("TextOpen"));
+				}
+				elseif ($State == 100) { //geschlossen
+					$this->Notification($this->ReadPropertyString("TextClose"));
+				}
 				If ($State <> 25) {
 					SetValueInteger($this->GetIDForIdent("State"), 2);
 				}
