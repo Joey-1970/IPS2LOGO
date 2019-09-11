@@ -20,6 +20,10 @@
 		$this->RegisterPropertyInteger("Bit", 0);
 		$this->RegisterPropertyInteger("Timer_1", 5);
 		$this->RegisterTimer("Timer_1", 0, 'I2LTueroeffner_StateReset($_IPS["TARGET"]);');
+		$this->RegisterPropertyInteger("WebfrontID", 0);
+		$this->RegisterPropertyString("Title", "Meldungstitel");
+		$this->RegisterPropertyString("TextOpen", "Text geöffnet");
+		$this->RegisterPropertyInteger("SoundID", 0);
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Lock.Reversed", 10);
@@ -42,6 +46,25 @@
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit",  "caption" => "Bit"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "label" => "Benachrichtigungsfunktion");
+		$WebfrontID = Array();
+		$WebfrontID = $this->GetWebfrontID();
+		$arrayOptions = array();
+		$arrayOptions[] = array("label" => "unbestimmt", "value" => 0);
+		foreach ($WebfrontID as $ID => $Webfront) {
+        		$arrayOptions[] = array("label" => $Webfront, "value" => $ID);
+    		}
+		$arrayElements[] = array("type" => "Select", "name" => "WebfrontID", "caption" => "Webfront", "options" => $arrayOptions );
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Title", "caption" => "Meldungstitel");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TextOpen", "caption" => "Text geöffnet");
+		$arrayOptions = array();
+		$SoundArray = array("Alarm", "Bell", "Boom", "Buzzer", "Connected", "Dark", "Digital", "Drums", "Duck", "Full", "Happy", "Horn", "Inception", "Kazoo", "Roll", "Siren", "Space", "Trickling", "Turn");
+		foreach ($SoundArray as $ID => $Sound) {
+        		$arrayOptions[] = array("label" => $Sound, "value" => $ID);
+    		}
+		$arrayElements[] = array("type" => "Select", "name" => "SoundID", "caption" => "Sound", "options" => $arrayOptions );		
+
 	
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
@@ -106,7 +129,7 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
 			SetValueBoolean($this->GetIDForIdent("State"), true);
-			
+			$this->Notification($this->ReadPropertyString("TextOpen"));
 			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
 			$this->SetState(true);
 		}
@@ -118,6 +141,19 @@
 		$this->SetTimerInterval("Timer_1", 0);
 		SetValueBoolean($this->GetIDForIdent("State"), false);
 	}
+	
+	private function Notification ($Text)
+	{
+		If ($this->ReadPropertyInteger("WebfrontID") > 0) {
+			$WebfrontID = $this->ReadPropertyInteger("WebfrontID");
+			$Title = $this->ReadPropertyString("Title");
+			$SoundID = $this->ReadPropertyInteger("SoundID");
+			$SoundArray = array("Alarm", "Bell", "Boom", "Buzzer", "Connected", "Dark", "Digital", "Drums", "Duck", "Full", "Happy", "Horn", "Inception", "Kazoo", "Roll", "Siren", "Space", "Trickling", "Turn");
+			$Sound = strtolower($SoundArray[$SoundID]);
+			$TargetID = 0;
+			WFC_PushNotification($WebfrontID, $Title, substr($Text, 0, 256), $Sound, $TargetID);
+		}
+	}        
 	    
 	private function GetParentID()
 	{
