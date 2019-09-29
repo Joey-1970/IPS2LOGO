@@ -118,7 +118,7 @@
 		$arrayElements[] = array("type" => "Select", "name" => "SoundID", "caption" => "Sound", "options" => $arrayOptions );		
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise iat abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
-		
+		$arrayElements[] = array("type" => "TestCenter");
 		
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
@@ -347,19 +347,7 @@
     		}
 	return $Result;   
 	}
-	    
-	protected function HasActiveParent()
-    	{
-		$Instance = @IPS_GetInstance($this->InstanceID);
-		if ($Instance['ConnectionID'] > 0)
-		{
-			$Parent = IPS_GetInstance($Instance['ConnectionID']);
-			if ($Parent['InstanceStatus'] == 102)
-			return true;
-		}
-        return false;
-    	}  
-	    
+	   
 	private function RegisterProfileInteger($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize)
 	{
 	        if (!IPS_VariableProfileExists($Name))
