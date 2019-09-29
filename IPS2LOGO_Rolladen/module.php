@@ -86,8 +86,9 @@
         		$arrayOptions[] = array("label" => $Sound, "value" => $ID);
     		}
 		$arrayElements[] = array("type" => "Select", "name" => "SoundID", "caption" => "Sound", "options" => $arrayOptions );		
-		$arrayElements[] = array("type" => "TestCenter", "name" => "Test Center");
-		
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "label" => "Test Center"); 
+		$arrayElements[] = array("type" => "TestCenter", "name" => "TestCenter");		
 		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
 	
