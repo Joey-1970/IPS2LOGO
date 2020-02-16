@@ -62,7 +62,7 @@
 		$arrayElements[] = array("name" => "AP", "type" => "CheckBox",  "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		$arrayOptions = array();
-		for ($i = 1; $i <= 16; $i++) {
+		for ($i = 1; $i <= 20; $i++) {
 		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 		}
 		for ($i = 1; $i <= 27; $i++) {
