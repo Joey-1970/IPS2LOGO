@@ -71,7 +71,7 @@
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist auf"); 
 		$arrayOptions = array();
-		for ($i = 1; $i <= 16; $i++) {
+		for ($i = 1; $i <= 20; $i++) {
 		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 		}
 		for ($i = 1; $i <= 27; $i++) {
@@ -81,7 +81,7 @@
 		
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist zu"); 
 		$arrayOptions = array();
-		for ($i = 1; $i <= 16; $i++) {
+		for ($i = 1; $i <= 20; $i++) {
 		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 		}
 		for ($i = 1; $i <= 27; $i++) {
