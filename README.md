@@ -1,2 +1,2 @@
 # IPS2LOGO
-Siemens-LOGO Gerätesteuerung mit IPS
+Siemens-LOGO 7/8 Gerätesteuerung mit IPS
