@@ -18,6 +18,7 @@
             	parent::Create();
 		$this->ConnectParent("{1B0A36F7-343F-42F3-8181-0748819FB324}");
             	$this->RegisterPropertyBoolean("Open", false);
+		$this->RegisterPropertyInteger("Model", 7);
 		$this->RegisterPropertyInteger("Address_1", 0);
 		$this->RegisterPropertyInteger("Bit_1", 0);
 		$this->RegisterPropertyInteger("Output_1", 1);
@@ -60,7 +61,11 @@
 		$arrayStatus[] = array("code" => 202, "icon" => "error", "caption" => "Kommunikationfehler!");
 		
 		$arrayElements = array(); 
-		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 			
+		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
+		$arrayOptions = array();
+		$arrayOptions[] = array("label" => "LOGO 7", "value" => 7);
+		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
+		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Öffnen"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_1",  "caption" => "Adresse"); 
