@@ -195,7 +195,7 @@
 			}
 			else {
 				$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") * 1000);
-				SetValueInteger($this->GetIDForIdent("GateState"), 25);
+				SetValueInteger($this->GetIDForIdent("GateState"), 50);
 				$this->SetState(true, $Button);
 				$this->SetBuffer("Button", $Button);
 			}
