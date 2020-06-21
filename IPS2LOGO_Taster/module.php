@@ -136,6 +136,7 @@
 	            	break;
 		case "RefreshProfileForm":
 				$this->SendDebug("RequestAction", "Wert: ".$Value, 0);
+				$this->RefreshProfileForm($Value);
 			break;
 	        default:
 	            throw new Exception("Invalid Ident");
