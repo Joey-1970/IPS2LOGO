@@ -44,7 +44,7 @@
 		$arrayOptions = array();
 		$arrayOptions[] = array("label" => "LOGO 7", "value" => 7);
 		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
-		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions );
+		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions, "onChange" => "IPS_RequestAction($id,'RefreshProfileForm',$Modell);" );
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs");
 		
@@ -110,7 +110,10 @@
 			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
 				$this->KeyPress($Value);
 			}
-	            break;
+	            	break;
+		case "RefreshProfileForm":
+				$this->SendDebug("RequestAction", "Wert: ".$Value, 0);
+			break;
 	        default:
 	            throw new Exception("Invalid Ident");
 	    	}
