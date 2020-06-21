@@ -45,7 +45,6 @@
 		$arrayOptions[] = array("label" => "LOGO 7", "value" => 7);
 		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
 		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions, "onChange" => 'IPS_RequestAction($id,"RefreshProfileForm",$Model);' );
-		//$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions );
 
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs");
@@ -60,12 +59,14 @@
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		$arrayOptions = array();
+		
 		for ($i = 1; $i <= 20; $i++) {
 		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 		}
 		for ($i = 1; $i <= 27; $i++) {
 		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
 		}
+		
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
@@ -234,6 +235,31 @@
 			}
 		}
   	}
+	/*
+	private function RefreshProfileForm($Model)
+    	{
+        $Capas = @$this->GetCapabilities();
+        if ($Capas == false) {
+            return false;
+        }
+        $ProfileOptions = [];
+        $ProfileOptions[] = [
+            'caption' => 'none',
+            'value'   => ''
+        ];
+        foreach ($Capas['VideoSources'] as $VideoSource) {
+            if ($NewVideoSource == $VideoSource['VideoSourceToken']) {
+                foreach ($VideoSource['Profile'] as $Profile) {
+                    $ProfileOptions[] = [
+                        'caption' => $Profile['Name'],
+                        'value'   => $Profile['token']
+                    ];
+                }
+            }
+        }
+        	$this->UpdateFormField('Profile', 'options', json_encode($ProfileOptions));
+    	}    
+	*/
 	    
 	private function GetParentID()
 	{
