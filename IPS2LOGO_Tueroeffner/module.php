@@ -47,8 +47,11 @@
 		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address",  "caption" => "Adresse"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit",  "caption" => "Bit"); 
+		$ArrayRowLayout = array();
+		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address",  "caption" => "Adresse"); 
+		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit",  "caption" => "Bit"); 
+		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
+		
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
