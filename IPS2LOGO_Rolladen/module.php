@@ -61,16 +61,21 @@
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Öffnen");
 		
+		$arrayOptions = array();
+		for ($i = 0; $i <= 7; $i++) {
+			$arrayOptions[] = array("label" => $i, "value" => $i);
+		}
+		
 		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address_1",  "caption" => "Adresse"); 
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit_1",  "caption" => "Bit"); 
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address", "caption" => "Adresse_1", "options" => $arrayOptions );
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit", "caption" => "Bit_1", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
 		
 		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse"); 
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit"); 
+		$$ArrayRowLayout[] = array("type" => "Select", "name" => "Address_2", "caption" => "Adresse", "options" => $arrayOptions );
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit_2", "caption" => "Bit", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
@@ -181,8 +186,12 @@
 				$Address = $this->ReadPropertyInteger("Address_2"); // Schliessen
 				$Bit = $this->ReadPropertyInteger("Bit_2");
 			}
-			$AddressBit = ($Address * 10) + $Bit;
-			$AddressBit = intval(octdec($AddressBit));
+			//$AddressBit = ($Address * 10) + $Bit;
+			//$AddressBit = intval(octdec($AddressBit));
+			
+			$AddressBit = ($Address * 8) + $Bit;
+			$AddressBit = intval($AddressBit);
+
 			
 			If ($State == true) {
 				$DataPayload = utf8_encode(chr(1));
