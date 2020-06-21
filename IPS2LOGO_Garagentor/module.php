@@ -65,40 +65,67 @@
 		$arrayOptions = array();
 		$arrayOptions[] = array("label" => "LOGO 7", "value" => 7);
 		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
-		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions );
+		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions, "onChange" => 'IPS_RequestAction($id,"RefreshProfileForm",$Model);' );
+
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Öffnen"); 
 		
+		$arrayOptions = array();
+		for ($i = 0; $i <= 7; $i++) {
+			$arrayOptions[] = array("label" => $i, "value" => $i);
+		}
+		
 		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address_1",  "caption" => "Adresse"); 
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit_1",  "caption" => "Bit"); 
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address_1", "caption" => "Adresse", "options" => $arrayOptions );
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit_1", "caption" => "Bit", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
 		
 		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse"); 
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit"); 
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address_2", "caption" => "Adresse", "options" => $arrayOptions );
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit_2", "caption" => "Bit", "options" => $arrayOptions );
+
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist auf"); 
 		$arrayOptions = array();
-		for ($i = 1; $i <= 20; $i++) {
-		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+		If ($this->ReadPropertyInteger("Model") == 7) {
+			for ($i = 1; $i <= 16; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 27; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
 		}
-		for ($i = 1; $i <= 27; $i++) {
-		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+		else If ($this->ReadPropertyInteger("Model") == 8) {
+			for ($i = 1; $i <= 20; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 64; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_1", "caption" => "Ausgang", "options" => $arrayOptions );
 		
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist zu"); 
 		$arrayOptions = array();
-		for ($i = 1; $i <= 20; $i++) {
-		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+		If ($this->ReadPropertyInteger("Model") == 7) {
+			for ($i = 1; $i <= 16; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 27; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
 		}
-		for ($i = 1; $i <= 27; $i++) {
-		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+		else If ($this->ReadPropertyInteger("Model") == 8) {
+			for ($i = 1; $i <= 20; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 64; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_2", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_2", "caption" => "ms");
@@ -168,7 +195,11 @@
   		switch($Ident) {
 	        case "State":
 			$this->KeyPress($Value);
-	            break;
+	            	break;
+		case "RefreshProfileForm":
+			$this->SendDebug("RequestAction", "Wert: ".$Value, 0);
+			$this->RefreshProfileForm($Value);
+			break;
 	        default:
 	            throw new Exception("Invalid Ident");
 	    	}
@@ -192,8 +223,12 @@
 			$Bit[0] = $this->ReadPropertyInteger("Bit_1");
 			$Address[4] = $this->ReadPropertyInteger("Address_2"); // Schliessen
 			$Bit[4] = $this->ReadPropertyInteger("Bit_2");
-			$AddressBit = ($Address[$Button] * 10) + $Bit[$Button];
-			$AddressBit = intval(octdec($AddressBit));
+			//$AddressBit = ($Address * 10) + $Bit;
+			//$AddressBit = intval(octdec($AddressBit));
+			
+			$AddressBit = ($Address * 8) + $Bit;
+			$AddressBit = intval($AddressBit);
+			
 			If ($State == true) {
 				$DataPayload = utf8_encode(chr(1));
 			}
@@ -338,6 +373,29 @@
 			WFC_PushNotification($WebfrontID, $Title, substr($Text, 0, 256), $Sound, $TargetID);
 		}
 	}    
+	 
+	private function RefreshProfileForm($Model)
+    	{
+        	$arrayOptions = array();
+		If ($Model == 7) {
+			for ($i = 1; $i <= 16; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 27; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
+		}
+		else If ($Model == 8) {
+			for ($i = 1; $i <= 20; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 64; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
+		}
+        	$this->UpdateFormField('Output_1', 'options', json_encode($arrayOptions));
+		$this->UpdateFormField('Output_2', 'options', json_encode($arrayOptions));
+    	}        
 	    
 	private function GetParentID()
 	{
