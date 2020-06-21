@@ -49,9 +49,18 @@
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs");
 		
+		$arrayOptions = array();
+		for ($i = 0; $i <= 7; $i++) {
+			$arrayOptions[] = array("label" => $i, "value" => $i);
+		}
+		
 		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address",  "caption" => "Adresse"); 
-		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit",  "caption" => "Bit"); 
+		//$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address",  "caption" => "Adresse"); 
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address", "caption" => "Adresse", "options" => $arrayOptions );
+
+		//$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit",  "caption" => "Bit"); 
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit", "caption" => "Bit", "options" => $arrayOptions );
+
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
