@@ -46,9 +46,9 @@
 		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
 		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions );
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs");
 		
 		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs");
 		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address",  "caption" => "Adresse"); 
 		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit",  "caption" => "Bit"); 
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
