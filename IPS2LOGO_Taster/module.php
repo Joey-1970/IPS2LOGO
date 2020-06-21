@@ -158,8 +158,12 @@
 			$Area = 132; // Konstante
 			$Address = $this->ReadPropertyInteger("Address");
 			$Bit = $this->ReadPropertyInteger("Bit");
-			$AddressBit = ($Address * 10) + $Bit;
-			$AddressBit = intval(octdec($AddressBit));
+			//$AddressBit = ($Address * 10) + $Bit;
+			//$AddressBit = intval(octdec($AddressBit));
+			
+			$AddressBit = ($Address * 8) + $Bit;
+			$AddressBit = intval($AddressBit);
+			
 			If ($State == true) {
 				$DataPayload = utf8_encode(chr(1));
 			}
