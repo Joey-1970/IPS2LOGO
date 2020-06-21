@@ -59,12 +59,20 @@
 		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
 		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Öffnen"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_1",  "caption" => "Adresse"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_1",  "caption" => "Bit"); 
+		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Öffnen");
+		
+		$ArrayRowLayout = array();
+		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address_1",  "caption" => "Adresse"); 
+		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit_1",  "caption" => "Bit"); 
+		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
+
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit");
+		
+		$ArrayRowLayout = array();
+		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Address_2",  "caption" => "Adresse"); 
+		$ArrayRowLayout[] = array("type" => "NumberSpinner", "name" => "Bit_2",  "caption" => "Bit"); 
+		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
+		
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
