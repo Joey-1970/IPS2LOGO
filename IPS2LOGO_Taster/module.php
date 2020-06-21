@@ -60,7 +60,7 @@
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		
 		$arrayOptions = array();
-		If ($this->ReadPropertyBoolean("Model") == 7) {
+		If ($this->ReadPropertyInteger("Model") == 7) {
 			for ($i = 1; $i <= 16; $i++) {
 				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 			}
@@ -68,7 +68,7 @@
 				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
 			}
 		}
-		else If ($this->ReadPropertyBoolean("Model") == 8) {
+		else If ($this->ReadPropertyInteger("Model") == 8) {
 			for ($i = 1; $i <= 20; $i++) {
 				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 			}
@@ -84,7 +84,7 @@
 		$arrayElements[] = array("name" => "AP", "type" => "CheckBox",  "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		$arrayOptions = array();
-		If ($this->ReadPropertyBoolean("Model") == 7) {
+		If ($this->ReadPropertyInteger("Model") == 7) {
 			for ($i = 1; $i <= 16; $i++) {
 				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 			}
@@ -92,7 +92,7 @@
 				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
 			}
 		}
-		else If ($this->ReadPropertyBoolean("Model") == 8) {
+		else If ($this->ReadPropertyInteger("Model") == 8) {
 			for ($i = 1; $i <= 20; $i++) {
 				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
 			}
