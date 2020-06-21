@@ -58,13 +58,23 @@
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
-		$arrayOptions = array();
 		
-		for ($i = 1; $i <= 20; $i++) {
-		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+		$arrayOptions = array();
+		If ($this->ReadPropertyBoolean("Model") == 7) {
+			for ($i = 1; $i <= 16; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 27; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
 		}
-		for ($i = 1; $i <= 27; $i++) {
-		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+		else If ($this->ReadPropertyBoolean("Model") == 8) {
+			for ($i = 1; $i <= 20; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 64; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
 		}
 		
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
@@ -74,11 +84,21 @@
 		$arrayElements[] = array("name" => "AP", "type" => "CheckBox",  "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		$arrayOptions = array();
-		for ($i = 1; $i <= 20; $i++) {
-		    	$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+		If ($this->ReadPropertyBoolean("Model") == 7) {
+			for ($i = 1; $i <= 16; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 27; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
 		}
-		for ($i = 1; $i <= 27; $i++) {
-		    	$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+		else If ($this->ReadPropertyBoolean("Model") == 8) {
+			for ($i = 1; $i <= 20; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 64; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
@@ -235,31 +255,29 @@
 			}
 		}
   	}
-	/*
+	
 	private function RefreshProfileForm($Model)
     	{
-        $Capas = @$this->GetCapabilities();
-        if ($Capas == false) {
-            return false;
-        }
-        $ProfileOptions = [];
-        $ProfileOptions[] = [
-            'caption' => 'none',
-            'value'   => ''
-        ];
-        foreach ($Capas['VideoSources'] as $VideoSource) {
-            if ($NewVideoSource == $VideoSource['VideoSourceToken']) {
-                foreach ($VideoSource['Profile'] as $Profile) {
-                    $ProfileOptions[] = [
-                        'caption' => $Profile['Name'],
-                        'value'   => $Profile['token']
-                    ];
-                }
-            }
-        }
-        	$this->UpdateFormField('Profile', 'options', json_encode($ProfileOptions));
+        	$arrayOptions = array();
+		If ($Model == 7) {
+			for ($i = 1; $i <= 16; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 27; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
+		}
+		else If ($Model == 8) {
+			for ($i = 1; $i <= 20; $i++) {
+				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
+			}
+			for ($i = 1; $i <= 64; $i++) {
+				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
+			}
+		}
+        	$this->UpdateFormField('Output', 'options', json_encode($arrayOptions));
+		$this->UpdateFormField('Output_AP', 'options', json_encode($arrayOptions));
     	}    
-	*/
 	    
 	private function GetParentID()
 	{
