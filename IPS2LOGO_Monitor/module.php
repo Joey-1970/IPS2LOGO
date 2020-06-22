@@ -21,7 +21,9 @@
 		$this->RegisterTimer("Timer_1", 0, 'I2LMonitor_GetState($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
-		
+		for ($i = 0; $i <= 15; $i++) {
+			$this->RegisterVariableBoolean("Output_".$i, "Ausgang Q".$i, "~Switch", ($i + 1) * 10);	
+		}
 
         }
        	
