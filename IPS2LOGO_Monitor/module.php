@@ -107,9 +107,15 @@
 			}
 			else {
 				$this->SetStatus(102);
+				for ($pos=0; $pos < strlen($Result); $pos ++ ) {
+ 					$Byte = substr($str, $pos);
+ 					$this->SendDebug("GetState", "Ergebnis ".$pos.": ".ord($Byte), 0);
+				}
+				
+				/*
 				$State = ($Result);
 				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
-				/*
+				
 				for ($i = 0; $i <= 15; $i++) {
 					$Bitvalue = boolval($State & pow(2, $i));					
 					If (GetValueBoolean($this->GetIDForIdent("Output_".$i)) <> $Bitvalue) {
