@@ -226,7 +226,7 @@
 			//$AddressBit = ($Address * 10) + $Bit;
 			//$AddressBit = intval(octdec($AddressBit));
 			
-			$AddressBit = ($Address * 8) + $Bit[$Button];
+			$AddressBit = ($Address[$Button] * 8) + $Bit[$Button];
 			$AddressBit = intval($AddressBit);
 			
 			If ($State == true) {
