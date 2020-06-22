@@ -56,8 +56,6 @@
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
 		
-		SetValueInteger($this->GetIDForIdent("State"), 2);
-		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SetStatus(102);
 			$this->GetState();
