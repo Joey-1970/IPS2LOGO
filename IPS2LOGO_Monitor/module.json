@@ -1,0 +1,14 @@
+{
+  "id": "{9F4265E8-51FF-CE76-4990-9AF1EC3A2F7C}",
+  "name": "IPS2LOGO_Monitor",
+  "type": 3,
+  "vendor": "JP-IPS-Modules",
+  "aliases":
+  [
+    "IPS2LOGO_Monitor"
+  ],
+  "parentRequirements": ["{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}"],
+  "childRequirements": [],
+  "implemented": ["{EC09E155-355C-4DC2-95C7-5C336B1C9D48}"],
+  "prefix": "I2LMonitor"
+}
