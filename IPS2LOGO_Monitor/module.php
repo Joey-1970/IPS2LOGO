@@ -96,43 +96,27 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$Area = 130;
-			$AreaAddress = 942;
-			$BitAddress = 0;
-			//22.06.2020, 14:37:22 |          ForwardData | Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":130,"AreaAddress":742,"BitAddress":0,"WordLength":4,"DataCount":1,"DataPayload":""}
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 2, "DataCount" => 1,"DataPayload" => "")));
-			If ($Result === false) {
-				$this->SetStatus(202);
-				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
-			}
-			else {
-				$this->SetStatus(102);
-				$State = ord($Result);
-				$this->SendDebug("GetState", "Ergebnis 1: ".$State, 0);
-				/*
-				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
-					SetValueBoolean($this->GetIDForIdent("State"), $State);
-				}
-				*/
-			}
-			$Area = 130;
 			$AreaAddress = 943;
 			$BitAddress = 0;
-			//22.06.2020, 14:37:22 |          ForwardData | Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":130,"AreaAddress":742,"BitAddress":0,"WordLength":4,"DataCount":1,"DataPayload":""}
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 2, "DataCount" => 1,"DataPayload" => "")));
+			// 22.06.2020, 15:12:16 |          ForwardData | Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":130,"AreaAddress":743,"BitAddress":0,"WordLength":4,"DataCount":1,"DataPayload":""}
+			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 4, "DataCount" => 1,"DataPayload" => "")));
 			If ($Result === false) {
 				$this->SetStatus(202);
 				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
 			}
 			else {
 				$this->SetStatus(102);
-				$State = ord($Result);
-				$this->SendDebug("GetState", "Ergebnis 2: ".$State, 0);
-				/*
-				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
-					SetValueBoolean($this->GetIDForIdent("State"), $State);
+				$State = $Result;
+				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
+				for ($i = 0; $i <= 15; $i++) {
+					$Bitvalue = boolval($State & pow(2, $i));					
+					If (GetValueBoolean($this->GetIDForIdent("Output_".$i)) <> $Bitvalue) {
+						SetValueBoolean($this->GetIDForIdent("Output_".$i), $Bitvalue);
+					}
 				}
-				*/
+				
 			}
+			
 		}
 	}
 			
