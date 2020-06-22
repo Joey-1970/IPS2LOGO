@@ -108,7 +108,7 @@
 			else {
 				$this->SetStatus(102);
 				for ($pos=0; $pos < strlen($Result); $pos ++ ) {
- 					$Byte = substr($str, $pos);
+ 					$Byte = substr($Result, $pos);
  					$this->SendDebug("GetState", "Ergebnis ".$pos.": ".ord($Byte), 0);
 				}
 				
