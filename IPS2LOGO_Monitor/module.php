@@ -97,8 +97,25 @@
 	public function GetState()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
-			
-			
+			$Area = 130;
+			$AreaAddress = 942;
+			$BitAddress = 0;
+			//22.06.2020, 14:37:22 |          ForwardData | Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":130,"AreaAddress":742,"BitAddress":0,"WordLength":4,"DataCount":1,"DataPayload":""}
+			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 4, "DataCount" => 1,"DataPayload" => "")));
+			If ($Result === false) {
+				$this->SetStatus(202);
+				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
+			}
+			else {
+				$this->SetStatus(102);
+				$State = ord($Result);
+				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
+				/*
+				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
+					SetValueBoolean($this->GetIDForIdent("State"), $State);
+				}
+				*/
+			}
 		}
 	}
 			
