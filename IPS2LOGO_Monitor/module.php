@@ -107,7 +107,7 @@
 			}
 			else {
 				$this->SetStatus(102);
-				$State = ord($Result);
+				$State = ($Result);
 				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				/*
 				for ($i = 0; $i <= 15; $i++) {
