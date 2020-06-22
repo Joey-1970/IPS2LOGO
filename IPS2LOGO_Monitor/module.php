@@ -43,7 +43,7 @@
 		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions, "onChange" => 'IPS_RequestAction($id,"RefreshProfileForm",$Model);' );
 
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
 		
 		
 		
@@ -99,7 +99,7 @@
 			$AreaAddress = 942;
 			$BitAddress = 0;
 			//22.06.2020, 14:37:22 |          ForwardData | Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":130,"AreaAddress":742,"BitAddress":0,"WordLength":4,"DataCount":1,"DataPayload":""}
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 4, "DataCount" => 1,"DataPayload" => "")));
+			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 6, "DataCount" => 1,"DataPayload" => "")));
 			If ($Result === false) {
 				$this->SetStatus(202);
 				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
