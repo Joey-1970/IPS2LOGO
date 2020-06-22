@@ -107,6 +107,7 @@
 			}
 			else {
 				$this->SetStatus(102);
+				$this->SendDebug("GetState", "Roh-Ergebnis: ".$Result, 0);
 				for ($pos=0; $pos < strlen($Result); $pos ++ ) {
  					$Byte = substr($Result, $pos);
  					$this->SendDebug("GetState", "Ergebnis ".$pos.": ".ord($Byte), 0);
