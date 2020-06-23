@@ -95,46 +95,64 @@
 	public function GetState()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
-			$Area = 130;
-			$AreaAddress = 742;
-			$BitAddress = 0;
-			// 22.06.2020, 15:30:53 |          ForwardData | Daten: {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":130,"AreaAddress":742,"BitAddress":0,"WordLength":4,"DataCount":1,"DataPayload":""}
+			If ($this->ReadPropertyInteger("Model") == 7) {
+				$Area = 130;
+				$AreaAddress = 742;
+				$BitAddress = 0;
+				$WordLength = 4;
 
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 4, "DataCount" => 1,"DataPayload" => "")));
-			If ($Result === false) {
-				$this->SetStatus(202);
-				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
-			}
-			else {
-				$this->SetStatus(102);
-				//$this->SendDebug("GetState", "Roh-Ergebnis: ".$Result, 0);
-				If (strlen($Result) == 2) {
-					$LSB = ord(substr($Result, 0));
-					$MSB = ord(substr($Result, 1));
-					$State = $MSB << 8 | $LSB;
- 					$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
-					
+				$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => $WordLength, "DataCount" => 1,"DataPayload" => "")));
+				If ($Result === false) {
+					$this->SetStatus(202);
+					$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
 				}
-				/*
-				for ($pos=0; $pos < strlen($Result); $pos ++ ) {
- 					$Byte = substr($Result, $pos);
- 					$this->SendDebug("GetState", "Ergebnis ".$pos.": ".ord($Byte), 0);
-				}
-				
-				
-				$State = ($Result);
-				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
-				*/
-				for ($i = 0; $i <= 15; $i++) {
-					$Bitvalue = boolval($State & pow(2, $i));					
-					If (GetValueBoolean($this->GetIDForIdent("Output_".$i)) <> $Bitvalue) {
-						SetValueBoolean($this->GetIDForIdent("Output_".$i), $Bitvalue);
+				else {
+					$this->SetStatus(102);
+					//$this->SendDebug("GetState", "Roh-Ergebnis: ".$Result, 0);
+					If (strlen($Result) == 2) {
+						$LSB = ord(substr($Result, 0));
+						$MSB = ord(substr($Result, 1));
+						$State = $MSB << 8 | $LSB;
+						$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
+
+					}
+					for ($i = 0; $i <= 15; $i++) {
+						$Bitvalue = boolval($State & pow(2, $i));					
+						If (GetValueBoolean($this->GetIDForIdent("Output_".$i)) <> $Bitvalue) {
+							SetValueBoolean($this->GetIDForIdent("Output_".$i), $Bitvalue);
+						}
 					}
 				}
-				
-				
 			}
-			
+			elseIf ($this->ReadPropertyInteger("Model") == 8) {
+				$Area = 130;
+				$AreaAddress = 1064;
+				$BitAddress = 0;
+				$WordLength = 5;
+
+				$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => $WordLength, "DataCount" => 1,"DataPayload" => "")));
+				If ($Result === false) {
+					$this->SetStatus(202);
+					$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
+				}
+				else {
+					$this->SetStatus(102);
+					$this->SendDebug("GetState", "Roh-Ergebnis: ".$Result." Laenge: ".strlen($Result), 0);
+					If (strlen($Result) == 4) {
+						$LSB = ord(substr($Result, 0));
+						$MSB = ord(substr($Result, 1));
+						$State = $MSB << 8 | $LSB;
+						$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
+
+					}
+					for ($i = 0; $i <= 15; $i++) {
+						$Bitvalue = boolval($State & pow(2, $i));					
+						If (GetValueBoolean($this->GetIDForIdent("Output_".$i)) <> $Bitvalue) {
+							SetValueBoolean($this->GetIDForIdent("Output_".$i), $Bitvalue);
+						}
+					}
+				}
+			}
 		}
 	}
 			
