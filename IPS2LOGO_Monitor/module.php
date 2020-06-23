@@ -107,10 +107,10 @@
 			}
 			else {
 				$this->SetStatus(102);
-				$this->SendDebug("GetState", "Roh-Ergebnis: ".$Result, 0);
+				//$this->SendDebug("GetState", "Roh-Ergebnis: ".$Result, 0);
 				If (strlen($Result) == 2) {
-					$MSB = ord(substr($Result, 0));
-					$LSB = ord(substr($Result, 1));
+					$LSB = ord(substr($Result, 0));
+					$MSB = ord(substr($Result, 1));
 					$State = $MSB << 8 | $LSB;
  					$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 					
@@ -124,14 +124,14 @@
 				
 				$State = ($Result);
 				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
-				
+				*/
 				for ($i = 0; $i <= 15; $i++) {
 					$Bitvalue = boolval($State & pow(2, $i));					
 					If (GetValueBoolean($this->GetIDForIdent("Output_".$i)) <> $Bitvalue) {
 						SetValueBoolean($this->GetIDForIdent("Output_".$i), $Bitvalue);
 					}
 				}
-				*/
+				
 				
 			}
 			
