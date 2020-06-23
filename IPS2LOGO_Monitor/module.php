@@ -108,12 +108,20 @@
 			else {
 				$this->SetStatus(102);
 				$this->SendDebug("GetState", "Roh-Ergebnis: ".$Result, 0);
+				If (strlen($Result) == 2) {
+					$MSB = ord(substr($Result, 0));
+					$LSB = ord(substr($Result, 1));
+					$State = $MSB << 8 | $LSB;
+ 					$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
+					
+				}
+				/*
 				for ($pos=0; $pos < strlen($Result); $pos ++ ) {
  					$Byte = substr($Result, $pos);
  					$this->SendDebug("GetState", "Ergebnis ".$pos.": ".ord($Byte), 0);
 				}
 				
-				/*
+				
 				$State = ($Result);
 				$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				
