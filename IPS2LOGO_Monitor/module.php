@@ -138,7 +138,7 @@
 				else {
 					$this->SetStatus(102);
 					$this->SendDebug("GetState", "Roh-Ergebnis: ".$Result." Laenge: ".strlen($Result), 0);
-					If (strlen($Result) == 4) {
+					If (strlen($Result) == 2) {
 						$LSB = ord(substr($Result, 0));
 						$MSB = ord(substr($Result, 1));
 						$State = $MSB << 8 | $LSB;
