@@ -173,7 +173,7 @@
     		}
 		$arrayElements[] = array("type" => "Select", "name" => "SoundID_Notify", "caption" => "Sound", "options" => $arrayOptions );	
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise iat abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
+		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise ist abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Test Center"); 
 		$arrayElements[] = array("type" => "TestCenter", "name" => "TestCenter");
