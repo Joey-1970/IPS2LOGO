@@ -326,6 +326,7 @@
 					$this->SetTimerInterval("Timer_Notify", $this->ReadPropertyInteger("Timer_Notify") * 1000 * 60);
 				}
 				elseif ($State == 100) { //geschlossen
+					$this->SetTimerInterval("Timer_Notify", 0);
 					$this->Notification($this->ReadPropertyString("Title"), $this->ReadPropertyString("TextClose"), $this->ReadPropertyInteger("SoundID"));
 				}
 				If ($State <> 25) {
