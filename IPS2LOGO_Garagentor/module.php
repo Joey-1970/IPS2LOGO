@@ -239,8 +239,6 @@
 			$Bit[0] = $this->ReadPropertyInteger("Bit_1");
 			$Address[4] = $this->ReadPropertyInteger("Address_2"); // Schliessen
 			$Bit[4] = $this->ReadPropertyInteger("Bit_2");
-			//$AddressBit = ($Address * 10) + $Bit;
-			//$AddressBit = intval(octdec($AddressBit));
 			
 			$AddressBit = ($Address[$Button] * 8) + $Bit[$Button];
 			$AddressBit = intval($AddressBit);
@@ -253,7 +251,7 @@
 			}
 			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1"));
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 5, "Area" => $Area, "AreaAddress" => 0, "BitAddress" => $AddressBit, "WordLength" => 1,"DataCount" => 1,"DataPayload" => $DataPayload)));
-			//$this->SendDebug("SetState", "Ergebnis: ".intval($Result), 0);
+
 			$this->GetGateState();
 		}
 	}
@@ -325,6 +323,7 @@
 				SetValueInteger($this->GetIDForIdent("GateState"), $State);
 				If ($State == 0) { // geöffnet
 					$this->Notification($this->ReadPropertyString("Title"), $this->ReadPropertyString("TextOpen"), $this->ReadPropertyInteger("SoundID"));
+					$this->SetTimerInterval("Timer_Notify", $this->ReadPropertyInteger("Timer_Notify") * 1000 * 60);
 				}
 				elseif ($State == 100) { //geschlossen
 					$this->Notification($this->ReadPropertyString("Title"), $this->ReadPropertyString("TextClose"), $this->ReadPropertyInteger("SoundID"));
