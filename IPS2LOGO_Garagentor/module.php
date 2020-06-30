@@ -9,6 +9,7 @@
 		$this->SetTimerInterval("Timer_1", 0);
 		$this->SetTimerInterval("Timer_2", 0);
 		$this->SetTimerInterval("Timer_3", 0);
+		$this->SetTimerInterval("Timer_Notify", 0);
 	}
 	    
 	// Überschreibt die interne IPS_Create($id) Funktion
@@ -37,6 +38,11 @@
 		$this->RegisterPropertyString("TextOpen", "Text geöffnet");
 		$this->RegisterPropertyString("TextClose", "Text geschlossen");
 		$this->RegisterPropertyInteger("SoundID", 0);
+		$this->RegisterPropertyInteger("Timer_Notify", 15); // Erinnerung wenn Tor geöffnet
+		$this->RegisterPropertyInteger("SoundID_Notify", 0);
+		$this->RegisterPropertyString("TitleNotify", "Meldungstitel");
+		$this->RegisterPropertyString("TextNotify", "Text Erinnerung");
+		$this->RegisterTimer("Timer_Notify", 0, 'I2LGaragentor_NotifyState($_IPS["TARGET"]);');
 		
 		// Profile erstellen
 		$this->RegisterProfileInteger("IPS2LOGO.GateState", "Information", "", "", 0, 3, 1);
@@ -155,7 +161,17 @@
 		foreach ($SoundArray as $ID => $Sound) {
         		$arrayOptions[] = array("label" => $Sound, "value" => $ID);
     		}
-		$arrayElements[] = array("type" => "Select", "name" => "SoundID", "caption" => "Sound", "options" => $arrayOptions );		
+		$arrayElements[] = array("type" => "Select", "name" => "SoundID", "caption" => "Sound", "options" => $arrayOptions );	
+		$arrayElements[] = array("type" => "Label", "label" => "Erinnerungsfunktion für das geöffnete Tor");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_Notify", "caption" => "min");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TitleNotify", "caption" => "Meldungstitel");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TextNotify", "caption" => "Text Erinnerung");
+		$arrayOptions = array();
+		$SoundArray = array("Alarm", "Bell", "Boom", "Buzzer", "Connected", "Dark", "Digital", "Drums", "Duck", "Full", "Happy", "Horn", "Inception", "Kazoo", "Roll", "Siren", "Space", "Trickling", "Turn");
+		foreach ($SoundArray as $ID => $Sound) {
+        		$arrayOptions[] = array("label" => $Sound, "value" => $ID);
+    		}
+		$arrayElements[] = array("type" => "Select", "name" => "SoundID_Notify", "caption" => "Sound", "options" => $arrayOptions );	
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise iat abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
@@ -308,10 +324,10 @@
 			If ($State <> GetValueInteger($this->GetIDForIdent("GateState"))) {
 				SetValueInteger($this->GetIDForIdent("GateState"), $State);
 				If ($State == 0) { // geöffnet
-					$this->Notification($this->ReadPropertyString("TextOpen"));
+					$this->Notification($this->ReadPropertyString("Title"), $this->ReadPropertyString("TextOpen"), $this->ReadPropertyInteger("SoundID"));
 				}
 				elseif ($State == 100) { //geschlossen
-					$this->Notification($this->ReadPropertyString("TextClose"));
+					$this->Notification($this->ReadPropertyString("Title"), $this->ReadPropertyString("TextClose"), $this->ReadPropertyInteger("SoundID"));
 				}
 				If ($State <> 25) {
 					SetValueInteger($this->GetIDForIdent("State"), 2);
@@ -360,13 +376,19 @@
 		}
 		$this->SetTimerInterval("Timer_3", 0);
 	} 
+	
+	public function NotifyState()
+	{
+		$this->SendDebug("NotifyState", "Erinnerung", 0);
+		$this->Notification($this->ReadPropertyString("TitleNotify"), $this->ReadPropertyString("TextNotify"), $this->ReadPropertyInteger("SoundID_Notify"));
+		
+		$this->SetTimerInterval("Timer_Notify", 0);
+	}     
 	    
-	private function Notification ($Text)
+	private function Notification ($Title, $Text, $SoundID)
 	{
 		If ($this->ReadPropertyInteger("WebfrontID") > 0) {
 			$WebfrontID = $this->ReadPropertyInteger("WebfrontID");
-			$Title = $this->ReadPropertyString("Title");
-			$SoundID = $this->ReadPropertyInteger("SoundID");
 			$SoundArray = array("Alarm", "Bell", "Boom", "Buzzer", "Connected", "Dark", "Digital", "Drums", "Duck", "Full", "Happy", "Horn", "Inception", "Kazoo", "Roll", "Siren", "Space", "Trickling", "Turn");
 			$Sound = strtolower($SoundArray[$SoundID]);
 			$TargetID = 0;
