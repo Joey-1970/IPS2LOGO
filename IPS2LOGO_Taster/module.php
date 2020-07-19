@@ -184,7 +184,7 @@
 	public function GetState()
 	{
 		$State = false;
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true) AND (IPS_GetKernelRunlevel() == KR_READY)) {
 			//$this->SendDebug("GetState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output");
 			$AreaAddress = 0;
@@ -221,7 +221,7 @@
 	    
 	private function GetAPState()
 	{
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true) AND (IPS_GetKernelRunlevel() == KR_READY)) {
 			//$this->SendDebug("GetAPState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output_AP");
 			$AreaAddress = 0;
