@@ -231,7 +231,7 @@
 	// Beginn der Funktionen
 	public function SetState(Bool $State, Int $Button)
 	{
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true) AND (IPS_GetKernelRunlevel() == KR_READY)) {
 			$this->SendDebug("SetState", "Ausfuehrung", 0);
 			$this->SetBuffer("Button", $Button);
 			$Area = 132; // Konstante
@@ -304,7 +304,7 @@
 	
 	public function GetGateState()
 	{
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true) AND (IPS_GetKernelRunlevel() == KR_READY)) {
 			//$this->SendDebug("GetGateState", "Ausfuehrung", 0);
 			$Output = $this->ReadPropertyInteger("Output_1");
 			$StateTop = $this->GetState($Output);
