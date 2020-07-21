@@ -175,10 +175,11 @@
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise ist abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Test Center"); 
-		$arrayElements[] = array("type" => "TestCenter", "name" => "TestCenter");
+		$arrayActions = array(); 
+		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
+		$arrayActions[] = array("type" => "TestCenter", "name" => "TestCenter");
 		
- 		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
+ 		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements, "actions" => $arrayActions)); 		 
  	} 
 	
 	// Überschreibt die intere IPS_ApplyChanges($id) Funktion
