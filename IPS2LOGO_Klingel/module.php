@@ -7,6 +7,7 @@
 		//Never delete this line!
 		parent::Destroy();
 		$this->SetTimerInterval("Timer_1", 0);
+		$this->SetTimerInterval("Reset", 0);
 	}
 	    
 	// Überschreibt die interne IPS_Create($id) Funktion
@@ -21,11 +22,13 @@
 		$this->RegisterPropertyInteger("Address", 0);
 		$this->RegisterPropertyInteger("Bit", 0);
 		$this->RegisterPropertyInteger("Switchtime", 20);
+		$this->RegisterPropertyInteger("Resettime", 1);
+		$this->RegisterTimer("Reset", 0, 'I2LKlingel_Reset($_IPS["TARGET"]);');
 		$this->RegisterPropertyInteger("Timer_1", 250);
 		$this->RegisterTimer("Timer_1", 0, 'I2LKlingel_GetState($_IPS["TARGET"]);');
 		$this->RegisterPropertyInteger("WebfrontID", 0);
 		$this->RegisterPropertyString("Title", "Meldungstitel");
-		$this->RegisterPropertyString("TextOpen", "Text");
+		$this->RegisterPropertyString("Text", "Text");
 		$this->RegisterPropertyInteger("SoundID", 0);
 		
 		//Status-Variablen anlegen
@@ -48,8 +51,8 @@
 		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
 		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions, "onChange" => 'IPS_RequestAction($id,"RefreshProfileForm",$Model);' );
 
- 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs");
+ 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des Netzwerkeingangs");
 		
 		$arrayOptions = array();
 		for ($i = 0; $i <= 7; $i++) {
@@ -61,10 +64,10 @@
 		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit", "caption" => "Bit", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
-		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "Laufzeit des Tast-Impulses");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms", "minimum" => 20);
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		
 		$arrayOptions = array();
 		If ($this->ReadPropertyInteger("Model") == 7) {
@@ -86,8 +89,11 @@
 		
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Benachrichtigungsfunktion");
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Laufzeit des Tast-Impulses");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "Resettime", "caption" => "s", "minimum" => 1);
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Benachrichtigungsfunktion");
 		$WebfrontID = Array();
 		$WebfrontID = $this->GetWebfrontID();
 		$arrayOptions = array();
@@ -97,7 +103,7 @@
     		}
 		$arrayElements[] = array("type" => "Select", "name" => "WebfrontID", "caption" => "Webfront", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Title", "caption" => "Meldungstitel");
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TextOpen", "caption" => "Text geöffnet");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Text", "caption" => "Text");
 		$arrayOptions = array();
 		$SoundArray = array("Alarm", "Bell", "Boom", "Buzzer", "Connected", "Dark", "Digital", "Drums", "Duck", "Full", "Happy", "Horn", "Inception", "Kazoo", "Roll", "Siren", "Space", "Trickling", "Turn");
 		foreach ($SoundArray as $ID => $Sound) {
@@ -115,6 +121,7 @@
                 parent::ApplyChanges();
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
+			$this->Reset();
 			$this->GetState();
 			$this->SetStatus(102);
 			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") );
@@ -199,7 +206,8 @@
 					SetValueBoolean($this->GetIDForIdent("State"), $State);
 					If ($State == true) {
 						$this->SendDebug("GetState", "Es hat geklingelt!", 0);
-						$this->Reset();
+						$this->Notification($this->ReadPropertyString("TextOpen"));
+						$this->SetTimerInterval("Reset", $this->ReadPropertyInteger("Resettime") * 1000);
 					}
 				}
 			}
@@ -214,6 +222,7 @@
 			$this->SetState(true);
 			IPS_Sleep($Switchtime);
 			$this->SetState(false);
+			$this->SetTimerInterval("Reset", 0);
 		}
   	}   
 	    
