@@ -203,6 +203,7 @@
 				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
 					SetValueBoolean($this->GetIDForIdent("State"), $State);
 					If ($State == true) {
+						$this->SendDebug("GetState", "Es hat geklingelt!", 0);
 						$this->Reset();
 					}
 				}
