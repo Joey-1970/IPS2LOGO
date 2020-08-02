@@ -23,8 +23,6 @@
 		$this->RegisterPropertyInteger("Switchtime", 20);
 		$this->RegisterPropertyInteger("Timer_1", 250);
 		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
-		$this->RegisterPropertyBoolean("AP", false); // Parallele automatische Progamme
-		$this->RegisterPropertyInteger("Output_AP", 1);
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
@@ -138,8 +136,6 @@
 			$Area = 132; // Konstante
 			$Address = $this->ReadPropertyInteger("Address");
 			$Bit = $this->ReadPropertyInteger("Bit");
-			//$AddressBit = ($Address * 10) + $Bit;
-			//$AddressBit = intval(octdec($AddressBit));
 			
 			$AddressBit = ($Address * 8) + $Bit;
 			$AddressBit = intval($AddressBit);
@@ -184,10 +180,6 @@
 				//$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
 					SetValueBoolean($this->GetIDForIdent("State"), $State);
-				}
-				$ReadAP = $this->ReadPropertyBoolean("AP");
-				If ($ReadAP == true) {
-					 $this->GetAPState();
 				}
 			}
 		}
