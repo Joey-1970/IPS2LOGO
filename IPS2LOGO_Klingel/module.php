@@ -25,7 +25,7 @@
 		$this->RegisterTimer("Timer_1", 0, 'I2LKlingel_GetState($_IPS["TARGET"]);');
 		$this->RegisterPropertyInteger("WebfrontID", 0);
 		$this->RegisterPropertyString("Title", "Meldungstitel");
-		$this->RegisterPropertyString("TextOpen", "Text geöffnet");
+		$this->RegisterPropertyString("TextOpen", "Text");
 		$this->RegisterPropertyInteger("SoundID", 0);
 		
 		//Status-Variablen anlegen
@@ -104,13 +104,8 @@
         		$arrayOptions[] = array("label" => $Sound, "value" => $ID);
     		}
 		$arrayElements[] = array("type" => "Select", "name" => "SoundID", "caption" => "Sound", "options" => $arrayOptions );		
-
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayActions = array(); 
-		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
-		$arrayActions[] = array("type" => "TestCenter", "name" => "TestCenter");
 		
- 		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements, "actions" => $arrayActions)); 		 
+ 		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
  	} 
 	
 	// Überschreibt die intere IPS_ApplyChanges($id) Funktion
