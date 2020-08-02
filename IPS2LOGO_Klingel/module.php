@@ -206,7 +206,7 @@
 					SetValueBoolean($this->GetIDForIdent("State"), $State);
 					If ($State == true) {
 						$this->SendDebug("GetState", "Es hat geklingelt!", 0);
-						$this->Notification($this->ReadPropertyString("TextOpen"));
+						$this->Notification($this->ReadPropertyString("Text"));
 						$this->SetTimerInterval("Reset", $this->ReadPropertyInteger("Resettime") * 1000);
 					}
 				}
