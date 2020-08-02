@@ -1,6 +1,6 @@
 <?
     // Klassendefinition
-    class IPS2LOGO_Taster extends IPSModule 
+    class IPS2LOGO_Klingel extends IPSModule 
     {
 	public function Destroy() 
 	{
@@ -28,7 +28,7 @@
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
-		$this->EnableAction("State");
+		$this->RegisterVariableString("Log", "Log", "~HTMLBox", 20);
         }
        	
 	public function GetConfigurationForm() { 
@@ -84,28 +84,7 @@
 		
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Status parallel laufender automatischer Programme"); 
-		$arrayElements[] = array("name" => "AP", "type" => "CheckBox",  "caption" => "Aktiv"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
-		$arrayOptions = array();
-		If ($this->ReadPropertyInteger("Model") == 7) {
-			for ($i = 1; $i <= 16; $i++) {
-				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
-			}
-			for ($i = 1; $i <= 27; $i++) {
-				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
-			}
-		}
-		else If ($this->ReadPropertyInteger("Model") == 8) {
-			for ($i = 1; $i <= 20; $i++) {
-				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
-			}
-			for ($i = 1; $i <= 64; $i++) {
-				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
-			}
-		}
-		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
+		
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayActions = array(); 
 		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
@@ -135,11 +114,6 @@
 	public function RequestAction($Ident, $Value) 
 	{
   		switch($Ident) {
-	        case "State":
-			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
-				$this->KeyPress($Value);
-			}
-	            	break;
 		case "RefreshProfileForm":
 				$this->SendDebug("RequestAction", "Wert: ".$Value, 0);
 				$this->RefreshProfileForm($Value);
@@ -219,53 +193,6 @@
 		}
 	return $State;
 	}
-	    
-	private function GetAPState()
-	{
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true) AND (IPS_GetKernelRunlevel() == KR_READY)) {
-			//$this->SendDebug("GetAPState", "Ausfuehrung", 0);
-			$Output = $this->ReadPropertyInteger("Output_AP");
-			$AreaAddress = 0;
-			
-			If ($Output < 100) {
-				$Area = 130; // Ausgang
-				$BitAddress = $Output - 1;
-			}
-			else {
-				$Area = 131; // Merker
-				$BitAddress = $Output - 101;
-			}
-				
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
-			If ($Result === false) {
-				$this->SetStatus(202);
-				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
-			}
-			else {
-				$this->SetStatus(102);
-				$State = ord($Result);
-				//$this->SendDebug("GetAPState", "Ergebnis: ".$State, 0);
-				If ($State == false) {
-					$this->EnableAction("State");
-				}
-				else {
-					$this->DisableAction("State");
-				}
-			}
-		}
-	}
-	    
-	public function Keypress(bool $State)
-	{
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
-			If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
-				$this->SetState(true);
-				IPS_Sleep($Switchtime);
-				$this->SetState(false);
-			}
-		}
-  	}
 	
 	private function RefreshProfileForm($Model)
     	{
