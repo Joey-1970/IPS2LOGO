@@ -186,6 +186,16 @@
 	return $State;
 	}
 	
+	private function Reset()
+	{
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
+			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
+			$this->SetState(true);
+			IPS_Sleep($Switchtime);
+			$this->SetState(false);
+		}
+  	}   
+	    
 	private function RefreshProfileForm($Model)
     	{
         	$arrayOptions = array();
