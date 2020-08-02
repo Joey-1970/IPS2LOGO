@@ -215,7 +215,7 @@
 	return $State;
 	}
 	
-	private function Reset()
+	public function Reset()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
 			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
