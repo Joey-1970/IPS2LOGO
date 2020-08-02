@@ -90,7 +90,7 @@
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "caption" => "Laufzeit des Tast-Impulses");
+		$arrayElements[] = array("type" => "Label", "caption" => "Reset des Klingelsignals");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Resettime", "caption" => "s", "minimum" => 1);
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Benachrichtigungsfunktion");
