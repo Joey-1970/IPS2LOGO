@@ -1,0 +1,14 @@
+{
+  "id": "{84EFF4C0-8D0D-A96B-DF87-635ECA2B64BB}",
+  "name": "IPS2LOGO_Klingel",
+  "type": 3,
+  "vendor": "JP-IPS-Modules",
+  "aliases":
+  [
+    "IPS2LOGO_Klingel"
+  ],
+  "parentRequirements": ["{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}"],
+  "childRequirements": [],
+  "implemented": ["{EC09E155-355C-4DC2-95C7-5C336B1C9D48}"],
+  "prefix": "I2LKlingel"
+}
