@@ -22,7 +22,7 @@
 		$this->RegisterPropertyInteger("Bit", 0);
 		$this->RegisterPropertyInteger("Switchtime", 20);
 		$this->RegisterPropertyInteger("Timer_1", 250);
-		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
+		$this->RegisterTimer("Timer_1", 0, 'I2LKlingel_GetState($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
