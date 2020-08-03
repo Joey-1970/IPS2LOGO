@@ -225,6 +225,80 @@
 			$this->SetTimerInterval("Reset", 0);
 		}
   	}   
+	
+	private function RenderData($MessageData)		
+	{
+		$Sorting = $this->ReadPropertyInteger("Sorting");
+		
+		// Etwas CSS und HTML
+		$style = "";
+		$style .= '<style type="text/css">';
+		$style .= 'table { width:100%; border-collapse: collapse; }';
+		$style .= 'td.fst { width: 36px; padding: 2px; border-left: 1px solid rgba(255, 255, 255, 0.2); border-top: 1px solid rgba(255, 255, 255, 0.1); }';
+		$style .= 'td.mid { padding: 2px;  border-top: 1px solid rgba(255, 255, 255, 0.1); }';
+		$style .= 'td.lst { width: 42px; text-align:center; padding: 2px;  border-right: 1px solid rgba(255, 255, 255, 0.2); border-top: 1px solid rgba(255, 255, 255, 0.1); }';
+		$style .= 'tr:last-child { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }';
+		$style .= '.blue { padding: 5px; color: rgb(255, 255, 255); background-color: rgb(0, 0, 255); background-image: linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -o-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -moz-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -ms-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); }';
+		$style .= '.red { padding: 5px; color: rgb(255, 255, 255); background-color: rgb(255, 0, 0); background-image: linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -o-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -moz-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -ms-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); }';
+		$style .= '.green { padding: 5px; color: rgb(255, 255, 255); background-color: rgb(0, 255, 0); background-image: linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -o-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -moz-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -ms-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); }';
+		$style .= '.yellow { padding: 5px; color: rgb(255, 255, 255); background-color: rgb(255, 255, 0); background-image: linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -o-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -moz-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -ms-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); }';
+		$style .= '.orange { padding: 5px; color: rgb(255, 255, 255); background-color: rgb(255, 160, 0); background-image: linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -o-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -moz-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); background-image: -ms-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.3) 100%); }';
+		$style .= '</style>';
+
+		$content = $style;
+		$content .= '<table>';
+		
+		if (count($MessageData) == 0) {
+			$content .= '<tr>';
+			$Icon = "Ok";
+			$content .= '<td class="iconMediumSpinner ipsIcon' .$Icon. '"></td>';
+			if ($ShowTime == true) {
+				$content .= '<td class="lst">'.date("d.m.Y H:i", time() ).'</td>';
+			}
+			$content .= '<td class="mid">Keine Meldungen vorhanden!</td>';
+			$content .= '<td class="mid"></td>';
+			$content .= '<td class=\'lst\'><div class=\'green\' onclick=\'alert("Nachricht kann nicht bestätigt werden.");\'>...</div></td>';
+			$content .= '</tr>';
+	  	}
+	  	else {
+	    		$MessageData =  $this->MessageSort($MessageData, 'Timestamp',  $Sorting);
+			foreach ($MessageData as $Number => $Message) {
+	      			$TypeColor = array("green", "red", "yellow", "blue");
+				$TypeImage = array("Ok", "Alert", "Warning", "Clock");
+				$Message['Type'] = min(3, max(0, $Message['Type']));
+						
+				if ($Message['Image'] <> "") {
+					$Image = $Message['Image'];
+				}
+				else {
+					$Image = $TypeImage[$Message['Type']];
+				}
+
+				$content .= '<tr>';
+				$content .= '<td class="iconMediumSpinner ipsIcon' .$Image. '"></td>';
+				
+				$SecondsToday= date('H') * 3600 + date('i') * 60 + date('s');
+				If ($Message['Timestamp'] <= (time() - $SecondsToday)) {
+					$content .= '<td class="lst">'.date("d.m.Y H:i", $Message['Timestamp']).'</td>';
+				}
+				else {
+					$content .= '<td class="lst">'.date("H:i:s", $Message['Timestamp']).'</td>';
+				}
+				
+				$content .= '<td class="mid">'.utf8_decode($Message['Text']).'</td>';
+				
+				$content .= '<td class="mid"></td>';
+				
+				$content .= '<td class=\'lst\'><div class=\''.$TypeColor[$Message['Type']].'\' onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2MessageDisplay_'.$this->InstanceID.'?ts=\' + (new Date()).getTime() + \'&action=remove&MessageID='.$Message['MessageID'].'\' });">OK</div></td>';
+					
+				$content .= '</tr>';
+			}
+	  	}
+	  	$content .= '</table>';
+	  	If (GetValueString($this->GetIDForIdent("Log")) <> $content) {
+			SetValueString($this->GetIDForIdent("Log"), $content);
+		}
+	}        
 	    
 	private function RefreshProfileForm($Model)
     	{
