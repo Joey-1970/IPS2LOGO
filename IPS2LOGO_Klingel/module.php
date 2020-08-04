@@ -28,6 +28,7 @@
 		$this->RegisterTimer("Reset", 0, 'I2LKlingel_Reset($_IPS["TARGET"]);');
 		$this->RegisterPropertyInteger("Timer_1", 250);
 		$this->RegisterTimer("Timer_1", 0, 'I2LKlingel_GetState($_IPS["TARGET"]);');
+		$this->RegisterPropertyInteger("Sorting", 3);
 		$this->RegisterPropertyInteger("WebfrontID", 0);
 		$this->RegisterPropertyString("Title", "Meldungstitel");
 		$this->RegisterPropertyString("Text", "Text");
@@ -37,6 +38,9 @@
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
 		$this->RegisterVariableString("Log", "Log", "~HTMLBox", 20);
+		
+		$EventData = array();
+		$this->WriteAttributeString("MessageData", serialize($EventData)); 
         }
        	
 	public function GetConfigurationForm() { 
@@ -95,6 +99,13 @@
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Reset des Klingelsignals");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Resettime", "caption" => "s", "minimum" => 1);
+		
+		$arrayOptions = array();
+		$arrayOptions[] = array("label" => "Neuste Nachricht zuerst", "value" => SORT_DESC);
+		$arrayOptions[] = array("label" => "Älteste Nachricht zuerst", "value" => SORT_ASC);
+		$arrayElements[] = array("type" => "Select", "name" => "Sorting", "caption" => "Sortierung in der Darstellung", "options" => $arrayOptions );
+
+		
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Benachrichtigungsfunktion");
 		$WebfrontID = Array();
@@ -125,13 +136,16 @@
 		
 		if (IPS_GetKernelRunlevel() == KR_READY) {
 			// Webhook einrichten
-			$this->RegisterHook("/hook/IPS2MessageDisplay_".$this->InstanceID);
+			$this->RegisterHook("/hook/IPS2LOGOKlingel_".$this->InstanceID);
 		}
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->Reset();
 			$this->GetState();
 			$this->SetStatus(102);
+			$EventData = array();
+			$EventData = unserialize($this->ReadAttributeString("EventData"));
+			$this->RenderData($EventData);
 			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") );
 		}
 		else {
@@ -234,7 +248,7 @@
 		}
   	}   
 	
-	private function RenderData($MessageData)		
+	private function RenderData($EventData)		
 	{
 		$Sorting = $this->ReadPropertyInteger("Sorting");
 		
@@ -256,7 +270,7 @@
 		$content = $style;
 		$content .= '<table>';
 		
-		if (count($MessageData) == 0) {
+		if (count($EventData) == 0) {
 			$content .= '<tr>';
 			$Icon = "Ok";
 			$content .= '<td class="iconMediumSpinner ipsIcon' .$Icon. '"></td>';
@@ -269,35 +283,35 @@
 			$content .= '</tr>';
 	  	}
 	  	else {
-	    		$MessageData =  $this->MessageSort($MessageData, 'Timestamp',  $Sorting);
-			foreach ($MessageData as $Number => $Message) {
+	    		$MessageData =  $this->EventSort($EventData, 'Timestamp',  $Sorting);
+			foreach ($EventData as $Number => $Event) {
 	      			$TypeColor = array("green", "red", "yellow", "blue");
 				$TypeImage = array("Ok", "Alert", "Warning", "Clock");
-				$Message['Type'] = min(3, max(0, $Message['Type']));
+				$Event['Type'] = min(3, max(0, $Event['Type']));
 						
-				if ($Message['Image'] <> "") {
-					$Image = $Message['Image'];
+				if ($Event['Image'] <> "") {
+					$Image = $Event['Image'];
 				}
 				else {
-					$Image = $TypeImage[$Message['Type']];
+					$Image = $TypeImage[$Event['Type']];
 				}
 
 				$content .= '<tr>';
 				$content .= '<td class="iconMediumSpinner ipsIcon' .$Image. '"></td>';
 				
 				$SecondsToday= date('H') * 3600 + date('i') * 60 + date('s');
-				If ($Message['Timestamp'] <= (time() - $SecondsToday)) {
-					$content .= '<td class="lst">'.date("d.m.Y H:i", $Message['Timestamp']).'</td>';
+				If ($Event['Timestamp'] <= (time() - $SecondsToday)) {
+					$content .= '<td class="lst">'.date("d.m.Y H:i", $Event['Timestamp']).'</td>';
 				}
 				else {
-					$content .= '<td class="lst">'.date("H:i:s", $Message['Timestamp']).'</td>';
+					$content .= '<td class="lst">'.date("H:i:s", $Event['Timestamp']).'</td>';
 				}
 				
-				$content .= '<td class="mid">'.utf8_decode($Message['Text']).'</td>';
+				$content .= '<td class="mid">'.utf8_decode($Event['Text']).'</td>';
 				
 				$content .= '<td class="mid"></td>';
 				
-				$content .= '<td class=\'lst\'><div class=\''.$TypeColor[$Message['Type']].'\' onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2MessageDisplay_'.$this->InstanceID.'?ts=\' + (new Date()).getTime() + \'&action=remove&MessageID='.$Message['MessageID'].'\' });">OK</div></td>';
+				$content .= '<td class=\'lst\'><div class=\''.$TypeColor[$Event['Type']].'\' onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2LOGOKlingel_'.$this->InstanceID.'?ts=\' + (new Date()).getTime() + \'&action=remove&MessageID='.$Event['EventID'].'\' });">OK</div></td>';
 					
 				$content .= '</tr>';
 			}
@@ -344,6 +358,21 @@
 		}
 	}        
 	
+	private function EventSort($EventData, $DataField, $SortOrder) 
+	{
+    		if(is_array($EventData)==true) {
+            		foreach ($EventData as $key => $value) {
+            			if(is_array($value) == true){
+                			foreach ($value as $kk => $vv) {
+                    				${$kk}[$key]  = strtolower( $value[$kk]);
+                			}
+            			}
+        		}
+    		}
+    		array_multisort(${$DataField}, $SortOrder, $EventData);
+    	return $EventData;
+	}    
+	    
 	private function GetWebfrontID()
 	{
     		$guid = "{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}"; // Webfront Konfigurator
