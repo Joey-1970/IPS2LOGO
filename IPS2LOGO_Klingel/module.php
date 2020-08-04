@@ -15,6 +15,8 @@
         {
             	// Diese Zeile nicht löschen.
             	parent::Create();
+		$this->RegisterMessage(0, IPS_KERNELMESSAGE);
+		
 		$this->ConnectParent("{1B0A36F7-343F-42F3-8181-0748819FB324}");
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyInteger("Model", 7);
@@ -30,6 +32,7 @@
 		$this->RegisterPropertyString("Title", "Meldungstitel");
 		$this->RegisterPropertyString("Text", "Text");
 		$this->RegisterPropertyInteger("SoundID", 0);
+		$this->RegisterAttributeString("EventData", ""); 
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
@@ -119,6 +122,11 @@
         {
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
+		
+		if (IPS_GetKernelRunlevel() == KR_READY) {
+			// Webhook einrichten
+			$this->RegisterHook("/hook/IPS2MessageDisplay_".$this->InstanceID);
+		}
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->Reset();
