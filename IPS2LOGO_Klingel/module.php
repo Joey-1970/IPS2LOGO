@@ -40,7 +40,7 @@
 		$this->RegisterVariableString("Log", "Log", "~HTMLBox", 20);
 		
 		$EventData = array();
-		$this->WriteAttributeString("MessageData", serialize($EventData)); 
+		$this->WriteAttributeString("EventData", serialize($EventData)); 
         }
        	
 	public function GetConfigurationForm() { 
