@@ -264,7 +264,7 @@
 						$this->SendDebug("WorkProcess", "Event ".$EventID." wurde hinzugefuegt", 0);
 						break;
 					case 'Remove':
-						If (is_array($MessageData)) {
+						If (is_array($EventData)) {
 							if (array_key_exists($EventID, $EventData)) {
 								unset($EventData[$EventID]);
 								$this->SendDebug("WorkProcess", "Event ".$EventID." wurde entfernt", 0);
