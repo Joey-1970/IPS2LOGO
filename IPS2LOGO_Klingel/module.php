@@ -228,6 +228,7 @@
 					SetValueBoolean($this->GetIDForIdent("State"), $State);
 					If ($State == true) {
 						$this->SendDebug("GetState", "Es hat geklingelt!", 0);
+						$this->WorkProcess("Add", microtime(true));
 						$this->Notification($this->ReadPropertyString("Text"));
 						$this->SetTimerInterval("Reset", $this->ReadPropertyInteger("Resettime") * 1000);
 					}
@@ -248,7 +249,7 @@
 		}
   	}   
 	
-	private function WorkProcess(string $Activity) 
+	private function WorkProcess(string $Activity, int $EventID) 
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			if (IPS_SemaphoreEnter("WorkProcess", 2000))
@@ -257,27 +258,28 @@
 				$EventData = unserialize($this->ReadAttributeString("EventData"));
 				switch ($Activity) {
 					case 'Add':
-						$EventData[$EventID]["EventID"] = microtime(true);
+						$EventData[$EventID]["EventID"] = $EventID;
 		
 						$EventData[$EventID]["Timestamp"] = microtime(true);
-						$this->SendDebug("WorkProcess", "Message ".$MessageID." wurde hinzugefuegt", 0);
+						$this->SendDebug("WorkProcess", "Event ".$EventID." wurde hinzugefuegt", 0);
 						break;
 					case 'Remove':
 						If (is_array($MessageData)) {
-							if (array_key_exists($MessageID, $MessageData)) {
-								unset($MessageData[$MessageID]);
-								$this->SendDebug("WorkProcess", "Message ".$MessageID." wurde entfernt", 0);
+							if (array_key_exists($EventID, $EventData)) {
+								unset($EventData[$EventID]);
+								$this->SendDebug("WorkProcess", "Event ".$EventID." wurde entfernt", 0);
 							}
 							else {
-								$this->SendDebug("WorkProcess", "Message ".$MessageID." wurde nicht gefunden", 0);
+								$this->SendDebug("WorkProcess", "Event ".$EventID." wurde nicht gefunden", 0);
 							}
 						}
 						break;
 					case 'RemoveAll':
-						$MessageData = array();
+						$EventData = array();
 						$this->SendDebug("WorkProcess", "Alle Messages wurde entfernt", 0);
 						break;
 					case 'Switch':
+						/*
 						If (is_array($MessageData)) {
 							if (array_key_exists($MessageID, $MessageData)) {
 								If ((intval($MessageData[$MessageID]["WebfrontID"]) >= 10000) AND (strlen($MessageData[$MessageID]["Page"]) > 0)) {
@@ -286,13 +288,14 @@
 								}
 							}
 						}
+						*/
 						break;
 				}
-				$this->WriteAttributeString("MessageData", serialize($MessageData));
+				$this->WriteAttributeString("EventData", serialize($EventData));
 			}
 			IPS_SemaphoreLeave("WorkProcess");
 			If ($Activity <> "AutoRemove") {
-				$this->RenderData($MessageData);
+				$this->RenderData($EventData);
 			}
 		}
 		else {
@@ -308,7 +311,7 @@
 			    	case 'remove':
 			      		$EventID = isset($_GET['EventID']) ? $_GET['EventID'] : -1;
 			      		if ($EventID > 0) {
-						$this->WorkProcess("Remove", $EventID, "", 0, false, 0, "", 0, "");
+						$this->WorkProcess("Remove", $EventID);
 			      		}
 					else {
 						$this->SendDebug("ProcessHookData", "Keine EventID!", 0);
@@ -317,7 +320,7 @@
 			    case 'switch':
 			      		$MessageID = isset($_GET['EventID']) ? $_GET['EventID'] : -1;
 			      		if ($MessageID > 0) {
-						$this->WorkProcess("Switch", $EventID, "", 0, false, 0, "", 0, "");
+						$this->WorkProcess("Switch", $EventID);
 			      		}
 					else {
 						$this->SendDebug("ProcessHookData", "Keine EventID!", 0);
