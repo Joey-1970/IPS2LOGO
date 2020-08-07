@@ -248,6 +248,34 @@
 		}
   	}   
 	
+	protected function ProcessHookData() 
+	{		
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			$this->SendDebug("ProcessHookData", "Ausfuehrung: ".$_SERVER['HOOK'], 0);
+			switch ($_GET['action']) {
+			    	case 'remove':
+			      		$EventID = isset($_GET['EventID']) ? $_GET['EventID'] : -1;
+			      		if ($EventID > 0) {
+						$this->WorkProcess("Remove", $EventID, "", 0, false, 0, "", 0, "");
+			      		}
+					else {
+						$this->SendDebug("ProcessHookData", "Keine EventID!", 0);
+					}
+			      		break;
+			    case 'switch':
+			      		$MessageID = isset($_GET['EventID']) ? $_GET['EventID'] : -1;
+			      		if ($MessageID > 0) {
+						$this->WorkProcess("Switch", $EventID, "", 0, false, 0, "", 0, "");
+			      		}
+					else {
+						$this->SendDebug("ProcessHookData", "Keine EventID!", 0);
+					}
+			      		break;
+			      break;
+			}
+		}
+	}       
+	    
 	private function RenderData($EventData)		
 	{
 		$Sorting = $this->ReadPropertyInteger("Sorting");
@@ -311,7 +339,7 @@
 				
 				$content .= '<td class="mid"></td>';
 				
-				$content .= '<td class=\'lst\'><div class=\''.$TypeColor[$Event['Type']].'\' onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2LOGOKlingel_'.$this->InstanceID.'?ts=\' + (new Date()).getTime() + \'&action=remove&MessageID='.$Event['EventID'].'\' });">OK</div></td>';
+				$content .= '<td class=\'lst\'><div class=\''.$TypeColor[$Event['Type']].'\' onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2LOGOKlingel_'.$this->InstanceID.'?ts=\' + (new Date()).getTime() + \'&action=remove&EventID='.$Event['EventID'].'\' });">OK</div></td>';
 					
 				$content .= '</tr>';
 			}
