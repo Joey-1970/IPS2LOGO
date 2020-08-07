@@ -390,7 +390,7 @@
 					$content .= '<td class="lst">'.date("H:i:s", $Event['Timestamp']).'</td>';
 				}
 				
-				$content .= '<td class="mid">'.utf8_decode($Event['Text']).'</td>';
+				$content .= '<td class="mid">'.utf8_decode("Es hat geklingelt!").'</td>';
 				
 				$content .= '<td class="mid"></td>';
 				
