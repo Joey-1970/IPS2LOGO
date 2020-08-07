@@ -248,6 +248,58 @@
 		}
   	}   
 	
+	private function WorkProcess(string $Activity) 
+	{
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			if (IPS_SemaphoreEnter("WorkProcess", 2000))
+			{
+				$EventData = array();
+				$EventData = unserialize($this->ReadAttributeString("EventData"));
+				switch ($Activity) {
+					case 'Add':
+						$EventData[$EventID]["EventID"] = microtime(true);
+		
+						$EventData[$EventID]["Timestamp"] = microtime(true);
+						$this->SendDebug("WorkProcess", "Message ".$MessageID." wurde hinzugefuegt", 0);
+						break;
+					case 'Remove':
+						If (is_array($MessageData)) {
+							if (array_key_exists($MessageID, $MessageData)) {
+								unset($MessageData[$MessageID]);
+								$this->SendDebug("WorkProcess", "Message ".$MessageID." wurde entfernt", 0);
+							}
+							else {
+								$this->SendDebug("WorkProcess", "Message ".$MessageID." wurde nicht gefunden", 0);
+							}
+						}
+						break;
+					case 'RemoveAll':
+						$MessageData = array();
+						$this->SendDebug("WorkProcess", "Alle Messages wurde entfernt", 0);
+						break;
+					case 'Switch':
+						If (is_array($MessageData)) {
+							if (array_key_exists($MessageID, $MessageData)) {
+								If ((intval($MessageData[$MessageID]["WebfrontID"]) >= 10000) AND (strlen($MessageData[$MessageID]["Page"]) > 0)) {
+									$this->SendDebug("WorkProcess", "Switch Webfront: ".$MessageData[$MessageID]["WebfrontID"]." Item: ".$MessageData[$MessageID]["Page"], 0);
+									WFC_SwitchPage (intval($MessageData[$MessageID]["WebfrontID"]), $MessageData[$MessageID]["Page"]);
+								}
+							}
+						}
+						break;
+				}
+				$this->WriteAttributeString("MessageData", serialize($MessageData));
+			}
+			IPS_SemaphoreLeave("WorkProcess");
+			If ($Activity <> "AutoRemove") {
+				$this->RenderData($MessageData);
+			}
+		}
+		else {
+			$this->SendDebug("WorkProcess", "Semaphore Abbruch!", 0);
+		}
+	}   
+	    
 	protected function ProcessHookData() 
 	{		
 		If ($this->ReadPropertyBoolean("Open") == true) {
