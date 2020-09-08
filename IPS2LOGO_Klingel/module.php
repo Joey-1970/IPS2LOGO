@@ -368,16 +368,14 @@
 	  	else {
 	    		$MessageData =  $this->EventSort($EventData, 'Timestamp',  $Sorting);
 			foreach ($EventData as $Number => $Event) {
-	      			$TypeColor = array("green", "red", "yellow", "blue");
-				$TypeImage = array("Ok", "Alert", "Warning", "Clock");
-				$Event['Type'] = min(3, max(0, $Event['Type']));
+	      			$TypeColor = "red"; // array("green", "red", "yellow", "blue");
+				$TypeImage = "Alert"; //array("Ok", "Alert", "Warning", "Clock");
+				$Event['Type'] = 0;
+				//$Event['Type'] = min(3, max(0, $Event['Type']));
 						
-				if ($Event['Image'] <> "") {
-					$Image = $Event['Image'];
-				}
-				else {
-					$Image = $TypeImage[$Event['Type']];
-				}
+				
+				$Image = $TypeImage;
+				
 
 				$content .= '<tr>';
 				$content .= '<td class="iconMediumSpinner ipsIcon' .$Image. '"></td>';
@@ -394,7 +392,7 @@
 				
 				$content .= '<td class="mid"></td>';
 				
-				$content .= '<td class=\'lst\'><div class=\''.$TypeColor[$Event['Type']].'\' onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2LOGOKlingel_'.$this->InstanceID.'?ts=\' + (new Date()).getTime() + \'&action=remove&EventID='.$Event['EventID'].'\' });">OK</div></td>';
+				$content .= '<td class=\'lst\'><div class=\''.$TypeColor.'\' onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2LOGOKlingel_'.$this->InstanceID.'?ts=\' + (new Date()).getTime() + \'&action=remove&EventID='.$Event['EventID'].'\' });">OK</div></td>';
 					
 				$content .= '</tr>';
 			}
