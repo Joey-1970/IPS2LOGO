@@ -357,9 +357,7 @@
 			$content .= '<tr>';
 			$Icon = "Ok";
 			$content .= '<td class="iconMediumSpinner ipsIcon' .$Icon. '"></td>';
-			if ($ShowTime == true) {
-				$content .= '<td class="lst">'.date("d.m.Y H:i", time() ).'</td>';
-			}
+			$content .= '<td class="lst">'.date("d.m.Y H:i", time() ).'</td>';
 			$content .= '<td class="mid">Keine Meldungen vorhanden!</td>';
 			$content .= '<td class="mid"></td>';
 			$content .= '<td class=\'lst\'><div class=\'green\' onclick=\'alert("Nachricht kann nicht bestätigt werden.");\'>...</div></td>';
