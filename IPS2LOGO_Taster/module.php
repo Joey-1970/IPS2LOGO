@@ -252,7 +252,10 @@
 	private function GetInputState()
 	{
 		// {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":132,"AreaAddress":0,"BitAddress":7389,"WordLength":1,"DataCount":1,"DataPayload":""}
-
+		// LOGO 7 I1 = 7384  LOGO 8 I1 = 7384
+		// LOGO 7 I6 = 7389
+		// LOGO 7 I20 = 7403
+		//                   LOGO 8 I24 = 7407
 	
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true) AND (IPS_GetKernelRunlevel() == KR_READY)) {
 			//$this->SendDebug("GetInputState", "Ausfuehrung", 0);
