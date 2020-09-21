@@ -18,6 +18,7 @@
 		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
 		$this->RegisterPropertyBoolean("AP", false); // Parallele automatische Progamme
 		$this->RegisterPropertyInteger("Output_AP", 1);
+		$this->RegisterPropertyInteger("Input", 1);
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
@@ -77,10 +78,10 @@
 		
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Status parallel laufender automatischer Programme"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Status parallel laufender automatischer Programme"); 
 		$arrayElements[] = array("name" => "AP", "type" => "CheckBox",  "caption" => "Aktiv"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		$arrayOptions = array();
 		If ($this->ReadPropertyInteger("Model") == 7) {
 			for ($i = 1; $i <= 16; $i++) {
@@ -100,8 +101,19 @@
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		
-		
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Eingangs zur Erkennung von Kurz- oder Langdruck (UNVOLLENDET!!)"); 
+		$arrayOptions = array();
+		If ($this->ReadPropertyInteger("Model") == 7) {
+			for ($i = 1; $i <= 20; $i++) {
+				$arrayOptions[] = array("label" => "I".$i, "value" => $i);
+			}
+		}
+		else If ($this->ReadPropertyInteger("Model") == 8) {
+			for ($i = 1; $i <= 24; $i++) {
+				$arrayOptions[] = array("label" => "I".$i, "value" => $i);
+			}
+		}
+		$arrayElements[] = array("type" => "Select", "name" => "Input", "caption" => "Eingang", "options" => $arrayOptions );
 		
 		$arrayActions = array(); 
 		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
@@ -262,7 +274,7 @@
 			$Input= $this->ReadPropertyInteger("Input");
 			$AreaAddress = 0;
 			$Area = 132; // Ausgang
-			$BitAddress = 0; //???
+			$BitAddress = $Input + 7383;
 				
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
 			If ($Result === false) {
