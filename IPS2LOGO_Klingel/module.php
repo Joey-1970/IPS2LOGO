@@ -2,14 +2,6 @@
     // Klassendefinition
     class IPS2LOGO_Klingel extends IPSModule 
     {
-	public function Destroy() 
-	{
-		//Never delete this line!
-		parent::Destroy();
-		$this->SetTimerInterval("Timer_1", 0);
-		$this->SetTimerInterval("Reset", 0);
-	}
-	    
 	// Überschreibt die interne IPS_Create($id) Funktion
         public function Create() 
         {
