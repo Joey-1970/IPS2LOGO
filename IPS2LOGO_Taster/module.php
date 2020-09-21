@@ -100,6 +100,9 @@
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		
+		
+		
 		$arrayActions = array(); 
 		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
 		$arrayActions[] = array("type" => "TestCenter", "name" => "TestCenter");
@@ -157,8 +160,6 @@
 			$Area = 132; // Konstante
 			$Address = $this->ReadPropertyInteger("Address");
 			$Bit = $this->ReadPropertyInteger("Bit");
-			//$AddressBit = ($Address * 10) + $Bit;
-			//$AddressBit = intval(octdec($AddressBit));
 			
 			$AddressBit = ($Address * 8) + $Bit;
 			$AddressBit = intval($AddressBit);
@@ -247,6 +248,33 @@
 			}
 		}
 	}
+	    
+	private function GetInputState()
+	{
+		// {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":132,"AreaAddress":0,"BitAddress":7389,"WordLength":1,"DataCount":1,"DataPayload":""}
+
+	
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true) AND (IPS_GetKernelRunlevel() == KR_READY)) {
+			//$this->SendDebug("GetInputState", "Ausfuehrung", 0);
+			$Input= $this->ReadPropertyInteger("Input");
+			$AreaAddress = 0;
+			$Area = 132; // Ausgang
+			$BitAddress = 0; //???
+				
+			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
+			If ($Result === false) {
+				$this->SetStatus(202);
+				$this->SendDebug("GetInputState", "Fehler bei der Ausführung!", 0);
+			}
+			else {
+				$this->SetStatus(102);
+				$State = ord($Result);
+				//$this->SendDebug("GetInputState", "Ergebnis: ".$State, 0);
+				
+			}
+		}
+	}    
+	    
 	    
 	public function Keypress(bool $State)
 	{
