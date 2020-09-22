@@ -26,8 +26,6 @@
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
 		$this->EnableAction("State");
-		$this->RegisterVariableBoolean("InputState", "Input State", "~Switch", 20);
-		$this->RegisterVariableBoolean("InputLongpress", "Input Longpress", "~Switch", 30);
 		
         }
        	
@@ -46,8 +44,8 @@
 		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
 		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions, "onChange" => 'IPS_RequestAction($id,"RefreshProfileForm",$Model);' );
 
- 		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs");
+ 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des Netzwerkeingangs");
 		
 		$arrayOptions = array();
 		for ($i = 0; $i <= 7; $i++) {
@@ -59,10 +57,10 @@
 		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit", "caption" => "Bit", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
-		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
+		$arrayElements[] = array("type" => "Label", "caption" => "Laufzeit des Tast-Impulses");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________"); 
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		
 		$arrayOptions = array();
 		If ($this->ReadPropertyInteger("Model") == 7) {
@@ -107,7 +105,7 @@
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Eingangs zur Erkennung von Kurz- oder Langdruck (UNVOLLENDET!!)"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Eingangs zur Erkennung von Kurz- oder Langdruck"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "InputDetection", "caption" => "Aktiv"); 
 		$arrayOptions = array();
 		If ($this->ReadPropertyInteger("Model") == 7) {
@@ -121,7 +119,7 @@
 			}
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Input", "caption" => "Eingang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "Label", "caption" => "Langdruck-Erkennung-Zeit (Sekunden)"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "Langdruck-Erkennungs-Zeit (Sekunden)"); 
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_2", "caption" => "s");
 		$arrayActions = array(); 
 		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
@@ -135,6 +133,10 @@
         {
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
+		If ($this->ReadPropertyBoolean("InputDetection") == true) {
+			$this->RegisterVariableBoolean("InputState", "Input State", "~Switch", 20);
+			$this->RegisterVariableBoolean("InputLongpress", "Input Longpress", "~Switch", 30);		
+		}
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->GetState();
@@ -222,8 +224,8 @@
 				$this->SetStatus(102);
 				$State = ord($Result);
 				//$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
-				If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
-					SetValueBoolean($this->GetIDForIdent("State"), $State);
+				If ($State <> $this->GetValue("State")) {
+					$this->SetValue("State", $State);
 				}
 				$ReadAP = $this->ReadPropertyBoolean("AP");
 				If ($ReadAP == true) {
