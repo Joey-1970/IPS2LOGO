@@ -356,6 +356,19 @@
 		}
         	$this->UpdateFormField('Output', 'options', json_encode($arrayOptions));
 		$this->UpdateFormField('Output_AP', 'options', json_encode($arrayOptions));
+		
+		$arrayOptions = array();
+		If ($Model == 7) {
+			for ($i = 1; $i <= 20; $i++) {
+				$arrayOptions[] = array("label" => "I".$i, "value" => $i);
+			}
+		}
+		else If ($Model == 8) {
+			for ($i = 1; $i <= 24; $i++) {
+				$arrayOptions[] = array("label" => "I".$i, "value" => $i);
+			}
+		}
+		$this->UpdateFormField('Input', 'options', json_encode($arrayOptions));
     	}    
 	    
 	private function GetParentID()
