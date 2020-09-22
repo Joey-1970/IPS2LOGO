@@ -297,6 +297,17 @@
 				$this->SetStatus(102);
 				$State = ord($Result);
 				//$this->SendDebug("GetInputState", "Ergebnis: ".$State, 0);
+				If ($State <> $this->GetValue("InputState")) {
+					$this->SetValue("InputState", $State);
+					If ($State == true) {
+						$this->SetTimerInterval("Timer_2", $this->ReadPropertyInteger("Timer_2") * 1000);
+					}
+					elseif ($State == false) {
+						$this->SetTimerInterval("Timer_2", 0);
+						$this->SetValue("InputLongpress", false);
+					}
+				}
+				
 				
 			}
 		}
@@ -306,6 +317,7 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("SetLongpress", "Longpress setzen", 0);
+			$this->SetValue("InputLongpress", true);
 		}
 	}
 	    
