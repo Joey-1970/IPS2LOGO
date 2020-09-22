@@ -18,11 +18,17 @@
 		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
 		$this->RegisterPropertyBoolean("AP", false); // Parallele automatische Progamme
 		$this->RegisterPropertyInteger("Output_AP", 1);
+		$this->RegisterPropertyBoolean("InputDetection", false);
 		$this->RegisterPropertyInteger("Input", 1);
+		$this->RegisterPropertyInteger("Timer_2", 3);
+		$this->RegisterTimer("Timer_2", 0, 'I2LTaster_SetLongpress($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
 		$this->EnableAction("State");
+		$this->RegisterVariableBoolean("InputState", "Input State", "~Switch", 20);
+		$this->RegisterVariableBoolean("InputLongpress", "Input Longpress", "~Switch", 30);
+		
         }
        	
 	public function GetConfigurationForm() { 
@@ -100,8 +106,9 @@
 			}
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Eingangs zur Erkennung von Kurz- oder Langdruck (UNVOLLENDET!!)"); 
+		$arrayElements[] = array("type" => "CheckBox", "name" => "InputDetection", "caption" => "Aktiv"); 
 		$arrayOptions = array();
 		If ($this->ReadPropertyInteger("Model") == 7) {
 			for ($i = 1; $i <= 20; $i++) {
@@ -114,7 +121,8 @@
 			}
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Input", "caption" => "Eingang", "options" => $arrayOptions );
-		
+		$arrayElements[] = array("type" => "Label", "caption" => "Langdruck-Erkennung-Zeit (Sekunden)"); 
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_2", "caption" => "s");
 		$arrayActions = array(); 
 		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
 		$arrayActions[] = array("type" => "TestCenter", "name" => "TestCenter");
@@ -221,6 +229,10 @@
 				If ($ReadAP == true) {
 					 $this->GetAPState();
 				}
+				$InputDetection = $this->ReadPropertyBoolean("InputDetection");
+				If ($InputDetection == true) {
+					 $this->GetInputState();
+				}
 			}
 		}
 	return $State;
@@ -289,7 +301,13 @@
 			}
 		}
 	}    
-	    
+	
+	public function SetLongpress()
+	{
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+			$this->SendDebug("SetLongpress", "Longpress setzen", 0);
+		}
+	}
 	    
 	public function Keypress(bool $State)
 	{
