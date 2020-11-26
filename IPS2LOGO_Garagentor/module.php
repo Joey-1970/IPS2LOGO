@@ -289,7 +289,9 @@
 	public function StateReset()
 	{
 		$Button = $this->GetBuffer("Button");
-		$this->SetState(false, $Button);
+		If ($Button <> 2) {
+			$this->SetState(false, $Button);
+		}
 		$this->SetTimerInterval("Timer_1", 0);
 	}
 	
