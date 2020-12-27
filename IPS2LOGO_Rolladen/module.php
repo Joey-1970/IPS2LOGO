@@ -60,15 +60,15 @@
 		}
 		
 		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address", "caption" => "Adresse_1", "options" => $arrayOptions );
-		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit", "caption" => "Bit_1", "options" => $arrayOptions );
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address_1", "caption" => "Adresse Öffnen", "options" => $arrayOptions );
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit_1", "caption" => "Bit Öffnen", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 
 		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
 		
 		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address_2", "caption" => "Adresse", "options" => $arrayOptions );
-		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit_2", "caption" => "Bit", "options" => $arrayOptions );
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address_2", "caption" => "Adresse Schliessen", "options" => $arrayOptions );
+		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit_2", "caption" => "Bit Schliessen", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
 		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
