@@ -64,7 +64,7 @@
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
 		$arrayElements[] = array("type" => "Label", "caption" => "Laufzeit des Tast-Impulses");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms", "minimum" => 20);
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Switchtime", "caption" => "ms", "minimum" => 20);
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
 		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		
@@ -87,10 +87,10 @@
 		}
 		
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_1", "caption" => "ms");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Reset des Klingelsignals");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Resettime", "caption" => "s", "minimum" => 1);
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Resettime", "caption" => "s", "minimum" => 1);
 		
 		$arrayOptions = array();
 		$arrayOptions[] = array("label" => "Neuste Nachricht zuerst", "value" => SORT_DESC);
