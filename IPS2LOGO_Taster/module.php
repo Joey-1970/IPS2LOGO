@@ -58,7 +58,7 @@
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
 		$arrayElements[] = array("type" => "Label", "caption" => "Laufzeit des Tast-Impulses");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Switchtime", "caption" => "ms");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Switchtime", "caption" => "ms", "minumum" => 0);
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
 		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Ausgangs oder Merkers"); 
 		
