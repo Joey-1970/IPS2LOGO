@@ -81,7 +81,7 @@
 		}
 		
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_1", "caption" => "ms", "minumum" => 0);
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Status parallel laufender automatischer Programme"); 
 		$arrayElements[] = array("name" => "AP", "type" => "CheckBox",  "caption" => "Aktiv"); 
@@ -120,7 +120,7 @@
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Input", "caption" => "Eingang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "Label", "caption" => "Langdruck-Erkennungs-Zeit (Sekunden)"); 
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_2", "caption" => "s");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_2", "caption" => "s", "minumum" => 0);
 		$arrayActions = array(); 
 		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
 		$arrayActions[] = array("type" => "TestCenter", "name" => "TestCenter");
