@@ -63,8 +63,8 @@
 		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
 		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions, "onChange" => 'IPS_RequestAction($id,"RefreshProfileForm",$Model);' );
 
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Öffnen"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des Netzwerkeingangs Öffnen"); 
 		
 		$arrayOptions = array();
 		for ($i = 0; $i <= 7; $i++) {
@@ -76,7 +76,7 @@
 		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit_1", "caption" => "Bit", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des Netzwerkeingangs Schliessen"); 
 		
 		$ArrayRowLayout = array();
 		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address_2", "caption" => "Adresse", "options" => $arrayOptions );
@@ -84,8 +84,8 @@
 
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist auf"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist auf"); 
 		$arrayOptions = array();
 		If ($this->ReadPropertyInteger("Model") == 7) {
 			for ($i = 1; $i <= 16; $i++) {
@@ -105,7 +105,7 @@
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_1", "caption" => "Ausgang", "options" => $arrayOptions );
 		
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist zu"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Ausgangs oder Merkers - Tor ist zu"); 
 		$arrayOptions = array();
 		If ($this->ReadPropertyInteger("Model") == 7) {
 			for ($i = 1; $i <= 16; $i++) {
@@ -124,17 +124,17 @@
 			}
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_2", "caption" => "Ausgang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_2", "caption" => "ms");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Tast-Impulses");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "ms");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Beleuchtungs-Aktor-Variable (Boolean)");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_2", "caption" => "ms", "minumum" => 0);
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Laufzeit des Tast-Impulses");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_1", "caption" => "ms", "minumum" => 0);
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Beleuchtungs-Aktor-Variable (Boolean)");
             	$arrayElements[] = array("type" => "SelectVariable", "name" => "ActuatorID", "caption" => "Aktor");
-		$arrayElements[] = array("type" => "Label", "label" => "Ausschaltverzögerung für die Beleuchtung");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_3", "caption" => "s");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Benachrichtigungsfunktion");
+		$arrayElements[] = array("type" => "Label", "caption" => "Ausschaltverzögerung für die Beleuchtung");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_3", "caption" => "s", "minumum" => 0);
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Benachrichtigungsfunktion");
 		$WebfrontID = Array();
 		$WebfrontID = $this->GetWebfrontID();
 		$arrayOptions = array();
@@ -152,8 +152,8 @@
         		$arrayOptions[] = array("label" => $Sound, "value" => $ID);
     		}
 		$arrayElements[] = array("type" => "Select", "name" => "SoundID", "caption" => "Sound", "options" => $arrayOptions );	
-		$arrayElements[] = array("type" => "Label", "label" => "Erinnerungsfunktion für das geöffnete Tor");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_Notify", "caption" => "min");
+		$arrayElements[] = array("type" => "Label", "caption" => "Erinnerungsfunktion für das geöffnete Tor");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_Notify", "caption" => "min", "minumum" => 0);
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TitleNotify", "caption" => "Meldungstitel");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "TextNotify", "caption" => "Text Erinnerung");
 		$arrayOptions = array();
@@ -162,11 +162,11 @@
         		$arrayOptions[] = array("label" => $Sound, "value" => $ID);
     		}
 		$arrayElements[] = array("type" => "Select", "name" => "SoundID_Notify", "caption" => "Sound", "options" => $arrayOptions );	
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Hinweis: Funktionsweise ist abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Hinweis: Funktionsweise ist abgestimmt auf die Hörmann Universaladapterplatine (UAP)");
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayActions = array(); 
-		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
+		$arrayActions[] = array("type" => "Label", "caption" => "Test Center"); 
 		$arrayActions[] = array("type" => "TestCenter", "name" => "TestCenter");
 		
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements, "actions" => $arrayActions)); 		 
