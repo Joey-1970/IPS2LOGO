@@ -51,8 +51,8 @@
 		$arrayOptions[] = array("label" => "LOGO 7", "value" => 7);
 		$arrayOptions[] = array("label" => "LOGO 8", "value" => 8);
 		$arrayElements[] = array("type" => "Select", "name" => "Model", "caption" => "Modell", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Öffnen");
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des Netzwerkeingangs Öffnen");
 		
 		$arrayOptions = array();
 		for ($i = 0; $i <= 7; $i++) {
@@ -64,22 +64,22 @@
 		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit_1", "caption" => "Bit Öffnen", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 
-		$arrayElements[] = array("type" => "Label", "label" => "Auswahl des Netzwerkeingangs Schliessen"); 
+		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des Netzwerkeingangs Schliessen"); 
 		
 		$ArrayRowLayout = array();
 		$ArrayRowLayout[] = array("type" => "Select", "name" => "Address_2", "caption" => "Adresse Schliessen", "options" => $arrayOptions );
 		$ArrayRowLayout[] = array("type" => "Select", "name" => "Bit_2", "caption" => "Bit Schliessen", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
 		
-		$arrayElements[] = array("type" => "Label", "label" => "Laufzeit des Rolladen"); 
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "Timer_1", "caption" => "s");
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Variable die den aktuellen Temperaturwert enthält:");
+		$arrayElements[] = array("type" => "Label", "caption" => "Laufzeit des Rolladen"); 
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_1", "caption" => "s", "minumum" => 0);
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Variable die den aktuellen Temperaturwert enthält:");
 		$arrayElements[] = array("type" => "SelectVariable", "name" => "ActualTemperatureID", "caption" => "Ist-Temperatur"); 
- 		$arrayElements[] = array("type" => "Label", "label" => "Mindesttemperatur für den Betrieb:");
+ 		$arrayElements[] = array("type" => "Label", "caption" => "Mindesttemperatur für den Betrieb:");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Temperature", "caption" => "Temperatur", "digits" => 1);
-		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "label" => "Benachrichtigungsfunktion");
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Benachrichtigungsfunktion");
 		$WebfrontID = Array();
 		$WebfrontID = $this->GetWebfrontID();
 		$arrayOptions = array();
@@ -98,7 +98,7 @@
     		}
 		$arrayElements[] = array("type" => "Select", "name" => "SoundID", "caption" => "Sound", "options" => $arrayOptions );		
 		$arrayActions = array(); 
-		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
+		$arrayActions[] = array("type" => "Label", "caption" => "Test Center"); 
 		$arrayActions[] = array("type" => "TestCenter", "name" => "TestCenter");
 		
  		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements, "actions" => $arrayActions)); 	
