@@ -197,14 +197,6 @@
 				If ($State <> $this->GetValue("State")) {
 					$this->SetValue("State", $State);
 				}
-				$ReadAP = $this->ReadPropertyBoolean("AP");
-				If ($ReadAP == true) {
-					 $this->GetAPState();
-				}
-				$InputDetection = $this->ReadPropertyBoolean("InputDetection");
-				If ($InputDetection == true) {
-					 $this->GetInputState();
-				}
 			}
 		}
 	return $State;
