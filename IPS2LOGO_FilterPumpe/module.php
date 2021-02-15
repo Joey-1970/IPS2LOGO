@@ -21,7 +21,7 @@
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
 		$this->EnableAction("State");
 		$this->RegisterVariableBoolean("Automatic", "Automatik", "~Switch", 20);
-		$this->EnableAction("State");
+		$this->EnableAction("Automatic");
 		
 		// Anlegen des Wochenplans
 		$this->RegisterEvent("Tagesplan", "I2LFilterPumpe_Event_".$this->InstanceID, 2, $this->InstanceID, 50);
