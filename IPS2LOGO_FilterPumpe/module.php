@@ -16,15 +16,11 @@
 		$this->RegisterPropertyInteger("Switchtime", 20);
 		$this->RegisterPropertyInteger("Timer_1", 250);
 		$this->RegisterTimer("Timer_1", 0, 'I2LFilterPumpe_GetState($_IPS["TARGET"]);');
-		$this->RegisterPropertyBoolean("AP", false); // Parallele automatische Progamme
-		$this->RegisterPropertyInteger("Output_AP", 1);
-		$this->RegisterPropertyBoolean("InputDetection", false);
-		$this->RegisterPropertyInteger("Input", 1);
-		$this->RegisterPropertyInteger("Timer_2", 3);
-		$this->RegisterTimer("Timer_2", 0, 'I2LFilterPumpe_SetLongpress($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
+		$this->EnableAction("State");
+		$this->RegisterVariableBoolean("Automatic", "Automatik", "~Switch", 10);
 		$this->EnableAction("State");
 		
         }
@@ -83,44 +79,6 @@
 		$arrayElements[] = array("type" => "Select", "name" => "Output", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_1", "caption" => "ms", "minumum" => 0);
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "caption" => "Status parallel laufender automatischer Programme"); 
-		$arrayElements[] = array("name" => "AP", "type" => "CheckBox",  "caption" => "Aktiv"); 
-		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Ausgangs oder Merkers"); 
-		$arrayOptions = array();
-		If ($this->ReadPropertyInteger("Model") == 7) {
-			for ($i = 1; $i <= 16; $i++) {
-				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
-			}
-			for ($i = 1; $i <= 27; $i++) {
-				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
-			}
-		}
-		else If ($this->ReadPropertyInteger("Model") == 8) {
-			for ($i = 1; $i <= 20; $i++) {
-				$arrayOptions[] = array("label" => "Q".$i, "value" => $i);
-			}
-			for ($i = 1; $i <= 64; $i++) {
-				$arrayOptions[] = array("label" => "M".$i, "value" => ($i + 100));
-			}
-		}
-		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Eingangs zur Erkennung von Kurz- oder Langdruck"); 
-		$arrayElements[] = array("type" => "CheckBox", "name" => "InputDetection", "caption" => "Aktiv"); 
-		$arrayOptions = array();
-		If ($this->ReadPropertyInteger("Model") == 7) {
-			for ($i = 1; $i <= 20; $i++) {
-				$arrayOptions[] = array("label" => "I".$i, "value" => $i);
-			}
-		}
-		else If ($this->ReadPropertyInteger("Model") == 8) {
-			for ($i = 1; $i <= 24; $i++) {
-				$arrayOptions[] = array("label" => "I".$i, "value" => $i);
-			}
-		}
-		$arrayElements[] = array("type" => "Select", "name" => "Input", "caption" => "Eingang", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "Label", "caption" => "Langdruck-Erkennungs-Zeit (Sekunden)"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_2", "caption" => "s", "minumum" => 0);
 		$arrayActions = array(); 
 		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
 		$arrayActions[] = array("type" => "TestCenter", "name" => "TestCenter");
@@ -133,10 +91,6 @@
         {
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
-		If ($this->ReadPropertyBoolean("InputDetection") == true) {
-			$this->RegisterVariableBoolean("InputState", "Input State", "~Switch", 20);
-			$this->RegisterVariableBoolean("InputLongpress", "Input Longpress", "~Switch", 30);		
-		}
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->GetState();
@@ -154,8 +108,13 @@
 	{
   		switch($Ident) {
 	        case "State":
-			If ($Value <> GetValueBoolean($this->GetIDForIdent("State"))) {
+			If ($Value <> $this->GetValue("State")) {
 				$this->KeyPress($Value);
+			}
+	            	break;
+		case "Automatic":
+			If ($Value <> $this->GetValue("Automatic")) {
+				$this->SetValue("Automatic", $Value);
 			}
 	            	break;
 		case "RefreshProfileForm":
@@ -239,50 +198,9 @@
 		}
 	return $State;
 	}
-	    
-	private function GetAPState()
-	{
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true) AND (IPS_GetKernelRunlevel() == KR_READY)) {
-			//$this->SendDebug("GetAPState", "Ausfuehrung", 0);
-			$Output = $this->ReadPropertyInteger("Output_AP");
-			$AreaAddress = 0;
-			
-			If ($Output < 100) {
-				$Area = 130; // Ausgang
-				$BitAddress = $Output - 1;
-			}
-			else {
-				$Area = 131; // Merker
-				$BitAddress = $Output - 101;
-			}
-				
-			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
-			If ($Result === false) {
-				$this->SetStatus(202);
-				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
-			}
-			else {
-				$this->SetStatus(102);
-				$State = ord($Result);
-				//$this->SendDebug("GetAPState", "Ergebnis: ".$State, 0);
-				If ($State == false) {
-					$this->EnableAction("State");
-				}
-				else {
-					$this->DisableAction("State");
-				}
-			}
-		}
-	}
-	    
+	      
 	private function GetInputState()
 	{
-		// {"DataID":"{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}","Function":4,"Area":132,"AreaAddress":0,"BitAddress":7389,"WordLength":1,"DataCount":1,"DataPayload":""}
-		// LOGO 7 I1 = 7384  LOGO 8 I1 = 7384
-		// LOGO 7 I6 = 7389
-		// LOGO 7 I20 = 7403
-		//                   LOGO 8 I24 = 7407
-	
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true) AND (IPS_GetKernelRunlevel() == KR_READY)) {
 			//$this->SendDebug("GetInputState", "Ausfuehrung", 0);
 			$Input= $this->ReadPropertyInteger("Input");
@@ -314,15 +232,7 @@
 			}
 		}
 	}    
-	
-	public function SetLongpress()
-	{
-		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
-			$this->SendDebug("SetLongpress", "Longpress setzen", 0);
-			$this->SetValue("InputLongpress", true);
-		}
-	}
-	    
+	 
 	public function Keypress(bool $State)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
@@ -355,7 +265,6 @@
 			}
 		}
         	$this->UpdateFormField('Output', 'options', json_encode($arrayOptions));
-		$this->UpdateFormField('Output_AP', 'options', json_encode($arrayOptions));
 		
 		$arrayOptions = array();
 		If ($Model == 7) {
