@@ -20,8 +20,11 @@
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
 		$this->EnableAction("State");
-		$this->RegisterVariableBoolean("Automatic", "Automatik", "~Switch", 10);
+		$this->RegisterVariableBoolean("Automatic", "Automatik", "~Switch", 20);
 		$this->EnableAction("State");
+		
+		// Anlegen des Wochenplans
+		$this->RegisterEvent("Tagesplan", "I2LFilterPumpe_Event_".$this->InstanceID, 2, $this->InstanceID, 50);
 		
         }
        	
@@ -91,6 +94,14 @@
         {
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
+		
+		// Anlegen der Daten für den Wochenplan
+		IPS_SetEventScheduleGroup($this->GetIDForIdent("I2LFilterPumpe_Event_".$this->InstanceID), 0, 127);
+		
+		//Anlegen von Aktionen 
+		IPS_SetEventScheduleAction($this->GetIDForIdent("I2LFilterPumpe_Event_".$this->InstanceID), 0, "Aus", 0xFF0000, "I2LFilterPumpe_Automatic(\$_IPS['TARGET'], false);");
+		IPS_SetEventScheduleAction($this->GetIDForIdent("I2LFilterPumpe_Event_".$this->InstanceID), 1, "Ein", 0x0000FF, "I2LFilterPumpe_Automatic(\$_IPS['TARGET'], true);");
+
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->GetState();
@@ -244,6 +255,18 @@
 			}
 		}
   	}
+	    
+	public function Automatic(bool $State)
+	{
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
+			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
+			If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
+				$this->SetState(true);
+				IPS_Sleep($Switchtime);
+				$this->SetState(false);
+			}
+		}
+  	}
 	
 	private function RefreshProfileForm($Model)
     	{
@@ -291,5 +314,25 @@
 		$Status = (IPS_GetInstance($this->GetParentID())['InstanceStatus']);  
 	return $Status;
 	}
+	    
+	private function RegisterEvent($Name, $Ident, $Typ, $Parent, $Position)
+	{
+		$eid = @$this->GetIDForIdent($Ident);
+		if($eid === false) {
+		    	$eid = 0;
+		} elseif(IPS_GetEvent($eid)['EventType'] <> $Typ) {
+		    	IPS_DeleteEvent($eid);
+		    	$eid = 0;
+		}
+		//we need to create one
+		if ($eid == 0) {
+			$EventID = IPS_CreateEvent($Typ);
+		    	IPS_SetParent($EventID, $Parent);
+		    	IPS_SetIdent($EventID, $Ident);
+		    	IPS_SetName($EventID, $Name);
+		    	IPS_SetPosition($EventID, $Position);
+		    	IPS_SetEventActive($EventID, true);  
+		}
+	}  
 }
 ?>
