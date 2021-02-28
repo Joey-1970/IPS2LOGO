@@ -240,7 +240,7 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
 			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
-			If ($State <> GetValueBoolean($this->GetIDForIdent("State"))) {
+			If ($State <> $this->GetValue("State")) {
 				$this->SetState(true);
 				IPS_Sleep($Switchtime);
 				$this->SetState(false);
@@ -251,9 +251,9 @@
 	public function Automatic(bool $State)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			$Automatic = GetValue("Automatic");
+			$Automatic = $this->GetValue("Automatic");
 			$Switchtime = $this->ReadPropertyInteger("Switchtime"); // Dauer der Betätigung
-			If (($Automatic == true) AND ($State <> GetValue("State"))) {
+			If (($Automatic == true) AND ($State <> $this->GetValue("State"))) {
 				$this->SetState(true);
 				IPS_Sleep($Switchtime);
 				$this->SetState(false);
