@@ -215,6 +215,7 @@
 			$this->KeyPress($Value);
 	            	break;
 		case "HomekitState":
+			$this->SendDebug("RequestAction", "Homekit sendet Wert: ".$Value, 0);
 			If ($Value == 0) {
 				// Homekit "Open"
 				$this->KeyPress(0);
