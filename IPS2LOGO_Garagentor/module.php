@@ -54,7 +54,7 @@
 		
 		$this->RegisterVariableInteger("GateState", "GateState", "IPS2LOGO.GateState", 20);
 		
-		$this->RegisterVariableInteger("HomekitState", "State", "IPS2LOGO.HomekitGateState", 30);
+		$this->RegisterVariableInteger("HomekitState", "HomekitState", "IPS2LOGO.HomekitGateState", 30);
 		$this->EnableAction("HomekitState");
 
         }
