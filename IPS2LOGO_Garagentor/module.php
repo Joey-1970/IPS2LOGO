@@ -40,11 +40,22 @@
 		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 25, "Undefiniert", "Garage", 0x0000FF);
 		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 100, "Geschlossen", "Garage", 0x00FF00);
 		
+		$this->RegisterProfileInteger("IPS2LOGO.HomekitGateState", "Information", "", "", 0, 3, 1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 0, "Öffnen", "Garage", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 1, "Schließen", "Garage", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 2, "Öffnet", "Garage", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 3, "Schließt", "Garage", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 4, "Gestoppt", "Garage", -1);
+		
+		
 		//Status-Variablen anlegen
 		$this->RegisterVariableInteger("State", "State", "~ShutterMoveStop", 10);
 		$this->EnableAction("State");
 		
 		$this->RegisterVariableInteger("GateState", "GateState", "IPS2LOGO.GateState", 20);
+		
+		$this->RegisterVariableInteger("HomekitState", "State", "IPS2LOGO.HomekitGateState", 30);
+		$this->EnableAction("HomekitState");
 
         }
        	
@@ -259,10 +270,12 @@
 					$this->SetState(true, $OldButton);
 					$this->SetBuffer("Button", $Button);
 				}
+				If ($this->GetValue("HomekitState") <> 4) {
+					$this->SetValue("HomekitState", 4);
+				}
 			}
 			else {
 				// 0 = Öffnen
-				// 4 = Schliessen
 				If (($Button == 0) AND ($this->ReadPropertyInteger("ActuatorID") > 0)) {
 					// Aktuellen Zustand des Licht einlesen
 					$LightState = intval(GetValueBoolean($this->ReadPropertyInteger("ActuatorID")));
@@ -272,13 +285,20 @@
 						// Licht einschalten wenn Tor geöffnet wird
 						RequestAction($this->ReadPropertyInteger("ActuatorID"), true);
 					}
+					If ($this->GetValue("HomekitState") <> 2) {
+						$this->SetValue("HomekitState", 2);
+					}
 				}
+				// 4 = Schliessen
 				If (($Button == 4) AND ($this->ReadPropertyInteger("ActuatorID") > 0)) {
 					$LightState = boolval($this->GetBuffer("LightState"));
 					$this->SendDebug("Keypress", "Buffer ausgelesen mit: ".$LightState, 0);
 					If (boolval($LightState) == false) {
 						// Timer starten
 						$this->SetTimerInterval("Timer_3", ($this->ReadPropertyInteger("Timer_3") * 1000));
+					}
+					If ($this->GetValue("HomekitState") <> 3) {
+						$this->SetValue("HomekitState", 3);
 					}
 				}
 				$this->SetState(true, $Button);
@@ -305,15 +325,17 @@
 			$StateDown = $this->GetState($Output);
 			If (($StateTop == true) AND ($StateDown == false)) {
 				$State = 0; // geöffnet
+				$HomekitState= 0;
 			}
 			elseIf (($StateTop == false) AND ($StateDown == true)) {
 				$State = 100; // geschlossen
+				$HomekitState= 1;
 			}
 			else {
 				$State = 25; // undefinierter Zustand
 			}
-			If ($State <> GetValueInteger($this->GetIDForIdent("GateState"))) {
-				SetValueInteger($this->GetIDForIdent("GateState"), $State);
+			If ($this->GetValue("GateState") <> $State) {
+				$this->SetValue("GateState", $State);
 				If ($State == 0) { // geöffnet
 					$this->Notification($this->ReadPropertyString("Title"), $this->ReadPropertyString("TextOpen"), $this->ReadPropertyInteger("SoundID"));
 					$this->SetTimerInterval("Timer_Notify", $this->ReadPropertyInteger("Timer_Notify") * 1000 * 60);
@@ -323,8 +345,11 @@
 					$this->Notification($this->ReadPropertyString("Title"), $this->ReadPropertyString("TextClose"), $this->ReadPropertyInteger("SoundID"));
 				}
 				If ($State <> 25) {
-					SetValueInteger($this->GetIDForIdent("State"), 2);
+					$this->SetValue("State", 2);
 				}
+			}
+			If ($this->GetValue("HomekitState") <> $HomekitState) {
+				$this->SetValue("HomekitState", $HomekitState);
 			}
 		}
 	}
