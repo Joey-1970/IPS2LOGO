@@ -214,6 +214,16 @@
 	        case "State":
 			$this->KeyPress($Value);
 	            	break;
+		case "HomekitState":
+			If ($Value == 0) {
+				// Homekit "Open"
+				$this->KeyPress(0);
+			}
+			elseif ($Value == 1) {
+				// Homekit "Close"
+				$this->KeyPress(4);
+			}
+	            	break;
 		case "RefreshProfileForm":
 			$this->SendDebug("RequestAction", "Wert: ".$Value, 0);
 			$this->RefreshProfileForm($Value);
