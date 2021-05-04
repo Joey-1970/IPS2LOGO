@@ -41,8 +41,8 @@
 		IPS_SetVariableProfileAssociation("IPS2LOGO.GateState", 100, "Geschlossen", "Garage", 0x00FF00);
 		
 		$this->RegisterProfileInteger("IPS2LOGO.HomekitGateState", "Information", "", "", 0, 3, 1);
-		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 0, "Öffnen", "Garage", -1);
-		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 1, "Schließen", "Garage", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 0, "Offen", "Garage", -1);
+		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 1, "Geschlossen", "Garage", -1);
 		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 2, "Öffnet", "Garage", -1);
 		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 3, "Schließt", "Garage", -1);
 		IPS_SetVariableProfileAssociation("IPS2LOGO.HomekitGateState", 4, "Gestoppt", "Garage", -1);
