@@ -272,7 +272,7 @@
 	public function Keypress(Int $Button)
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {	
-			SetValueInteger($this->GetIDForIdent("State"), $Button);
+			$this->SetValue("State", $Button);
 			
 			If ($Button == 2) {
 				$OldButton = $this->GetBuffer("Button");
@@ -343,6 +343,19 @@
 				$HomekitState= 1;
 			}
 			else {
+				$Button = $this->GetValue("State");
+				If ($Button = 0) {
+					// Öffnen
+					$HomekitState= 2;
+				}
+				elseif ($Button = 4) {
+					// Schließen
+					$HomekitState= 3;
+				}
+				else {
+					// Gestoppt
+					$HomekitState= 4;
+				}
 				$State = 25; // undefinierter Zustand
 			}
 			If ($this->GetValue("GateState") <> $State) {
