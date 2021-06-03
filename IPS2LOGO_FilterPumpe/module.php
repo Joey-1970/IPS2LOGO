@@ -102,6 +102,12 @@
 		IPS_SetEventScheduleAction($this->GetIDForIdent("I2LFilterPumpe_Event_".$this->InstanceID), 0, "Aus", 0xFF0000, "I2LFilterPumpe_Automatic(\$_IPS['TARGET'], false);");
 		IPS_SetEventScheduleAction($this->GetIDForIdent("I2LFilterPumpe_Event_".$this->InstanceID), 1, "Ein", 0x0000FF, "I2LFilterPumpe_Automatic(\$_IPS['TARGET'], true);");
 
+		If (GetValueBoolean($this->GetIDForIdent("Automatic")) == true) {
+			$this->DisableAction("State");
+		}
+		else {
+			$this->EnableAction("State");
+		}
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->GetState();
@@ -126,6 +132,14 @@
 		case "Automatic":
 			If ($Value <> $this->GetValue("Automatic")) {
 				$this->SetValue("Automatic", $Value);
+				 If ($Value == true) {
+				   	   $this->SendDebug("RequestAction", "State wird Disabled", 0);
+					   $this->DisableAction("State");
+				   }
+				   else {
+					   $this->SendDebug("RequestAction", "State wird Enabled", 0);
+					   $this->EnableAction("State");
+				   }
 			}
 	            	break;
 		case "RefreshProfileForm":
