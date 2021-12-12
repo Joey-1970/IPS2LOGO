@@ -133,6 +133,10 @@
         {
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
+		
+		//$Filter = '((.*"Function":"get_used_i2c".*|.*"DeviceIdent":'.$this->GetBuffer("DeviceIdent").'.*)|(.*"Function":"status".*|.*"Pin":'.$this->ReadPropertyInteger("Pin").'.*))';
+		//$this->SetReceiveDataFilter($Filter);
+		
 		If ($this->ReadPropertyBoolean("InputDetection") == true) {
 			$this->RegisterVariableBoolean("InputState", "Input State", "~Switch", 20);
 			$this->RegisterVariableBoolean("InputLongpress", "Input Longpress", "~Switch", 30);		
@@ -166,13 +170,15 @@
 	            throw new Exception("Invalid Ident");
 	    	}
 	}
-	    
+
+	 /*
 	public function ReceiveData($JSONString) 
 	{
 	    	// Empfangene Daten vom Gateway/Splitter
 	    	$data = json_decode($JSONString);
 	 	$this->SendDebug("ReceiveData", $data, 0);
  	}
+	*/
 	
 	// Beginn der Funktionen
 	private function SetState(Bool $State)
