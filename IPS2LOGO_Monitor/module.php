@@ -89,11 +89,15 @@ class IPS2LOGO_Monitor extends IPSModule
 
 				$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => $WordLength, "DataCount" => 1,"DataPayload" => "")));
 				If ($Result === false) {
-					$this->SetStatus(202);
+					If ($this->GetStatus() <> 202) {
+						$this->SetStatus(202);
+					}
 					$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
 				}
 				else {
-					$this->SetStatus(102);
+					If ($this->GetStatus() <> 102) {
+						$this->SetStatus(102);
+					}
 					//$this->SendDebug("GetState", "Roh-Ergebnis: ".$Result, 0);
 					If (strlen($Result) == 2) {
 						$LSB = ord(substr($Result, 0));
