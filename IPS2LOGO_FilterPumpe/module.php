@@ -111,11 +111,15 @@
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->GetState();
-			$this->SetStatus(102);
+			If ($this->GetStatus() <> 102) {
+				$this->SetStatus(102);
+			}
 			$this->SetTimerInterval("Timer_1", $this->ReadPropertyInteger("Timer_1") );
 		}
 		else {
-			$this->SetStatus(104);
+			If ($this->GetStatus() <> 104) {
+				$this->SetStatus(104);
+			}
 			$this->SetTimerInterval("Timer_1", 0);
 		}
 		
@@ -194,11 +198,15 @@
 				
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
 			If ($Result === false) {
-				$this->SetStatus(202);
+				If ($this->GetStatus() <> 202) {
+					$this->SetStatus(202);
+				}
 				$this->SendDebug("GetState", "Fehler bei der Ausführung!", 0);
 			}
 			else {
-				$this->SetStatus(102);
+				If ($this->GetStatus() <> 102) {
+					$this->SetStatus(102);
+				}
 				$State = ord($Result);
 				//$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				If ($State <> $this->GetValue("State")) {
@@ -220,11 +228,15 @@
 				
 			$Result = $this->SendDataToParent(json_encode(Array("DataID"=> "{042EF3A2-ECF4-404B-9FA2-42BA032F4A56}", "Function" => 4, "Area" => $Area, "AreaAddress" => $AreaAddress, "BitAddress" => $BitAddress, "WordLength" => 1, "DataCount" => 1,"DataPayload" => "")));
 			If ($Result === false) {
-				$this->SetStatus(202);
+				If ($this->GetStatus() <> 202) {
+					$this->SetStatus(202);
+				}
 				$this->SendDebug("GetInputState", "Fehler bei der Ausführung!", 0);
 			}
 			else {
-				$this->SetStatus(102);
+				If ($this->GetStatus() <> 102) {
+					$this->SetStatus(102);
+				}
 				$State = ord($Result);
 				//$this->SendDebug("GetInputState", "Ergebnis: ".$State, 0);
 				If ($State <> $this->GetValue("InputState")) {
