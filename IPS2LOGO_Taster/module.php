@@ -267,12 +267,14 @@
 				}
 				$State = ord($Result);
 				//$this->SendDebug("GetAPState", "Ergebnis: ".$State, 0);
-				If ($State == false) {
-					$this->EnableAction("State");
-				}
-				else {
-					$this->DisableAction("State");
-				}
+				//If (HasAction($this->GetIDForIdent("State")) <> !$State) 
+					If ($State == false) {
+						$this->EnableAction("State");
+					}
+					else {
+						$this->DisableAction("State");
+					}
+				//}
 			}
 		}
 	}
