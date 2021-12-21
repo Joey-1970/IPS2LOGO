@@ -267,10 +267,11 @@
 				}
 				$State = ord($Result);
 				//$this->SendDebug("GetAPState", "Ergebnis: ".$State, 0);
-				if (IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction'] == 0) //keine Standardaktion aktiv
+				//if (IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction'] == 0) //keine Standardaktion aktiv
+				// boolval(IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction']) = 0 = false = DisableAction -> bei $State = true
+				// boolval(IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction']) > 0 = true = EnableAction -> bei $State = false
 				
-				
-				if (boolval(IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction']) <> !$State) { 
+				if (boolval(IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction']) <> $State) { 
 					If ($State == false) {
 						$this->EnableAction("State"); // IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction'] > 0 -> true
 					}
