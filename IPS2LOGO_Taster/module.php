@@ -267,14 +267,17 @@
 				}
 				$State = ord($Result);
 				//$this->SendDebug("GetAPState", "Ergebnis: ".$State, 0);
-				//If (HasAction($this->GetIDForIdent("State")) <> !$State) 
+				if (IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction'] == 0) //keine Standardaktion aktiv
+				
+				
+				if (boolval(IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction']) <> !$State) { 
 					If ($State == false) {
-						$this->EnableAction("State");
+						$this->EnableAction("State"); // IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction'] > 0 -> true
 					}
 					else {
-						$this->DisableAction("State");
+						$this->DisableAction("State"); // IPS_GetVaribale($this->GetIDForIdent("State"))['VariableAction'] == 0 -> false
 					}
-				//}
+				}
 			}
 		}
 	}
