@@ -349,7 +349,7 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
 			$this->SendDebug("AutoSwitchOff", "Abschaltung durch AutoSwitchOff", 0);
-			$this->SetState(false);
+			$this->Keypress(false);
 			$this->SetTimerInterval("Timer_3", 0);
 		}
 	}
