@@ -109,7 +109,7 @@
 		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Automatische Ausschaltfunktion"); 
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_3", "caption" => "min", "minumum" => 0);
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "AutoSwitchOff", "caption" => "min", "minumum" => 0);
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Eingangs zur Erkennung von Kurz- oder Langdruck"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "InputDetection", "caption" => "Aktiv"); 
