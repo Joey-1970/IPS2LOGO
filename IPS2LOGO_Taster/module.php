@@ -230,6 +230,7 @@
 				//$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				If ($State <> $this->GetValue("State")) {
 					$this->SetValue("State", $State);
+					$this->SendDebug("GetState", "Ergebnis: ".$State." AutoSwitchOff: ".$this->ReadPropertyInteger("AutoSwitchOff"), 0);
 					// AutoSwitch
 					If (($State == false) AND ($this->ReadPropertyInteger("AutoSwitchOff") > 0)) {
 						$this->SetTimerInterval("Timer_3", 0);
