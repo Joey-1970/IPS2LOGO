@@ -14,7 +14,7 @@
 		$this->RegisterPropertyInteger("Address", 0);
 		$this->RegisterPropertyInteger("Bit", 0);
 		$this->RegisterPropertyInteger("Switchtime", 20);
-		$this->RegisterPropertyInteger("Timer_1", 250);
+		$this->RegisterPropertyInteger("Timer_1", 250); // Status-Abfrage
 		$this->RegisterTimer("Timer_1", 0, 'I2LTaster_GetState($_IPS["TARGET"]);');
 		$this->RegisterPropertyBoolean("AP", false); // Parallele automatische Progamme
 		$this->RegisterPropertyInteger("Output_AP", 1);
@@ -22,6 +22,9 @@
 		$this->RegisterPropertyInteger("Input", 1);
 		$this->RegisterPropertyInteger("Timer_2", 3);
 		$this->RegisterTimer("Timer_2", 0, 'I2LTaster_SetLongpress($_IPS["TARGET"]);');
+		$this->RegisterPropertyInteger("AutoSwitchOff", 0);
+		$this->RegisterPropertyInteger("Timer_3", 0); // Auschalttimer
+		$this->RegisterTimer("Timer_3", 0, 'I2LTaster_AutoSwitchOff($_IPS["TARGET"]);');
 		
 		//Status-Variablen anlegen
 		$this->RegisterVariableBoolean("State", "State", "~Switch", 10);
@@ -104,6 +107,9 @@
 			}
 		}
 		$arrayElements[] = array("type" => "Select", "name" => "Output_AP", "caption" => "Ausgang", "options" => $arrayOptions );
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Automatische Ausschaltfunktion"); 
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Timer_3", "caption" => "min", "minumum" => 0);
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Auswahl des digitalen Eingangs zur Erkennung von Kurz- oder Langdruck"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "InputDetection", "caption" => "Aktiv"); 
@@ -224,6 +230,15 @@
 				//$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				If ($State <> $this->GetValue("State")) {
 					$this->SetValue("State", $State);
+					// AutoSwitch
+					If (($State == false) AND ($this->ReadPropertyInteger("AutoSwitchOff") > 0)) {
+						$this->SetTimerInterval("Timer_3", 0);
+						$this->SendDebug("AutoSwitchOff", "Timer Reset", 0);
+					}
+					elseif (($State == true) AND ($this->ReadPropertyInteger("AutoSwitchOff") > 0)) {
+						$this->SetTimerInterval("Timer_3", $this->ReadPropertyInteger("AutoSwitchOff") * 60);
+						$this->SendDebug("AutoSwitchOff", "Aktiviert", 0);
+					}
 				}
 				$ReadAP = $this->ReadPropertyBoolean("AP");
 				If ($ReadAP == true) {
@@ -327,6 +342,15 @@
 		}
 	}    
 	
+	public function AutoSwitchOff()
+	{
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
+			$this->SendDebug("AutoSwitchOff", "Abschaltung durch AutoSwitchOff", 0);
+			$this->SetState(false);
+			$this->SetTimerInterval("Timer_3", 0);
+		}
+	}
+	    
 	public function SetLongpress()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->HasActiveParent() == true)) {
