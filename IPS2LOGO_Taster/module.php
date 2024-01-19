@@ -236,7 +236,7 @@
 						$this->SendDebug("AutoSwitchOff", "Timer Reset", 0);
 					}
 					elseif (($State == true) AND ($this->ReadPropertyInteger("AutoSwitchOff") > 0)) {
-						$this->SetTimerInterval("Timer_3", $this->ReadPropertyInteger("AutoSwitchOff") * 60);
+						$this->SetTimerInterval("Timer_3", $this->ReadPropertyInteger("AutoSwitchOff") * 1000 * 60);
 						$this->SendDebug("AutoSwitchOff", "Aktiviert", 0);
 					}
 				}
