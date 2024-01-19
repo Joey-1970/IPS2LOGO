@@ -230,13 +230,15 @@
 				//$this->SendDebug("GetState", "Ergebnis: ".$State, 0);
 				If ($State <> $this->GetValue("State")) {
 					$this->SetValue("State", $State);
-					$this->SendDebug("GetState", "Ergebnis: ".$State." AutoSwitchOff: ".$this->ReadPropertyInteger("AutoSwitchOff"), 0);
+					$AutoSwitchOff = $this->ReadPropertyInteger("AutoSwitchOff");
+					$this->SendDebug("GetState", "Ergebnis: ".$State." AutoSwitchOff: ".$AutoSwitchOff, 0);
 					// AutoSwitch
-					If (($State == false) AND ($this->ReadPropertyInteger("AutoSwitchOff") > 0)) {
+					
+					If (($State == false) AND ($AutoSwitchOff > 0)) {
 						$this->SetTimerInterval("Timer_3", 0);
 						$this->SendDebug("AutoSwitchOff", "Timer Reset", 0);
 					}
-					elseif (($State == true) AND ($this->ReadPropertyInteger("AutoSwitchOff") > 0)) {
+					elseif (($State == true) AND ($AutoSwitchOff > 0)) {
 						$this->SetTimerInterval("Timer_3", $this->ReadPropertyInteger("AutoSwitchOff") * 1000 * 60);
 						$this->SendDebug("AutoSwitchOff", "Aktiviert", 0);
 					}
